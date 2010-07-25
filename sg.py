@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-#    <one line to give the program's name and a brief idea of what it does.>
+#    sg.py -- small, static website generator
 #    Copyright (C) 2010  Bastian Venthur
 #
 #    This program is free software: you can redistribute it and/or modify
