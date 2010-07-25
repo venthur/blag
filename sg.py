@@ -20,6 +20,7 @@ import sys
 import os
 import shutil
 import string
+import codecs
 
 import markdown
 
@@ -60,7 +61,7 @@ def save_page(path, txt):
     # create directory if necessairy
     if not os.path.exists(os.path.dirname(path)):
         os.mkdir(os.path.dirname(path))
-    fh = open(path, 'w')
+    fh = codecs.open(path, 'w', 'utf-8')
     fh.write(txt)
     fh.close()
 
@@ -94,11 +95,12 @@ def render_page(path):
     It starts with the file under path, and processes it by pushing it through
     the processing pipeline. It returns a string.
     """
-    fh = open(path, 'r')
+    print "Rendering", path
+    fh = codecs.open(path, 'r', 'utf-8')
     txt = "".join(fh.readlines())
     fh.close()
 
-    fh = open(os.path.sep.join([LAYOUTS_DIR, 'default.html']), 'r')
+    fh = codecs.open(os.path.sep.join([LAYOUTS_DIR, 'default.html']), 'r', 'utf-8')
     template = ''.join(fh.readlines())
     fh.close()
 
