@@ -4,93 +4,97 @@
 import sys
 import os
 import shutil
+import string
 
 import markdown
 
 
 LAYOUTS_DIR = '_layouts'
 RESULT_DIR = '_site'
+STATIC_DIR = '_static'
+
+def prepare_site():
+    """Prepare site generation."""
+    # check if all needed files are available
+    # clean RESULT_DIR
+    shutil.rmtree(os.path.sep.join([os.curdir, RESULT_DIR]), True)
 
 
-def is_directory_valid(directory):
-    """Test if current directory is usable."""
-    # Currently we only test for an existing LAYOUTS_DIR
-    if not os.path.exists(os.path.sep.join([directory, LAYOUTS_DIR])):
-        return False
-    return True
-
-
-def prepare_directory(directory):
-    """Prepares directory."""
-    # create empty RESULT_DIR
-    result_d = os.path.sep.join([directory, RESULT_DIR])
-    if os.path.exists(result_d):
-        shutil.rmtree(result_d)
-    os.mkdir(result_d)
-    # create all other directories not starting with _ in RESULT_DIR
-    for file_or_dir in os.listdir(directory):
-        if not file_or_dir.startswith('_'):
-            src = os.path.sep.join([directory, file_or_dir])
-            dst = os.path.sep.join([directory, RESULT_DIR, file_or_dir])
-            if os.path.isdir(src):
-                cp = shutil.copytree
-            else:
-                cp = shutil.copy2
-            cp(src, dst)
-
-
-def generate_content(directory):
-    """Generate the site."""
-    df = open(os.path.sep.join([directory, LAYOUTS_DIR, 'default.html']), 'r')
-    layout = "".join(df.readlines())
-    df.close()
-    for root, dirs, files in os.walk(directory):
-        if root.startswith(os.path.sep.join([directory, '_'])):
+def generate_site():
+    """Generate the dynamic part of the site."""
+    for root, dirs, files in os.walk(os.curdir):
+        # ignore directories starting with _
+        if root.startswith(os.path.sep.join([os.curdir, '_'])):
             continue
         for f in files:
-            if f.split('.')[-1] in SUPPORTED_MARKUP:
-                f_path = os.path.sep.join([root, f])
-                html = generate_site(f_path)
-                html = layout % {'content' : html, 'title' : "footitle"}
-                dst_path = _src_to_destpath(f_path, directory)
-                dst_file = _src_to_destfile(f_path)
-                fh = open(os.path.sep.join([dst_path, dst_file]), 'w')
-                fh.write(html)
-                fh.close()
+            if f.endswith(".markdown"):
+                path = os.path.sep.join([root, f])
+                html = render_page(path)
+                filename = path.replace(".markdown", ".html")
+                save_page(dest_path(filename), html)
 
 
-def _src_to_destpath(src_path, directory):
-    src_path = os.path.dirname(src_path)
-    src_path = os.path.abspath(src_path)
-    directory = os.path.abspath(directory)
-    i = len(directory)
-    return os.path.sep.join([src_path[:i], RESULT_DIR, src_path[i:]])
+def copy_static_content():
+    """Copy the static content to RESULT_DIR."""
+    shutil.copytree(os.path.sep.join([os.curdir, STATIC_DIR]),
+            os.path.sep.join([os.curdir, RESULT_DIR]))
 
 
-def _src_to_destfile(filename):
-    filename = os.path.basename(filename)
-    i = filename.rfind('.')
-    return filename[:i] + '.html'
-
-def generate_site(f):
-    """Genererate html from markup in file f (returns a string)."""
-    # Currently we assume everythin is markdown
-    fh = open(f, 'r')
-    markup = "".join(fh.readlines())
+def save_page(path, txt):
+    """Save the txt under the given filename."""
+    # create directory if necessairy
+    if not os.path.exists(os.path.dirname(path)):
+        os.mkdir(os.path.dirname(path))
+    fh = open(path, 'w')
+    fh.write(txt)
     fh.close()
-    html = markdown.markdown(markup)
+
+
+def dest_path(path):
+    """Convert the destination path from the given path."""
+    base_dir = os.path.abspath(os.curdir)
+    path = os.path.abspath(path)
+    if not path.startswith(base_dir):
+        raise Exception("Path not in base_dir.")
+    path = path[len(base_dir):]
+    return os.path.sep.join([base_dir, RESULT_DIR, path])
+
+
+def process_markdown(txt):
+    """Convert given txt to html using markdown."""
+    html = markdown.markdown(txt)
     return html
 
 
-def main():
-    if not is_directory_valid(os.curdir):
-        return 1
-    prepare_directory(os.curdir)
-    generate_content(os.curdir)
+def process_embed_content(template, content):
+    """Embedd content into html template."""
+    txt = string.Template(template)
+    html = txt.safe_substitute({'content' : content})
+    return html
 
-    return 0
+
+def render_page(path):
+    """Render page.
+
+    It starts with the file under path, and processes it by pushing it through
+    the processing pipeline. It returns a string.
+    """
+    fh = open(path, 'r')
+    txt = "".join(fh.readlines())
+    fh.close()
+
+    fh = open(os.path.sep.join([LAYOUTS_DIR, 'default.html']), 'r')
+    template = ''.join(fh.readlines())
+    fh.close()
+
+    # currently we only process markdown, other stuff can be added easyly
+    txt = process_markdown(txt)
+    txt = process_embed_content(template, txt)
+    return txt
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    prepare_site()
+    copy_static_content()
+    generate_site()
 
