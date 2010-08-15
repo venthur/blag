@@ -12,4 +12,9 @@ be saved into the _site directory, conserving the directory structure where the
 Put your static content into _static. Files and subdirectories will be copied
 into _site without any modifications.
 
+TODO
+====
 
+  * document the YAML frontmatter
+  * create _dirs if not found and provide a primitive template
+  * enable layout selection by _layout_foo or so
