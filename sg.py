@@ -21,6 +21,7 @@ import os
 import shutil
 import string
 import codecs
+import re
 
 import markdown
 
@@ -89,6 +90,44 @@ def process_embed_content(template, content):
     return html
 
 
+def process_embed_meta(template, content):
+    """Embedd meta info into html template."""
+    txt = string.Template(template)
+    html = txt.safe_substitute(content)
+    return html
+
+
+def get_meta(txt):
+    """Parse meta information from text if available and return as dict.
+
+    meta information is a block imbedded in "---\n" lines having the format: 
+
+        key: value
+
+    both are treated as strings the value starts after the ": " end ends with
+    the newline.
+    """
+    SEP = '---\n'
+    meta = dict()
+    if txt.count(SEP) > 1 and txt.startswith(SEP):
+        stuff = txt[len(SEP):txt.find(SEP, 1)]
+        txt = txt[txt.find((SEP), 1)+len(SEP):]
+        for i in stuff.splitlines():
+            if i.count(':') > 0:
+                key, value = i.split(':', 1)
+                value = value.strip()
+                meta[key] = value
+    return meta, txt
+
+
+def check_unused_variables(txt):
+    """Search for unused $foo variables and print a warning."""
+    template = '\\$[_a-z][_a-z0=9]*'
+    f = re.findall(template, txt)
+    if len(f) > 0:
+        print "Unconsumed variables in template found:", f
+
+
 def render_page(path):
     """Render page.
 
@@ -104,9 +143,14 @@ def render_page(path):
     template = ''.join(fh.readlines())
     fh.close()
 
+    # get meta information
+    meta, txt = get_meta(txt)
+
     # currently we only process markdown, other stuff can be added easyly
     txt = process_markdown(txt)
     txt = process_embed_content(template, txt)
+    txt = process_embed_meta(txt, meta)
+    check_unused_variables(txt)
     return txt
 
 
