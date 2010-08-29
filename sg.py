@@ -16,6 +16,15 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
+"""Small static site generator.
+"""
+
+
+__author__ = "Bastian Venthur <venthur@debian.org>"
+__version__ = "1.0"
+
+
 import sys
 import os
 import shutil
