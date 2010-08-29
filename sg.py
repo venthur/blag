@@ -22,6 +22,7 @@ import shutil
 import string
 import codecs
 import re
+import logging
 
 import markdown
 
@@ -30,15 +31,35 @@ LAYOUTS_DIR = '_layouts'
 RESULT_DIR = '_site'
 STATIC_DIR = '_static'
 
+DEFAULT_LAYOUT = os.path.sep.join([LAYOUTS_DIR, 'default.html'])
+DEFAULT_LAYOUT_HTML = """
+<html>
+    <head></head>
+    <body>$content</body>
+</html>
+"""
+
+
 def prepare_site():
     """Prepare site generation."""
-    # check if all needed files are available
+    logging.info("Checking if all needed dirs and files are available.")
+    # check if all needed dirs and files are available
+    for directory in LAYOUTS_DIR, STATIC_DIR:
+        if not os.path.exists(directory):
+            logging.warning("Directory '%s' does not exist, creating it." % directory)
+            os.mkdir(directory)
+    if not os.path.exists(DEFAULT_LAYOUT):
+        logging.warning("File '%s' does not exist, creating it." % DEFAULT_LAYOUT)
+        filehandle = open(DEFAULT_LAYOUT, 'w')
+        filehandle.write(DEFAULT_LAYOUT_HTML)
+        filehandle.close()
     # clean RESULT_DIR
     shutil.rmtree(os.path.sep.join([os.curdir, RESULT_DIR]), True)
 
 
 def generate_site():
     """Generate the dynamic part of the site."""
+    logging.info("Generating Site.")
     for root, dirs, files in os.walk(os.curdir):
         # ignore directories starting with _
         if root.startswith(os.path.sep.join([os.curdir, '_'])):
@@ -53,6 +74,7 @@ def generate_site():
 
 def copy_static_content():
     """Copy the static content to RESULT_DIR."""
+    logging.info("Copying static content.")
     shutil.copytree(os.path.sep.join([os.curdir, STATIC_DIR]),
             os.path.sep.join([os.curdir, RESULT_DIR]))
 
@@ -125,7 +147,7 @@ def check_unused_variables(txt):
     template = '\\$[_a-z][_a-z0=9]*'
     f = re.findall(template, txt)
     if len(f) > 0:
-        print "Unconsumed variables in template found:", f
+        logging.warning("Unconsumed variables in template found: %s" % f)
 
 
 def render_page(path):
@@ -134,12 +156,12 @@ def render_page(path):
     It starts with the file under path, and processes it by pushing it through
     the processing pipeline. It returns a string.
     """
-    print "Rendering", path
+    logging.debug("Rendering %s" % path)
     fh = codecs.open(path, 'r', 'utf-8')
     txt = "".join(fh.readlines())
     fh.close()
 
-    fh = codecs.open(os.path.sep.join([LAYOUTS_DIR, 'default.html']), 'r', 'utf-8')
+    fh = codecs.open(DEFAULT_LAYOUT, 'r', 'utf-8')
     template = ''.join(fh.readlines())
     fh.close()
 
@@ -155,6 +177,7 @@ def render_page(path):
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.DEBUG, format="%(levelname)s\t%(message)s")
     prepare_site()
     copy_static_content()
     generate_site()
