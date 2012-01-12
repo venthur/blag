@@ -25,7 +25,6 @@ __author__ = "Bastian Venthur <venthur@debian.org>"
 __version__ = "1.0"
 
 
-import sys
 import os
 import shutil
 import string
