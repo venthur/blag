@@ -8,7 +8,7 @@ exec(open('./sg/version.py').read(), meta)
 meta['long_description'] = open('./README.md').read()
 
 setup(
-    name='sg',
+    name='sg.py',
     version=meta['__VERSION__'],
     description='Simple static site generator.',
     long_description=meta['long_description'],
