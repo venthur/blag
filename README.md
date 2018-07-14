@@ -1,5 +1,14 @@
 # sg.py -- a small static site generator
 
+## Installation
+
+```bash
+$ pip install sg.py
+```
+
+
+## Usage
+
 Populate directory with markdown files (they have to end with
 .markdown). You can also create arbitrarily nested subdirectories
 containing .markdown files.
