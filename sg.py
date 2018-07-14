@@ -18,6 +18,7 @@
 
 
 """Small static site generator.
+
 """
 
 
@@ -54,10 +55,12 @@ def prepare_site():
     # check if all needed dirs and files are available
     for directory in LAYOUTS_DIR, STATIC_DIR:
         if not os.path.exists(directory):
-            logging.warning("Directory '%s' does not exist, creating it." % directory)
+            logging.warning("Directory {} does not exist, creating it."
+                            .format(directory))
             os.mkdir(directory)
     if not os.path.exists(DEFAULT_LAYOUT):
-        logging.warning("File '%s' does not exist, creating it." % DEFAULT_LAYOUT)
+        logging.warning("File {} does not exist, creating it."
+                        .format(DEFAULT_LAYOUT))
         filehandle = open(DEFAULT_LAYOUT, 'w')
         filehandle.write(DEFAULT_LAYOUT_HTML)
         filehandle.close()
@@ -84,7 +87,7 @@ def copy_static_content():
     """Copy the static content to RESULT_DIR."""
     logging.info("Copying static content.")
     shutil.copytree(os.path.sep.join([os.curdir, STATIC_DIR]),
-            os.path.sep.join([os.curdir, RESULT_DIR]))
+                    os.path.sep.join([os.curdir, RESULT_DIR]))
 
 
 def save_page(path, txt):
@@ -116,7 +119,7 @@ def process_markdown(txt):
 def process_embed_content(template, content):
     """Embedd content into html template."""
     txt = string.Template(template)
-    html = txt.safe_substitute({'content' : content})
+    html = txt.safe_substitute({'content': content})
     return html
 
 
@@ -130,7 +133,7 @@ def process_embed_meta(template, content):
 def get_meta(txt):
     """Parse meta information from text if available and return as dict.
 
-    meta information is a block imbedded in "---\n" lines having the format: 
+    meta information is a block imbedded in "---\n" lines having the format:
 
         key: value
 
@@ -185,8 +188,8 @@ def render_page(path):
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.DEBUG, format="%(levelname)s\t%(message)s")
+    logging.basicConfig(level=logging.DEBUG,
+                        format="%(levelname)s\t%(message)s")
     prepare_site()
     copy_static_content()
     generate_site()
-
