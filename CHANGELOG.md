@@ -1,8 +1,9 @@
 # Changelog
 
-## [unreleased] - 
+## [1.2.0] - 2018-12-30
 
 * Added markdown as requirement
+* Simplified Makefile
 
 
 ## [1.1.0] - 2018-07-14

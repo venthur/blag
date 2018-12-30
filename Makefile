@@ -8,13 +8,10 @@
 all: lint test
 
 test:
-	pytest \
-	    --cov=gron \
-	    --cov-branch \
-	    --cov-report=term-missing
+	pytest
 
 lint:
-	flake8 gron
+	flake8
 
 #docs:
 #	$(MAKE) -C docs html
