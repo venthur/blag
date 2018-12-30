@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.2.1] - 2018-12-30
+
+* Fixed version
+
+
 ## [1.2.0] - 2018-12-30
 
 * Added markdown as requirement
