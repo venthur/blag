@@ -1,5 +1,10 @@
 # Changelog
 
+## [unreleased] - 
+
+* Added markdown as requirement
+
+
 ## [1.1.0] - 2018-07-14
 
 * Added proper packaging

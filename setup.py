@@ -18,6 +18,9 @@ setup(
     author_email='mail@venthur.de',
     url='https://github.com/venthur/sg',
     python_requires='>=3',
+    install_requires=[
+        'markdown',
+    ],
     extras_require={
       'dev': [
           'pytest',
