@@ -8,162 +8,151 @@
 __author__ = "Bastian Venthur <venthur@debian.org>"
 
 
+import argparse
 import os
 import shutil
 import string
 import codecs
 import re
 import logging
+from datetime import datetime
 
 import markdown
+from jinja2 import Environment, FileSystemLoader
+import feedgenerator
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(
+        level=logging.DEBUG,
+        format='%(asctime)s %(levelname)s %(name)s %(message)s',
+)
 
 
-LAYOUTS_DIR = '_layouts'
-RESULT_DIR = '_site'
-STATIC_DIR = '_static'
-
-DEFAULT_LAYOUT = os.path.sep.join([LAYOUTS_DIR, 'default.html'])
-DEFAULT_LAYOUT_HTML = """
-<html>
-    <head></head>
-    <body>$content</body>
-</html>
-"""
+def main(args=None):
+    args = parse_args(args)
+    args.func(args)
 
 
-def prepare_site():
-    """Prepare site generation."""
-    logging.info("Checking if all needed dirs and files are available.")
-    # check if all needed dirs and files are available
-    for directory in LAYOUTS_DIR, STATIC_DIR:
-        if not os.path.exists(directory):
-            logging.warning("Directory {} does not exist, creating it."
-                            .format(directory))
-            os.mkdir(directory)
-    if not os.path.exists(DEFAULT_LAYOUT):
-        logging.warning("File {} does not exist, creating it."
-                        .format(DEFAULT_LAYOUT))
-        filehandle = open(DEFAULT_LAYOUT, 'w')
-        filehandle.write(DEFAULT_LAYOUT_HTML)
-        filehandle.close()
-    # clean RESULT_DIR
-    shutil.rmtree(os.path.sep.join([os.curdir, RESULT_DIR]), True)
+def parse_args(args):
+    """Parse command line arguments.
 
+    Paramters
+    ---------
+    args :
+        optional parameters, used for testing
 
-def generate_site():
-    """Generate the dynamic part of the site."""
-    logging.info("Generating Site.")
-    for root, dirs, files in os.walk(os.curdir):
-        # ignore directories starting with _
-        if root.startswith(os.path.sep.join([os.curdir, '_'])):
-            continue
-        for f in files:
-            if f.endswith(".markdown"):
-                path = os.path.sep.join([root, f])
-                html = render_page(path)
-                filename = path.replace(".markdown", ".html")
-                save_page(dest_path(filename), html)
+    Returns
+    -------
+    args
 
-
-def copy_static_content():
-    """Copy the static content to RESULT_DIR."""
-    logging.info("Copying static content.")
-    shutil.copytree(os.path.sep.join([os.curdir, STATIC_DIR]),
-                    os.path.sep.join([os.curdir, RESULT_DIR]))
-
-
-def save_page(path, txt):
-    """Save the txt under the given filename."""
-    # create directory if necessairy
-    if not os.path.exists(os.path.dirname(path)):
-        os.mkdir(os.path.dirname(path))
-    fh = codecs.open(path, 'w', 'utf-8')
-    fh.write(txt)
-    fh.close()
-
-
-def dest_path(path):
-    """Convert the destination path from the given path."""
-    base_dir = os.path.abspath(os.curdir)
-    path = os.path.abspath(path)
-    if not path.startswith(base_dir):
-        raise Exception("Path not in base_dir.")
-    path = path[len(base_dir):]
-    return os.path.sep.join([base_dir, RESULT_DIR, path])
-
-
-def process_markdown(txt):
-    """Convert given txt to html using markdown."""
-    html = markdown.markdown(txt)
-    return html
-
-
-def process_embed_content(template, content):
-    """Embedd content into html template."""
-    txt = string.Template(template)
-    html = txt.safe_substitute({'content': content})
-    return html
-
-
-def process_embed_meta(template, content):
-    """Embedd meta info into html template."""
-    txt = string.Template(template)
-    html = txt.safe_substitute(content)
-    return html
-
-
-def get_meta(txt):
-    """Parse meta information from text if available and return as dict.
-
-    meta information is a block imbedded in "---\n" lines having the format:
-
-        key: value
-
-    both are treated as strings the value starts after the ": " end ends with
-    the newline.
     """
-    SEP = '---\n'
-    meta = dict()
-    if txt.count(SEP) > 1 and txt.startswith(SEP):
-        stuff = txt[len(SEP):txt.find(SEP, 1)]
-        txt = txt[txt.find((SEP), 1)+len(SEP):]
-        for i in stuff.splitlines():
-            if i.count(':') > 0:
-                key, value = i.split(':', 1)
-                value = value.strip()
-                meta[key] = value
-    return meta, txt
+    parser = argparse.ArgumentParser()
+
+    commands = parser.add_subparsers(dest='command')
+    commands.required = True
+
+    build_parser = commands.add_parser('build')
+    build_parser.set_defaults(func=build)
+    build_parser.add_argument(
+            '-i', '--input-dir',
+            default='content',
+            help='Input directory (default: content)',
+    )
+    build_parser.add_argument(
+            '-o', '--output-dir',
+            default='build',
+            help='Ouptut directory (default: build)',
+    )
+
+    return parser.parse_args()
 
 
-def check_unused_variables(txt):
-    """Search for unused $foo variables and print a warning."""
-    template = '\\$[_a-z][_a-z0=9]*'
-    f = re.findall(template, txt)
-    if len(f) > 0:
-        logging.warning("Unconsumed variables in template found: %s" % f)
+def build(args):
+    os.makedirs(f'{args.output_dir}', exist_ok=True)
+    convertibles = []
+    for root, dirnames, filenames in os.walk(args.input_dir):
+        for filename in filenames:
+            relpath = os.path.relpath(f'{root}/{filename}', start=args.input_dir)
+            abspath = os.path.abspath(f'{root}/{filename}')
+            # all non-markdown files are just copied over, the markdown
+            # files are converted to html
+            if abspath.endswith('.md'):
+                dstpath = os.path.abspath(f'{args.output_dir}/{relpath}')
+                dstpath = dstpath[:-3] + '.html'
+                convertibles.append((abspath, dstpath))
+            else:
+                shutil.copy(abspath, f'{args.output_dir}/{relpath}')
+        for dirname in dirnames:
+            # all directories are copied into the output directory
+            path = os.path.relpath(f'{root}/{dirname}', start=args.input_dir)
+            os.makedirs(f'{args.output_dir}/{path}', exist_ok=True)
+
+    convert_to_html(convertibles)
 
 
-def render_page(path):
-    """Render page.
+def convert_to_html(convertibles):
 
-    It starts with the file under path, and processes it by pushing it through
-    the processing pipeline. It returns a string.
-    """
-    logging.debug("Rendering %s" % path)
-    fh = codecs.open(path, 'r', 'utf-8')
-    txt = "".join(fh.readlines())
-    fh.close()
+    env = Environment(
+            loader=FileSystemLoader(['templates']),
+    )
 
-    fh = codecs.open(DEFAULT_LAYOUT, 'r', 'utf-8')
-    template = ''.join(fh.readlines())
-    fh.close()
+    md = markdown.Markdown(
+            extensions=['meta', 'fenced_code', 'codehilite'],
+            output_format='html5',
+    )
 
-    # get meta information
-    meta, txt = get_meta(txt)
+    pages = []
+    articles = []
 
-    # currently we only process markdown, other stuff can be added easyly
-    txt = process_markdown(txt)
-    txt = process_embed_content(template, txt)
-    txt = process_embed_meta(txt, meta)
-    check_unused_variables(txt)
-    return txt
+    for src, dst in convertibles:
+        logger.debug(f'Processing {src}')
+        with open(src, 'r') as fh:
+            body = fh.read()
+        md.reset()
+        content = md.convert(body)
+        meta = md.Meta
+        # convert markdown's weird format to str or list[str]
+        for key, value in meta.items():
+            value = '\n'.join(value).split(',')
+            value = [v.strip() for v in value]
+            if len(value) == 1:
+                value = value[0]
+            meta[key] = value
+
+        context = dict(content=content)
+        context.update(meta)
+        # for now, treat all pages as articles
+        if not meta:
+            pages.append((dst, context))
+            #template = env.get_template('page.html')
+        else:
+            articles.append((dst, context))
+            #template = env.get_template('article.html')
+        template = env.get_template('article.html')
+        result = template.render(context)
+        with open(dst, 'w') as fh_dest:
+            fh_dest.write(result)
+
+    # generate feed
+    feed = feedgenerator.Atom1Feed(
+            link='https://venthur.de',
+            title='my title',
+            description='basti"s blag',
+    )
+
+    for dst, context in articles:
+        feed.add_item(
+            title=context['title'],
+            link=dst,
+            description=context['title'],
+            content=context['content'],
+            pubdate=datetime.fromisoformat(context['date']),
+        )
+
+    with open('atom.xml', 'w') as fh:
+        feed.write(fh, encoding='utf8')
+    # generate archive
+    # generate tags
+
+if __name__ == '__main__':
+    main()

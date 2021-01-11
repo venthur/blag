@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block head %}
+  {{ super() }}
+
+{% endblock %}
+
+{% block content %}
+
+  <p>Written on {{ date }}.</p>
+
+  {{ content }}
+
+  {% if tags %}
+  <p>This entry was tagged
+    {% for tag in tags|sort(case_sensitive=true) %}
+      {%- if not loop.first and not loop.last %}, {% endif -%}
+      {%- if loop.last and not loop.first %} and {% endif %}
+      <a href="/tag.html">{{ tag }}</a>
+    {%- endfor %}
+  </p>
+  {% endif %}
+{% endblock %}
