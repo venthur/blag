@@ -11,9 +11,6 @@ __author__ = "Bastian Venthur <venthur@debian.org>"
 import argparse
 import os
 import shutil
-import string
-import codecs
-import re
 import logging
 from datetime import datetime
 
@@ -119,6 +116,10 @@ def convert_to_html(convertibles):
                 value = value[0]
             meta[key] = value
 
+        # convert known metadata
+        if 'date' in meta:
+            meta['date'] = datetime.fromisoformat(meta['date'])
+
         context = dict(content=content)
         context.update(meta)
         # for now, treat all pages as articles
@@ -146,7 +147,7 @@ def convert_to_html(convertibles):
             link=dst,
             description=context['title'],
             content=context['content'],
-            pubdate=datetime.fromisoformat(context['date']),
+            pubdate=context['date'],
         )
 
     with open('atom.xml', 'w') as fh:

@@ -9,7 +9,13 @@
 
 {% block content %}
 
-  <p>Written on {{ date }}.</p>
+  {% if title %}
+  <h1>{{ title }}</h1>
+  {% endif %}
+
+  {% if date %}
+  <p>Written on {{ date.date() }}.</p>
+  {% endif %}
 
   {{ content }}
 
