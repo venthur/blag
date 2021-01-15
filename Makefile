@@ -5,9 +5,9 @@ all: lint test
 
 $(VENV): requirements.txt requirements-dev.txt setup.py
 	python3 -m venv $(VENV)
-	$(VENV)/bin/python -m pip install --upgrade -r requirements.txt
-	$(VENV)/bin/python -m pip install --upgrade -r requirements-dev.txt
-	$(VENV)/bin/python -m pip install -e .
+	$(VENV)/bin/python3 -m pip install --upgrade -r requirements.txt
+	$(VENV)/bin/python3 -m pip install --upgrade -r requirements-dev.txt
+	$(VENV)/bin/python3 -m pip install -e .
 	touch $(VENV)
 
 test:
