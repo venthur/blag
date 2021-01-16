@@ -11,15 +11,15 @@ $(VENV): requirements.txt requirements-dev.txt setup.py
 	touch $(VENV)
 
 test:
-	$(VENV)/bin/python -m pytest
+	$(VENV)/bin/python3 -m pytest
 .PHONY: test
 
 lint:
-	$(VENV)/bin/python -m flake8
+	$(VENV)/bin/python3 -m flake8
 .PHONY: lint
 
 release:
-	python3 setup.py sdist bdist_wheel upload
+	$(VENV)/bin/python3 setup.py sdist bdist_wheel upload
 .PHONY: release
 
 clean:
