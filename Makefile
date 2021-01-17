@@ -10,7 +10,7 @@ $(VENV): requirements.txt requirements-dev.txt setup.py
 	$(VENV)/bin/python3 -m pip install -e .
 	touch $(VENV)
 
-test:
+test: $(VENV)
 	$(VENV)/bin/python3 -m pytest
 .PHONY: test
 
@@ -23,6 +23,7 @@ release:
 .PHONY: release
 
 clean:
+	rm -rf build dist *.egg-info
 	rm -rf $(VENV)
 	find . -type f -name *.pyc -delete
 	find . -type d -name __pycache__ -delete
