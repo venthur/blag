@@ -15,7 +15,7 @@ import logging
 from datetime import datetime
 
 import markdown
-from jinja2 import Environment, FileSystemLoader
+from jinja2 import Environment, ChoiceLoader, FileSystemLoader, PackageLoader
 import feedgenerator
 
 logger = logging.getLogger(__name__)
@@ -90,7 +90,10 @@ def build(args):
 def convert_to_html(convertibles):
 
     env = Environment(
-            loader=FileSystemLoader(['templates']),
+            loader=ChoiceLoader([
+                FileSystemLoader(['templates']),
+                PackageLoader('sg', 'templates'),
+            ])
     )
 
     md = markdown.Markdown(
