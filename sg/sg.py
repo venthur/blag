@@ -155,7 +155,21 @@ def convert_to_html(convertibles):
 
     with open('atom.xml', 'w') as fh:
         feed.write(fh, encoding='utf8')
+
     # generate archive
+    ctx = {}
+    archive = []
+    for dst, context in articles:
+        entry = context.copy()
+        entry['dst'] = dst
+        archive.append(entry)
+    archive = sorted(archive, key=lambda x: x['date'], reverse=True)
+    ctx['archive'] = archive
+    template = env.get_template('archive.html')
+    result = template.render(ctx)
+    with open('archive.html', 'w') as fh:
+        fh.write(result)
+
     # generate tags
 
 if __name__ == '__main__':
