@@ -180,7 +180,60 @@ def convert_to_html(convertibles):
     with open('archive.html', 'w') as fh:
         fh.write(result)
 
-    # generate tags
+    ## generate tags
+    #ctx = {}
+    #tags = {}
+    #for dst, context in articles:
+    #    logger.debug(f'{dst}: {context}')
+    #    entry = context.copy()
+    #    entry['dst'] = dst
+    #    for tag in context['tags']:
+    #        tags['tag'] = tags.get(tag, []).append(entry)
+    #tags = list(tags)
+    #tags = sorted(tags)
+    #ctx['tags'] = tags
+    #template = env.get_template('tags.html')
+    #result = template.render(ctx)
+    #with open('tags.html', 'w') as fh:
+    #    fh.write(result)
+
+
+
+def convert_markdown(md, markdown):
+    """Convert markdown into html and extract meta data.
+
+    Parameters
+    ----------
+    md : markdown.Markdown instance
+    markdown : str
+
+    Returns
+    -------
+    str, dict :
+        html and metadata
+
+    """
+    md.reset()
+    content = md.convert(markdown)
+    meta = md.Meta
+
+    # markdowns metadata consists as list of strings -- one item per
+    # line. let's convert into single strings.
+    for key, value in meta.items():
+        value = '\n'.join(value)
+        meta[key] = value
+
+    # convert known metadata
+    # date: datetime
+    if 'date' in meta:
+        meta['date'] = datetime.fromisoformat(meta['date'])
+    # tags: list[str]
+    if 'tags' in meta:
+        tags = meta['tags'].split(',')
+        tags = [t.strip() for t in tags]
+        meta['tags'] = tags
+
+    return content, meta
 
 
 class MarkdownLinkTreeprocessor(Treeprocessor):
