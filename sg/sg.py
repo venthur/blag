@@ -90,6 +90,27 @@ def build(args):
     convert_to_html(convertibles)
 
 
+def markdown_factory():
+    """Create a Markdown instance.
+
+    This method exists only to ensure we use the same Markdown instance
+    for tests as for the actual thing.
+
+    Returns
+    -------
+    markdown.Markdown
+
+    """
+    md = Markdown(
+        extensions=[
+            'meta', 'fenced_code', 'codehilite',
+            MarkdownLinkExtension()
+        ],
+        output_format='html5',
+    )
+    return md
+
+
 def convert_to_html(convertibles):
 
     env = Environment(
@@ -99,13 +120,7 @@ def convert_to_html(convertibles):
             ])
     )
 
-    md = Markdown(
-        extensions=[
-            'meta', 'fenced_code', 'codehilite',
-            MarkdownLinkExtension()
-        ],
-        output_format='html5',
-    )
+    md = markdown_factory()
 
     pages = []
     articles = []
@@ -114,23 +129,12 @@ def convert_to_html(convertibles):
         logger.debug(f'Processing {src}')
         with open(src, 'r') as fh:
             body = fh.read()
-        md.reset()
-        content = md.convert(body)
-        meta = md.Meta
-        # convert markdown's weird format to str or list[str]
-        for key, value in meta.items():
-            value = '\n'.join(value).split(',')
-            value = [v.strip() for v in value]
-            if len(value) == 1:
-                value = value[0]
-            meta[key] = value
 
-        # convert known metadata
-        if 'date' in meta:
-            meta['date'] = datetime.fromisoformat(meta['date'])
+        content, meta = convert_markdown(md, body)
 
         context = dict(content=content)
         context.update(meta)
+
         # for now, treat all pages as articles
         if not meta:
             pages.append((dst, context))
