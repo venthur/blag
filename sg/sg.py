@@ -177,7 +177,7 @@ def convert_to_html(convertibles):
     ctx['archive'] = archive
     template = env.get_template('archive.html')
     result = template.render(ctx)
-    with open('archive.html', 'w') as fh:
+    with open('build/archive.html', 'w') as fh:
         fh.write(result)
 
     ## generate tags
