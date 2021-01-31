@@ -109,12 +109,18 @@ def convert_to_html(convertibles, input_dir, output_dir):
         context = dict(content=content)
         context.update(meta)
 
+        # if markdown has date in meta, we treat it as a blog article,
+        # everything else are just pages
         if meta and 'date' in meta:
             articles.append((dst, context))
+
         template = env.get_template('article.html')
         result = template.render(context)
         with open(f'{output_dir}/{dst}', 'w') as fh_dest:
             fh_dest.write(result)
+
+    # sort articles by date, descending
+    articles = sorted(articles, key=lambda x: x[1]['date'], reverse=True)
 
     # generate feed
     feed = feedgenerator.Atom1Feed(
@@ -136,16 +142,14 @@ def convert_to_html(convertibles, input_dir, output_dir):
         feed.write(fh, encoding='utf8')
 
     # generate archive
-    ctx = {}
     archive = []
     for dst, context in articles:
         entry = context.copy()
         entry['dst'] = dst
         archive.append(entry)
-    archive = sorted(archive, key=lambda x: x['date'], reverse=True)
-    ctx['archive'] = archive
+
     template = env.get_template('archive.html')
-    result = template.render(ctx)
+    result = template.render(dict(archive=archive))
     with open('build/index.html', 'w') as fh:
         fh.write(result)
 
