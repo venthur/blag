@@ -12,14 +12,11 @@ import argparse
 import os
 import shutil
 import logging
-from datetime import datetime
-from urllib.parse import urlsplit, urlunsplit
 
-from markdown import Markdown
-from markdown.extensions import Extension
-from markdown.treeprocessors import Treeprocessor
 from jinja2 import Environment, ChoiceLoader, FileSystemLoader, PackageLoader
 import feedgenerator
+
+from sg.markdown import markdown_factory, convert_markdown
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
@@ -87,27 +84,6 @@ def build(args):
             os.makedirs(f'{args.output_dir}/{path}', exist_ok=True)
 
     convert_to_html(convertibles, args.input_dir, args.output_dir)
-
-
-def markdown_factory():
-    """Create a Markdown instance.
-
-    This method exists only to ensure we use the same Markdown instance
-    for tests as for the actual thing.
-
-    Returns
-    -------
-    markdown.Markdown
-
-    """
-    md = Markdown(
-        extensions=[
-            'meta', 'fenced_code', 'codehilite',
-            MarkdownLinkExtension()
-        ],
-        output_format='html5',
-    )
-    return md
 
 
 def convert_to_html(convertibles, input_dir, output_dir):
@@ -191,74 +167,6 @@ def convert_to_html(convertibles, input_dir, output_dir):
     #    fh.write(result)
 
 
-
-def convert_markdown(md, markdown):
-    """Convert markdown into html and extract meta data.
-
-    Parameters
-    ----------
-    md : markdown.Markdown instance
-    markdown : str
-
-    Returns
-    -------
-    str, dict :
-        html and metadata
-
-    """
-    md.reset()
-    content = md.convert(markdown)
-    meta = md.Meta
-
-    # markdowns metadata consists as list of strings -- one item per
-    # line. let's convert into single strings.
-    for key, value in meta.items():
-        value = '\n'.join(value)
-        meta[key] = value
-
-    # convert known metadata
-    # date: datetime
-    if 'date' in meta:
-        meta['date'] = datetime.fromisoformat(meta['date'])
-    # tags: list[str]
-    if 'tags' in meta:
-        tags = meta['tags'].split(',')
-        tags = [t.strip() for t in tags]
-        meta['tags'] = tags
-
-    return content, meta
-
-
-class MarkdownLinkTreeprocessor(Treeprocessor):
-    """Converts relative links to .md files to .html
-
-    """
-
-    def run(self, root):
-        for element in root.iter():
-            if element.tag == 'a':
-                url = element.get('href')
-                converted = self.convert(url)
-                element.set('href', converted)
-        return root
-
-    def convert(self, url):
-        scheme, netloc, path, query, fragment = urlsplit(url)
-        logger.debug(f'{url} -> scheme: {scheme} netloc: {netloc} path: {path} query: {query} fragment: {fragment}')
-        if (scheme or netloc or not path):
-            return url
-        if path.endswith('.md'):
-            path = path[:-3] + '.html'
-
-        url = urlunsplit((scheme, netloc, path, query, fragment))
-        return url
-
-
-class MarkdownLinkExtension(Extension):
-    def extendMarkdown(self, md):
-        md.treeprocessors.register(
-                MarkdownLinkTreeprocessor(md), 'mdlink', 0,
-        )
 
 
 if __name__ == '__main__':
