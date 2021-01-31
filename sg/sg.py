@@ -72,22 +72,21 @@ def build(args):
     convertibles = []
     for root, dirnames, filenames in os.walk(args.input_dir):
         for filename in filenames:
-            relpath = os.path.relpath(f'{root}/{filename}', start=args.input_dir)
-            abspath = os.path.abspath(f'{root}/{filename}')
+            rel_src = os.path.relpath(f'{root}/{filename}', start=args.input_dir)
             # all non-markdown files are just copied over, the markdown
             # files are converted to html
-            if abspath.endswith('.md'):
-                dstpath = os.path.abspath(f'{args.output_dir}/{relpath}')
-                dstpath = dstpath[:-3] + '.html'
-                convertibles.append((abspath, dstpath))
+            if rel_src.endswith('.md'):
+                rel_dst = rel_src
+                rel_dst = rel_dst[:-3] + '.html'
+                convertibles.append((rel_src, rel_dst))
             else:
-                shutil.copy(abspath, f'{args.output_dir}/{relpath}')
+                shutil.copy(f'{args.input_dir}/{rel_src}', f'{args.output_dir}/{rel_src}')
         for dirname in dirnames:
             # all directories are copied into the output directory
             path = os.path.relpath(f'{root}/{dirname}', start=args.input_dir)
             os.makedirs(f'{args.output_dir}/{path}', exist_ok=True)
 
-    convert_to_html(convertibles)
+    convert_to_html(convertibles, args.input_dir, args.output_dir)
 
 
 def markdown_factory():
@@ -111,7 +110,7 @@ def markdown_factory():
     return md
 
 
-def convert_to_html(convertibles):
+def convert_to_html(convertibles, input_dir, output_dir):
 
     env = Environment(
             loader=ChoiceLoader([
@@ -122,12 +121,11 @@ def convert_to_html(convertibles):
 
     md = markdown_factory()
 
-    pages = []
     articles = []
 
     for src, dst in convertibles:
         logger.debug(f'Processing {src}')
-        with open(src, 'r') as fh:
+        with open(f'{input_dir}/{src}', 'r') as fh:
             body = fh.read()
 
         content, meta = convert_markdown(md, body)
@@ -135,16 +133,11 @@ def convert_to_html(convertibles):
         context = dict(content=content)
         context.update(meta)
 
-        # for now, treat all pages as articles
-        if not meta:
-            pages.append((dst, context))
-            #template = env.get_template('page.html')
-        else:
+        if meta and 'date' in meta:
             articles.append((dst, context))
-            #template = env.get_template('article.html')
         template = env.get_template('article.html')
         result = template.render(context)
-        with open(dst, 'w') as fh_dest:
+        with open(f'{output_dir}/{dst}', 'w') as fh_dest:
             fh_dest.write(result)
 
     # generate feed
@@ -177,7 +170,7 @@ def convert_to_html(convertibles):
     ctx['archive'] = archive
     template = env.get_template('archive.html')
     result = template.render(ctx)
-    with open('build/archive.html', 'w') as fh:
+    with open('build/index.html', 'w') as fh:
         fh.write(result)
 
     ## generate tags

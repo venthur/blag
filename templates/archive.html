@@ -9,17 +9,14 @@
 
 {% block content %}
 
-<h1>Archive</h1>
-
 {% for entry in archive %}
 
-  {% if entry.title %}
-  <h1><a href="{{entry.dst}}">{{entry.title}}</a></h1>
-  {% endif %}
-
-  {% if entry.date %}
-  <p>Written on {{ entry.date.date() }}.</p>
-  {% endif %}
+  <article>
+    <header>
+      <time datetime="{{entry.date}}">{{entry.date.date()}}</time>
+      <h1><a href="{{entry.dst}}">{{entry.title}}</a></h1>
+    </header>
+  </article>
 
 {% endfor %}
 
