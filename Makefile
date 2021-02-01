@@ -14,11 +14,11 @@ test: $(VENV)
 	$(VENV)/bin/python3 -m pytest
 .PHONY: test
 
-lint:
+lint: $(VENV)
 	$(VENV)/bin/python3 -m flake8
 .PHONY: lint
 
-release:
+release: $(VENV)
 	$(VENV)/bin/python3 setup.py sdist bdist_wheel
 	$(VENV)/bin/twine upload dist/*
 .PHONY: release
