@@ -3,7 +3,7 @@ from datetime import datetime
 import pytest
 import markdown
 
-from sg.markdown import convert_markdown, markdown_factory
+from blag.markdown import convert_markdown, markdown_factory
 
 
 @pytest.mark.parametrize("input_, expected", [

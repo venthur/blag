@@ -16,7 +16,7 @@ import logging
 from jinja2 import Environment, ChoiceLoader, FileSystemLoader, PackageLoader
 import feedgenerator
 
-from sg.markdown import markdown_factory, convert_markdown
+from blag.markdown import markdown_factory, convert_markdown
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
@@ -91,7 +91,7 @@ def convert_to_html(convertibles, input_dir, output_dir):
     env = Environment(
             loader=ChoiceLoader([
                 FileSystemLoader(['templates']),
-                PackageLoader('sg', 'templates'),
+                PackageLoader('blag', 'templates'),
             ])
     )
 
