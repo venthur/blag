@@ -69,7 +69,8 @@ def build(args):
     convertibles = []
     for root, dirnames, filenames in os.walk(args.input_dir):
         for filename in filenames:
-            rel_src = os.path.relpath(f'{root}/{filename}', start=args.input_dir)
+            rel_src = os.path.relpath(f'{root}/{filename}',
+                                      start=args.input_dir)
             # all non-markdown files are just copied over, the markdown
             # files are converted to html
             if rel_src.endswith('.md'):
@@ -77,7 +78,8 @@ def build(args):
                 rel_dst = rel_dst[:-3] + '.html'
                 convertibles.append((rel_src, rel_dst))
             else:
-                shutil.copy(f'{args.input_dir}/{rel_src}', f'{args.output_dir}/{rel_src}')
+                shutil.copy(f'{args.input_dir}/{rel_src}',
+                            f'{args.output_dir}/{rel_src}')
         for dirname in dirnames:
             # all directories are copied into the output directory
             path = os.path.relpath(f'{root}/{dirname}', start=args.input_dir)
@@ -152,25 +154,6 @@ def convert_to_html(convertibles, input_dir, output_dir):
     result = template.render(dict(archive=archive))
     with open('build/index.html', 'w') as fh:
         fh.write(result)
-
-    ## generate tags
-    #ctx = {}
-    #tags = {}
-    #for dst, context in articles:
-    #    logger.debug(f'{dst}: {context}')
-    #    entry = context.copy()
-    #    entry['dst'] = dst
-    #    for tag in context['tags']:
-    #        tags['tag'] = tags.get(tag, []).append(entry)
-    #tags = list(tags)
-    #tags = sorted(tags)
-    #ctx['tags'] = tags
-    #template = env.get_template('tags.html')
-    #result = template.render(ctx)
-    #with open('tags.html', 'w') as fh:
-    #    fh.write(result)
-
-
 
 
 if __name__ == '__main__':
