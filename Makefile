@@ -19,7 +19,8 @@ lint:
 .PHONY: lint
 
 release:
-	$(VENV)/bin/python3 setup.py sdist bdist_wheel upload
+	$(VENV)/bin/python3 setup.py sdist bdist_wheel
+	$(VENV)/bin/twine upload dist/*
 .PHONY: release
 
 clean:
