@@ -89,14 +89,30 @@ def build(args):
             path = os.path.relpath(f'{root}/{dirname}', start=args.input_dir)
             os.makedirs(f'{args.output_dir}/{path}', exist_ok=True)
 
-    process_markdown(
-        convertibles, args.input_dir,
+    env = Environment(
+            loader=ChoiceLoader([
+                FileSystemLoader([args.template_dir]),
+                PackageLoader('blag', 'templates'),
+            ])
+    )
+    page_template = env.get_template('page.html')
+    article_template = env.get_template('article.html')
+    archive_template = env.get_template('archive.html')
+
+    articles, pages = process_markdown(
+        convertibles,
+        args.input_dir,
         args.output_dir,
-        args.template_dir
+        page_template,
+        article_template,
     )
 
+    generate_feed(articles, args.output_dir)
+    generate_archive(articles, archive_template, args.output_dir)
 
-def process_markdown(convertibles, input_dir, output_dir, template_dir):
+
+def process_markdown(convertibles, input_dir, output_dir,
+                     page_template, article_template):
     """Process markdown files.
 
     This method processes the convertibles, converts them to html and
@@ -111,20 +127,14 @@ def process_markdown(convertibles, input_dir, output_dir, template_dir):
         relative paths to markdown- (src) html- (dest) files
     input_dir : str
     output_dir : str
-    template_dir : str
+    page_template, archive_template : jinja2 template
+        templats for pages and articles
 
     Returns
     -------
     articles, pages : List[Tuple[str, Dict]]
 
     """
-    env = Environment(
-            loader=ChoiceLoader([
-                FileSystemLoader([template_dir]),
-                PackageLoader('blag', 'templates'),
-            ])
-    )
-
     md = markdown_factory()
 
     articles = []
@@ -143,18 +153,19 @@ def process_markdown(convertibles, input_dir, output_dir, template_dir):
         # everything else are just pages
         if meta and 'date' in meta:
             articles.append((dst, context))
-            template = env.get_template('article.html')
+            result = article_template.render(context)
         else:
             pages.append((dst, content))
-            template = env.get_template('page.html')
-        result = template.render(context)
+            result = page_template.render(context)
         with open(f'{output_dir}/{dst}', 'w') as fh_dest:
             fh_dest.write(result)
 
     # sort articles by date, descending
     articles = sorted(articles, key=lambda x: x[1]['date'], reverse=True)
+    return articles, pages
 
-    # generate feed
+
+def generate_feed(articles, output_dir):
     feed = feedgenerator.Atom1Feed(
             link='https://venthur.de',
             title='my title',
@@ -170,22 +181,20 @@ def process_markdown(convertibles, input_dir, output_dir, template_dir):
             pubdate=context['date'],
         )
 
-    with open('atom.xml', 'w') as fh:
+    with open(f'{output_dir}/atom.xml', 'w') as fh:
         feed.write(fh, encoding='utf8')
 
-    # generate archive
+
+def generate_archive(articles, template, output_dir):
     archive = []
     for dst, context in articles:
         entry = context.copy()
         entry['dst'] = dst
         archive.append(entry)
 
-    template = env.get_template('archive.html')
     result = template.render(dict(archive=archive))
-    with open('build/index.html', 'w') as fh:
+    with open(f'{output_dir}/index.html', 'w') as fh:
         fh.write(result)
-
-    return articles, pages
 
 
 if __name__ == '__main__':
