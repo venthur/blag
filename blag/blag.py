@@ -12,6 +12,8 @@ import argparse
 import os
 import shutil
 import logging
+import configparser
+import sys
 
 from jinja2 import Environment, ChoiceLoader, FileSystemLoader, PackageLoader
 import feedgenerator
@@ -68,6 +70,24 @@ def parse_args(args):
     return parser.parse_args()
 
 
+def get_config(configfile):
+    config = configparser.ConfigParser()
+    config.read(configfile)
+    # check for the mandatory options
+    for value in 'base_url', 'title', 'subtitle', 'author':
+        try:
+            config['main'][value]
+        except Exception:
+            print(f'{value} is missing in {configfile}!')
+            sys.exit(1)
+
+    if not config['main']['base_url'].endswith('/'):
+        logger.warning('base_url does not end with a slash, adding it.')
+        config['main']['base_url'] += '/'
+
+    return config['main']
+
+
 def build(args):
     os.makedirs(f'{args.output_dir}', exist_ok=True)
     convertibles = []
@@ -89,6 +109,8 @@ def build(args):
             path = os.path.relpath(f'{root}/{dirname}', start=args.input_dir)
             os.makedirs(f'{args.output_dir}/{path}', exist_ok=True)
 
+    config = get_config('config.ini')
+
     env = Environment(
             loader=ChoiceLoader([
                 FileSystemLoader([args.template_dir]),
@@ -107,7 +129,12 @@ def build(args):
         article_template,
     )
 
-    generate_feed(articles, args.output_dir)
+    generate_feed(articles, args.output_dir,
+            base_url=config['base_url'],
+            blog_title=config['title'],
+            blog_subtitle=config['subtitle'],
+            blog_author=config['author'],
+    )
     generate_archive(articles, archive_template, args.output_dir)
 
 
@@ -165,17 +192,26 @@ def process_markdown(convertibles, input_dir, output_dir,
     return articles, pages
 
 
-def generate_feed(articles, output_dir):
+def generate_feed(
+        articles,
+        output_dir,
+        base_url,
+        blog_title,
+        blog_subtitle,
+        blog_author,
+):
     feed = feedgenerator.Atom1Feed(
-            link='https://venthur.de',
-            title='my title',
-            description='basti"s blag',
+            link=base_url,
+            title=blog_title,
+            subtitle=blog_subtitle,
+            feed_url=base_url + 'atom.xml',
     )
 
     for dst, context in articles:
         feed.add_item(
             title=context['title'],
-            link=dst,
+            author_name=blog_author,
+            link=base_url + dst,
             description=context['title'],
             content=context['content'],
             pubdate=context['date'],
