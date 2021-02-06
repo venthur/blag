@@ -67,6 +67,10 @@ def parse_args(args):
             default='templates',
             help='Template directory (default: templates)',
     )
+
+    quickstart_parser = commands.add_parser('quickstart')
+    quickstart_parser.set_defaults(func=quickstart)
+
     return parser.parse_args()
 
 
@@ -231,6 +235,24 @@ def generate_archive(articles, template, output_dir):
     result = template.render(dict(archive=archive))
     with open(f'{output_dir}/index.html', 'w') as fh:
         fh.write(result)
+
+
+def quickstart(args):
+    base_url = input("Hostname (and path) to the root? "
+                     "[https://example.com/]: ")
+    title = input("Title of your website? ")
+    subtitle = input("Subtitle of your website? ")
+    author = input("Author of your website [John Doe]? ")
+
+    config = configparser.ConfigParser()
+    config['main'] = {
+            'base_url': base_url,
+            'title': title,
+            'subtitle': subtitle,
+            'author': author,
+    }
+    with open('config.ini', 'w') as fh:
+        config.write(fh)
 
 
 if __name__ == '__main__':
