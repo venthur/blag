@@ -59,6 +59,7 @@ def convert_markdown(md, markdown):
     # date: datetime
     if 'date' in meta:
         meta['date'] = datetime.fromisoformat(meta['date'])
+        meta['date'] = meta['date'].astimezone()
     # tags: list[str]
     if 'tags' in meta:
         tags = meta['tags'].split(',')
