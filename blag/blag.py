@@ -60,7 +60,11 @@ def parse_args(args):
             default='build',
             help='Ouptut directory (default: build)',
     )
-
+    build_parser.add_argument(
+            '-t', '--template-dir',
+            default='templates',
+            help='Template directory (default: templates)',
+    )
     return parser.parse_args()
 
 
@@ -85,14 +89,18 @@ def build(args):
             path = os.path.relpath(f'{root}/{dirname}', start=args.input_dir)
             os.makedirs(f'{args.output_dir}/{path}', exist_ok=True)
 
-    convert_to_html(convertibles, args.input_dir, args.output_dir)
+    convert_to_html(
+        convertibles, args.input_dir,
+        args.output_dir,
+        args.template_dir
+    )
 
 
-def convert_to_html(convertibles, input_dir, output_dir):
+def convert_to_html(convertibles, input_dir, output_dir, template_dir):
 
     env = Environment(
             loader=ChoiceLoader([
-                FileSystemLoader(['templates']),
+                FileSystemLoader([template_dir]),
                 PackageLoader('blag', 'templates'),
             ])
     )
