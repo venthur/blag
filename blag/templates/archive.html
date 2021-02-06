@@ -1,13 +1,15 @@
-<h1>Archive</h1>
+{% extends "base.html" %}
 
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
 {% for entry in archive %}
 
   {% if entry.title %}
   <h1><a href="{{entry.dst}}">{{entry.title}}</a></h1>
   {% endif %}
 
-  {% if entry.date %}
   <p>Written on {{ entry.date.date() }}.</p>
-  {% endif %}
 
 {% endfor %}
+{% endblock %}

@@ -89,15 +89,35 @@ def build(args):
             path = os.path.relpath(f'{root}/{dirname}', start=args.input_dir)
             os.makedirs(f'{args.output_dir}/{path}', exist_ok=True)
 
-    convert_to_html(
+    process_markdown(
         convertibles, args.input_dir,
         args.output_dir,
         args.template_dir
     )
 
 
-def convert_to_html(convertibles, input_dir, output_dir, template_dir):
+def process_markdown(convertibles, input_dir, output_dir, template_dir):
+    """Process markdown files.
 
+    This method processes the convertibles, converts them to html and
+    saves them to the respective destination paths.
+
+    If a markdown file has a `date` metadata field it will be recognized
+    as article otherwise as page.
+
+    Parameters
+    ----------
+    convertibles : List[Tuple[str, str]]
+        relative paths to markdown- (src) html- (dest) files
+    input_dir : str
+    output_dir : str
+    template_dir : str
+
+    Returns
+    -------
+    articles, pages : List[Tuple[str, Dict]]
+
+    """
     env = Environment(
             loader=ChoiceLoader([
                 FileSystemLoader([template_dir]),
@@ -108,7 +128,7 @@ def convert_to_html(convertibles, input_dir, output_dir, template_dir):
     md = markdown_factory()
 
     articles = []
-
+    pages = []
     for src, dst in convertibles:
         logger.debug(f'Processing {src}')
         with open(f'{input_dir}/{src}', 'r') as fh:
@@ -123,8 +143,10 @@ def convert_to_html(convertibles, input_dir, output_dir, template_dir):
         # everything else are just pages
         if meta and 'date' in meta:
             articles.append((dst, context))
-
-        template = env.get_template('article.html')
+            template = env.get_template('article.html')
+        else:
+            pages.append((dst, content))
+            template = env.get_template('page.html')
         result = template.render(context)
         with open(f'{output_dir}/{dst}', 'w') as fh_dest:
             fh_dest.write(result)
@@ -162,6 +184,8 @@ def convert_to_html(convertibles, input_dir, output_dir, template_dir):
     result = template.render(dict(archive=archive))
     with open('build/index.html', 'w') as fh:
         fh.write(result)
+
+    return articles, pages
 
 
 if __name__ == '__main__':
