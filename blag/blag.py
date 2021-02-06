@@ -207,7 +207,7 @@ def generate_feed(
     feed = feedgenerator.Atom1Feed(
             link=base_url,
             title=blog_title,
-            subtitle=blog_subtitle,
+            description=blog_subtitle,
             feed_url=base_url + 'atom.xml',
     )
 
