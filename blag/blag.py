@@ -67,6 +67,11 @@ def parse_args(args):
             default='templates',
             help='Template directory (default: templates)',
     )
+    build_parser.add_argument(
+            '-s', '--static-dir',
+            default='static',
+            help='Static directory (default: static)',
+    )
 
     quickstart_parser = commands.add_parser('quickstart')
     quickstart_parser.set_defaults(func=quickstart)
@@ -112,6 +117,10 @@ def build(args):
             # all directories are copied into the output directory
             path = os.path.relpath(f'{root}/{dirname}', start=args.input_dir)
             os.makedirs(f'{args.output_dir}/{path}', exist_ok=True)
+
+    # copy static files over
+    if os.path.exists(args.static_dir):
+        shutil.copytree(args.static_dir, args.output_dir, dirs_exist_ok=True)
 
     config = get_config('config.ini')
 
