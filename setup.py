@@ -18,6 +18,9 @@ setup(
     author_email='mail@venthur.de',
     url='https://github.com/venthur/blag',
     python_requires='>=3',
+    package_data={
+        'blag': ['templates/*'],
+    },
     install_requires=[
         'markdown',
         'feedgenerator',
