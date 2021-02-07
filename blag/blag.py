@@ -83,7 +83,7 @@ def get_config(configfile):
     config = configparser.ConfigParser()
     config.read(configfile)
     # check for the mandatory options
-    for value in 'base_url', 'title', 'subtitle', 'author':
+    for value in 'base_url', 'title', 'description', 'author':
         try:
             config['main'][value]
         except Exception:
@@ -145,7 +145,7 @@ def build(args):
     generate_feed(articles, args.output_dir,
             base_url=config['base_url'],
             blog_title=config['title'],
-            blog_subtitle=config['subtitle'],
+            blog_description=config['description'],
             blog_author=config['author'],
     )
     generate_archive(articles, archive_template, args.output_dir)
@@ -210,13 +210,13 @@ def generate_feed(
         output_dir,
         base_url,
         blog_title,
-        blog_subtitle,
+        blog_description,
         blog_author,
 ):
     feed = feedgenerator.Atom1Feed(
             link=base_url,
             title=blog_title,
-            description=blog_subtitle,
+            description=blog_description,
             feed_url=base_url + 'atom.xml',
     )
 
@@ -250,14 +250,14 @@ def quickstart(args):
     base_url = input("Hostname (and path) to the root? "
                      "[https://example.com/]: ")
     title = input("Title of your website? ")
-    subtitle = input("Subtitle of your website? ")
+    description = input("Description of your website [John Does's Blog]? ")
     author = input("Author of your website [John Doe]? ")
 
     config = configparser.ConfigParser()
     config['main'] = {
             'base_url': base_url,
             'title': title,
-            'subtitle': subtitle,
+            'description': description,
             'author': author,
     }
     with open('config.ini', 'w') as fh:
