@@ -133,6 +133,8 @@ def build(args):
     page_template = env.get_template('page.html')
     article_template = env.get_template('article.html')
     archive_template = env.get_template('archive.html')
+    tags_template = env.get_template('tags.html')
+    tag_template = env.get_template('tag.html')
 
     articles, pages = process_markdown(
         convertibles,
@@ -150,6 +152,7 @@ def build(args):
         blog_author=config['author'],
     )
     generate_archive(articles, archive_template, args.output_dir)
+    generate_tags(articles, tags_template, tag_template, args.output_dir)
 
 
 def process_markdown(convertibles, input_dir, output_dir,
@@ -245,6 +248,39 @@ def generate_archive(articles, template, output_dir):
     result = template.render(dict(archive=archive))
     with open(f'{output_dir}/index.html', 'w') as fh:
         fh.write(result)
+
+
+def generate_tags(articles, tags_template, tag_template, output_dir):
+    os.makedirs(f'{output_dir}/tags', exist_ok=True)
+
+    # get tags number of occurrences
+    all_tags = {}
+    for _, context in articles:
+        tags = context.get('tags', None)
+        for tag in tags:
+            all_tags[tag] = all_tags.get(tag, 0) + 1
+    # sort by occurrence
+    all_tags = sorted(all_tags.items(), key=lambda x: x[1], reverse=True)
+
+    result = tags_template.render(dict(tags=all_tags))
+    with open(f'{output_dir}/tags/index.html', 'w') as fh:
+        fh.write(result)
+
+    # get tags and archive per tag
+    all_tags = {}
+    for dst, context in articles:
+        tags = context.get('tags', None)
+        for tag in tags:
+            archive = all_tags.get(tag, [])
+            entry = context.copy()
+            entry['dst'] = dst
+            archive.append(entry)
+            all_tags[tag] = archive
+
+    for tag, archive in all_tags.items():
+        result = tag_template.render(dict(archive=archive, tag=tag))
+        with open(f'{output_dir}/tags/{tag}.html', 'w') as fh:
+            fh.write(result)
 
 
 def quickstart(args):
