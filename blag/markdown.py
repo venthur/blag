@@ -60,9 +60,10 @@ def convert_markdown(md, markdown):
     if 'date' in meta:
         meta['date'] = datetime.fromisoformat(meta['date'])
         meta['date'] = meta['date'].astimezone()
-    # tags: list[str]
+    # tags: list[str] and lower case
     if 'tags' in meta:
         tags = meta['tags'].split(',')
+        tags = [t.lower() for t in tags]
         tags = [t.strip() for t in tags]
         meta['tags'] = tags
 
