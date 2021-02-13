@@ -36,6 +36,10 @@ jobs:
         pip install -r requirements.txt
         pip install -r requirements-dev.txt
 
+    - name: Run tests
+      run: |
+        pytest
+
     - name: Run linter
       run: |
         flake8 -vv
