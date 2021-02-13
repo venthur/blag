@@ -17,7 +17,7 @@ setup(
     author='Bastian Venthur',
     author_email='mail@venthur.de',
     url='https://github.com/venthur/blag',
-    python_requires='>=3',
+    python_requires='>=3.8',
     package_data={
         'blag': ['templates/*'],
     },

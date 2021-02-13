@@ -17,8 +17,6 @@ jobs:
           - macos-latest
           - windows-latest
         python-version:
-          - 3.6
-          - 3.7
           - 3.8
           - 3.9
           - pypy3
@@ -42,8 +40,4 @@ jobs:
 
     - name: Run linter
       run: |
-        flake8 -vv
-
-    - name: Run tests
-      run: |
-        pytest
+        flake8
