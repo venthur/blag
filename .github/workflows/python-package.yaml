@@ -33,12 +33,13 @@ jobs:
 
     - name: Install dependencies
       run: |
-        make venv
+        pip install -r requirements.txt
+        pip install -r requirements-dev.txt
 
     - name: Run linter
       run: |
-        make lint
+        flake8
 
     - name: Run tests
       run: |
-        make test
+        pytest
