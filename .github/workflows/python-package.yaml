@@ -38,7 +38,7 @@ jobs:
 
     - name: Run linter
       run: |
-        flake8 -vvv
+        flake8 -v
 
     - name: Run tests
       run: |
