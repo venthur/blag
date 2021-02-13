@@ -1,26 +1,32 @@
 VENV = venv
 
+ifeq ($(OS), Windows_NT)
+	BIN=$(VENV)/Scripts
+else
+	BIN=$(VENV)/bin
+endif
+
 
 all: lint test
 
 $(VENV): requirements.txt requirements-dev.txt setup.py
 	python3 -m venv $(VENV)
-	$(VENV)/bin/python3 -m pip install --upgrade -r requirements.txt
-	$(VENV)/bin/python3 -m pip install --upgrade -r requirements-dev.txt
-	$(VENV)/bin/python3 -m pip install -e .
+	$(BIN)/python3 -m pip install --upgrade -r requirements.txt
+	$(BIN)/python3 -m pip install --upgrade -r requirements-dev.txt
+	$(BIN)/python3 -m pip install -e .
 	touch $(VENV)
 
 test: $(VENV)
-	$(VENV)/bin/python3 -m pytest
+	$(BIN)/python3 -m pytest
 .PHONY: test
 
 lint: $(VENV)
-	$(VENV)/bin/python3 -m flake8
+	$(BIN)/python3 -m flake8
 .PHONY: lint
 
 release: $(VENV)
-	$(VENV)/bin/python3 setup.py sdist bdist_wheel
-	$(VENV)/bin/twine upload dist/*
+	$(BIN)/python3 setup.py sdist bdist_wheel
+	$(BIN)/twine upload dist/*
 .PHONY: release
 
 clean:
