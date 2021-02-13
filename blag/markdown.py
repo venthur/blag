@@ -85,9 +85,9 @@ class MarkdownLinkTreeprocessor(Treeprocessor):
 
     def convert(self, url):
         scheme, netloc, path, query, fragment = urlsplit(url)
-        logger.debug(
-            f'{url}: {scheme=} {netloc=} {path=} {query=} {fragment=}'
-        )
+        # logger.debug(
+        #     f'{url}: {scheme=} {netloc=} {path=} {query=} {fragment=}'
+        # )
         if (scheme or netloc or not path):
             return url
         if path.endswith('.md'):
