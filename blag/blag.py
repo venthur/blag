@@ -32,12 +32,12 @@ def main(args=None):
     args.func(args)
 
 
-def parse_args(args):
+def parse_args(args=None):
     """Parse command line arguments.
 
     Paramters
     ---------
-    args :
+    args : List[str]
         optional parameters, used for testing
 
     Returns
@@ -76,7 +76,7 @@ def parse_args(args):
     quickstart_parser = commands.add_parser('quickstart')
     quickstart_parser.set_defaults(func=quickstart)
 
-    return parser.parse_args()
+    return parser.parse_args(args)
 
 
 def get_config(configfile):
