@@ -59,6 +59,7 @@ title = title
 description = description
 author = a. u. thor
     """
+    # happy path
     with TemporaryDirectory() as dir:
         configfile = f'{dir}/config.ini'
         with open(configfile, 'w') as fh:
@@ -70,6 +71,7 @@ author = a. u. thor
         assert config_parsed['description'] == 'description'
         assert config_parsed['author'] == 'a. u. thor'
 
+    # a missing required config causes a sys.exit
     for x in 'base_url', 'title', 'description', 'author':
         config2 = '\n'.join([line
                              for line
@@ -81,3 +83,19 @@ author = a. u. thor
                 fh.write(config2)
             with pytest.raises(SystemExit):
                 config_parsed = blag.get_config(configfile)
+
+    # base_url gets / appended if it is missing
+    config = """
+[main]
+base_url = https://example.com
+title = title
+description = description
+author = a. u. thor
+    """
+    with TemporaryDirectory() as dir:
+        configfile = f'{dir}/config.ini'
+        with open(configfile, 'w') as fh:
+            fh.write(config)
+
+        config_parsed = blag.get_config(configfile)
+        assert config_parsed['base_url'] == 'https://example.com/'
