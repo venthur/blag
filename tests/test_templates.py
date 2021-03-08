@@ -1,14 +1,19 @@
 import datetime
 
-from jinja2 import Environment, PackageLoader
 import pytest
+
+from blag import blag
 
 
 @pytest.fixture
 def environment():
-    env = Environment(
-            loader=PackageLoader('blag', 'templates')
-    )
+    site = {
+        'base_url': 'site base_url',
+        'title': 'site title',
+        'description': 'site description',
+        'author': 'site author',
+    }
+    env = blag.environment_factory(globals_=dict(site=site))
     yield env
 
 
@@ -65,11 +70,10 @@ def test_archive(archive_template):
     }
     archive = [entry]
     ctx = {
-        'title': 'this is the title',
         'archive': archive,
     }
     result = archive_template.render(ctx)
-    assert 'this is the title' in result
+    assert 'site title' in result
 
     assert 'this is a title' in result
     assert '1980-05-09' in result

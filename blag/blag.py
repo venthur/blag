@@ -97,6 +97,36 @@ def get_config(configfile):
     return config['main']
 
 
+def environment_factory(template_dir=None, globals_=None):
+    """Environment factory.
+
+    Creates a Jinja2 Environment with the default templates and
+    additional templates from `template_dir` loaded. If `globals` are
+    provided, they are attached to the environment and thus available to
+    all contexts.
+
+    Parameters
+    ----------
+    template_dir : str
+    globals_ : dict
+
+    Returns
+    -------
+    jinja2.Environment
+
+    """
+    # first we try the custom templates, and fall back the ones provided
+    # by blag
+    loaders = []
+    if template_dir:
+        loaders.append(FileSystemLoader([template_dir]))
+    loaders.append(PackageLoader('blag', 'templates'))
+    env = Environment(loader=ChoiceLoader(loaders))
+    if globals_:
+        env.globals = globals_
+    return env
+
+
 def build(args):
     os.makedirs(f'{args.output_dir}', exist_ok=True)
     convertibles = []
@@ -124,12 +154,8 @@ def build(args):
 
     config = get_config('config.ini')
 
-    env = Environment(
-            loader=ChoiceLoader([
-                FileSystemLoader([args.template_dir]),
-                PackageLoader('blag', 'templates'),
-            ])
-    )
+    env = environment_factory(args.template_dir, dict(site=config))
+
     page_template = env.get_template('page.html')
     article_template = env.get_template('article.html')
     archive_template = env.get_template('archive.html')

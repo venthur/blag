@@ -99,3 +99,13 @@ author = a. u. thor
 
         config_parsed = blag.get_config(configfile)
         assert config_parsed['base_url'] == 'https://example.com/'
+
+
+def test_environment_factory():
+    globals_ = {
+        'foo': 'bar',
+        'test': 'me'
+    }
+    env = blag.environment_factory(globals_=globals_)
+    assert env.globals['foo'] == 'bar'
+    assert env.globals['test'] == 'me'
