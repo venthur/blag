@@ -1,4 +1,4 @@
-PY3 = python3
+PY = python3
 VENV = venv
 
 ifeq ($(OS), Windows_NT)
@@ -12,7 +12,7 @@ endif
 all: lint test
 
 $(VENV): requirements.txt requirements-dev.txt setup.py
-	python3 -m venv $(VENV)
+	$(PY) -m venv $(VENV)
 	$(BIN)/python3 -m pip install --upgrade -r requirements.txt
 	$(BIN)/python3 -m pip install --upgrade -r requirements-dev.txt
 	$(BIN)/python3 -m pip install -e .
