@@ -13,21 +13,21 @@ all: lint test
 
 $(VENV): requirements.txt requirements-dev.txt setup.py
 	$(PY) -m venv $(VENV)
-	$(BIN)/python3 -m pip install --upgrade -r requirements.txt
-	$(BIN)/python3 -m pip install --upgrade -r requirements-dev.txt
-	$(BIN)/python3 -m pip install -e .
+	$(BIN)/python -m pip install --upgrade -r requirements.txt
+	$(BIN)/python -m pip install --upgrade -r requirements-dev.txt
+	$(BIN)/python -m pip install -e .
 	touch $(VENV)
 
 test: $(VENV)
-	$(BIN)/python3 -m pytest
+	$(BIN)/python -m pytest
 .PHONY: test
 
 lint: $(VENV)
-	$(BIN)/python3 -m flake8
+	$(BIN)/python -m flake8
 .PHONY: lint
 
 release: $(VENV)
-	$(BIN)/python3 setup.py sdist bdist_wheel
+	$(BIN)/python setup.py sdist bdist_wheel
 	$(BIN)/twine upload dist/*
 .PHONY: release
 
