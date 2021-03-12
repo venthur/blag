@@ -1,7 +1,9 @@
+PY3 = python3
 VENV = venv
 
 ifeq ($(OS), Windows_NT)
 	BIN=$(VENV)/Scripts
+	PY=python3.exe
 else
 	BIN=$(VENV)/bin
 endif
