@@ -3,7 +3,7 @@ VENV = venv
 
 ifeq ($(OS), Windows_NT)
 	BIN=$(VENV)/Scripts
-	PY=python.exe
+	PY=python
 else
 	BIN=$(VENV)/bin
 endif
