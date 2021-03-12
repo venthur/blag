@@ -1,12 +1,11 @@
 # system python interpreter. used only to create virtual environment
 PY = python3
 VENV = venv
+BIN=$(VENV)/bin
 
 ifeq ($(OS), Windows_NT)
 	BIN=$(VENV)/Scripts
 	PY=python
-else
-	BIN=$(VENV)/bin
 endif
 
 
