@@ -14,17 +14,17 @@ all: lint test
 
 $(VENV): requirements.txt requirements-dev.txt setup.py
 	$(PY) -m venv $(VENV)
-	$(BIN)/python -m pip install --upgrade -r requirements.txt
-	$(BIN)/python -m pip install --upgrade -r requirements-dev.txt
-	$(BIN)/python -m pip install -e .
+	$(BIN)/pip install --upgrade -r requirements.txt
+	$(BIN)/pip install --upgrade -r requirements-dev.txt
+	$(BIN)/pip install -e .
 	touch $(VENV)
 
 test: $(VENV)
-	$(BIN)/python -m pytest
+	$(BIN)/pytest
 .PHONY: test
 
 lint: $(VENV)
-	$(BIN)/python -m flake8
+	$(BIN)/flake8
 .PHONY: lint
 
 release: $(VENV)
