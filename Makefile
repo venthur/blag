@@ -1,3 +1,4 @@
+# system python interpreter. used only to create virtual environment
 PY = python3
 VENV = venv
 
