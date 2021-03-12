@@ -10,7 +10,7 @@ meta['long_description'] = open('./README.md').read()
 setup(
     name='blag',
     version=meta['__VERSION__'],
-    description='simple blog-aware static site generator',
+    description='blog-aware, static site generator',
     long_description=meta['long_description'],
     long_description_content_type='text/markdown',
     keywords='markdown blag blog static site generator cli',
