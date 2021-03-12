@@ -27,6 +27,7 @@ lint: $(VENV)
 .PHONY: lint
 
 release: $(VENV)
+	rm -rf dist
 	$(BIN)/python setup.py sdist bdist_wheel
 	$(BIN)/twine upload dist/*
 .PHONY: release
