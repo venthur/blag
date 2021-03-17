@@ -22,7 +22,7 @@ from blag.markdown import markdown_factory, convert_markdown
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
-        level=logging.DEBUG,
+        level=logging.INFO,
         format='%(asctime)s %(levelname)s %(name)s %(message)s',
 )
 
@@ -205,12 +205,13 @@ def process_markdown(convertibles, input_dir, output_dir,
     articles, pages : List[Tuple[str, Dict]]
 
     """
+    logger.info("Converting Markdown files...")
     md = markdown_factory()
 
     articles = []
     pages = []
     for src, dst in convertibles:
-        logger.debug(f'Processing {src}')
+        logger.info(f'Processing {src}')
         with open(f'{input_dir}/{src}', 'r') as fh:
             body = fh.read()
 
@@ -300,6 +301,7 @@ def generate_archive(articles, template, output_dir):
 
 
 def generate_tags(articles, tags_template, tag_template, output_dir):
+    logger.info("Generating Tag-pages.")
     os.makedirs(f'{output_dir}/tags', exist_ok=True)
 
     # get tags number of occurrences
