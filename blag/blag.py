@@ -243,6 +243,25 @@ def generate_feed(
         blog_description,
         blog_author,
 ):
+    """Generate Atom feed.
+
+    Parameters
+    ----------
+    articles : list[list[str, dict]]
+        list of relative output path and article dictionary
+    output_dir : str
+        where the feed is stored
+    base_url : str
+        base url
+    blog_title : str
+        blog title
+    blog_description : str
+        blog description
+    blog_author : str
+        blog author
+
+    """
+    logger.info('Generating Atom feed.')
     feed = feedgenerator.Atom1Feed(
             link=base_url,
             title=blog_title,
@@ -251,11 +270,15 @@ def generate_feed(
     )
 
     for dst, context in articles:
+        # if article has a description, use that. otherwise fall back to
+        # the title
+        description = context.get('description', context['title'])
+
         feed.add_item(
             title=context['title'],
             author_name=blog_author,
             link=base_url + dst,
-            description=context['title'],
+            description=description,
             content=context['content'],
             pubdate=context['date'],
         )

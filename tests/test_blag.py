@@ -1,5 +1,6 @@
 from tempfile import TemporaryDirectory
 import os
+from datetime import datetime
 
 import pytest
 
@@ -16,6 +17,76 @@ def test_generate_feed(outdir):
     articles = []
     blag.generate_feed(articles, outdir, ' ', ' ', ' ', ' ')
     assert os.path.exists(f'{outdir}/atom.xml')
+
+
+def test_feed(outdir):
+    articles = [
+        [
+            'dest1.html',
+            {
+                'title': 'title1',
+                'date': datetime(2019, 6, 6),
+                'content': 'content1',
+            }
+        ],
+        [
+            'dest2.html',
+            {
+                'title': 'title2',
+                'date': datetime(1980, 5, 9),
+                'content': 'content2',
+            }
+        ],
+
+    ]
+
+    blag.generate_feed(articles, outdir, 'https://example.com/', 'blog title',
+                       'blog description', 'blog author')
+    with open(f'{outdir}/atom.xml') as fh:
+        feed = fh.read()
+
+    assert '<title>blog title</title>' in feed
+    # enable when https://github.com/getpelican/feedgenerator/issues/22
+    # is fixed
+    # assert '<subtitle>blog description</subtitle>' in feed
+    assert '<author><name>blog author</name></author>' in feed
+
+    # article 1
+    assert '<title>title1</title>' in feed
+    assert '<summary type="html">title1' in feed
+    assert '<published>2019-06-06' in feed
+    assert '<content type="html">content1' in feed
+    assert '<link href="https://example.com/dest1.html"' in feed
+
+    # article 2
+    assert '<title>title2</title>' in feed
+    assert '<summary type="html">title2' in feed
+    assert '<published>1980-05-09' in feed
+    assert '<content type="html">content2' in feed
+    assert '<link href="https://example.com/dest2.html"' in feed
+
+
+def test_generate_feed_with_description(outdir):
+    # if a description is provided, it will be used as the summary in
+    # the feed, otherwise we simply use the title of the article
+    articles = [[
+        'dest.html',
+        {
+            'title': 'title',
+            'description': 'description',
+            'date': datetime(2019, 6, 6),
+            'content': 'content',
+        }
+    ]]
+    blag.generate_feed(articles, outdir, ' ', ' ', ' ', ' ')
+
+    with open(f'{outdir}/atom.xml') as fh:
+        feed = fh.read()
+
+    assert '<title>title</title>' in feed
+    assert '<summary type="html">description' in feed
+    assert '<published>2019-06-06' in feed
+    assert '<content type="html">content' in feed
 
 
 def test_parse_args_build():
