@@ -19,6 +19,7 @@ from jinja2 import Environment, ChoiceLoader, FileSystemLoader, PackageLoader
 import feedgenerator
 
 from blag.markdown import markdown_factory, convert_markdown
+from blag.devserver import serve
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
@@ -50,7 +51,10 @@ def parse_args(args=None):
     commands = parser.add_subparsers(dest='command')
     commands.required = True
 
-    build_parser = commands.add_parser('build')
+    build_parser = commands.add_parser(
+            'build',
+            help='Build website.',
+    )
     build_parser.set_defaults(func=build)
     build_parser.add_argument(
             '-i', '--input-dir',
@@ -73,8 +77,37 @@ def parse_args(args=None):
             help='Static directory (default: static)',
     )
 
-    quickstart_parser = commands.add_parser('quickstart')
+    quickstart_parser = commands.add_parser(
+            'quickstart',
+            help="Quickstart blag, creating necessary configuration.",
+    )
     quickstart_parser.set_defaults(func=quickstart)
+
+    serve_parser = commands.add_parser(
+            'serve',
+            help="Start development server.",
+    )
+    serve_parser.set_defaults(func=serve)
+    serve_parser.add_argument(
+            '-i', '--input-dir',
+            default='content',
+            help='Input directory (default: content)',
+    )
+    serve_parser.add_argument(
+            '-o', '--output-dir',
+            default='build',
+            help='Ouptut directory (default: build)',
+    )
+    serve_parser.add_argument(
+            '-t', '--template-dir',
+            default='templates',
+            help='Template directory (default: templates)',
+    )
+    serve_parser.add_argument(
+            '-s', '--static-dir',
+            default='static',
+            help='Static directory (default: static)',
+    )
 
     return parser.parse_args(args)
 
