@@ -14,6 +14,7 @@ blag is named after [the blag of the webcomic xkcd][blagxkcd].
 * Theming support using [Jinja2][] templates
 * Generation of Atom feeds for blog content
 * Fenced code blocks and syntax highlighting using [Pygments][]
+* Integrated devserver
 
 blag runs on Linux, Mac and Windows and requires Python >= 3.8
 
