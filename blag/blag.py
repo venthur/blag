@@ -19,6 +19,7 @@ from jinja2 import Environment, ChoiceLoader, FileSystemLoader, PackageLoader
 import feedgenerator
 
 from blag.markdown import markdown_factory, convert_markdown
+from blag.devserver import serve
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
@@ -50,7 +51,10 @@ def parse_args(args=None):
     commands = parser.add_subparsers(dest='command')
     commands.required = True
 
-    build_parser = commands.add_parser('build')
+    build_parser = commands.add_parser(
+            'build',
+            help='Build website.',
+    )
     build_parser.set_defaults(func=build)
     build_parser.add_argument(
             '-i', '--input-dir',
@@ -73,10 +77,16 @@ def parse_args(args=None):
             help='Static directory (default: static)',
     )
 
-    quickstart_parser = commands.add_parser('quickstart')
+    quickstart_parser = commands.add_parser(
+            'quickstart',
+            help="Quickstart blag, creating necessary configuration.",
+    )
     quickstart_parser.set_defaults(func=quickstart)
 
-    serve_parser = commands.add_parser('serve')
+    serve_parser = commands.add_parser(
+            'serve',
+            help="Start development server.",
+    )
     serve_parser.set_defaults(func=serve)
     serve_parser.add_argument(
             '-i', '--input-dir',
@@ -373,48 +383,6 @@ def quickstart(args):
     }
     with open('config.ini', 'w') as fh:
         config.write(fh)
-
-
-def get_last_modified():
-
-    last_mtime = 0
-
-    for dir in 'content', 'static', 'templates':
-        for root, dirs, files in os.walk(dir):
-            for f in files:
-                mtime = os.stat(os.path.join(root, f)).st_mtime
-                if mtime > last_mtime:
-                    last_mtime = mtime
-
-    return last_mtime
-
-
-def autoreload(args):
-    import time
-    last_mtime = get_last_modified()
-    while True:
-        mtime = get_last_modified()
-        if mtime > last_mtime:
-            last_mtime = mtime
-            logger.debug('ping!')
-            build(args)
-        time.sleep(1)
-
-
-def serve(args):
-    import multiprocessing
-    from http.server import SimpleHTTPRequestHandler, HTTPServer
-    from functools import partial
-
-
-    httpd = HTTPServer(('', 8000), partial(SimpleHTTPRequestHandler, directory='build'))
-
-    p1 = multiprocessing.Process(target=autoreload, args=(args,))
-    #p2 = # todo start http server
-
-    p1.start()
-    #p2.start()
-    httpd.serve_forever()
 
 
 if __name__ == '__main__':
