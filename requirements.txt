@@ -1,4 +1,4 @@
-markdown==3.3.3
+markdown==3.3.4
 feedgenerator==1.9.1
-jinja2==2.11.2
-pygments==2.7.3
+jinja2==2.11.3
+pygments==2.8.1
