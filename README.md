@@ -1,11 +1,13 @@
 # blag
 
-blag is a blog-aware, static site generator, written in [Python][].
+blag is a blog-aware, static site generator, written in [Python][]. An example
+"deployment" can be found [here][venthur.de].
 
 blag is named after [the blag of the webcomic xkcd][blagxkcd].
 
 [python]: https://python.org
 [blagxkcd]: https://blog.xkcd.com
+[venthur.de]: https://venthur.de
 
 
 ## Features
