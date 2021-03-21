@@ -4,3 +4,4 @@ python:
   install:
   - requirements: requirements.txt
   - requirements: requirements-dev.txt
+  - path: .
