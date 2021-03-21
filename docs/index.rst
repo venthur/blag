@@ -10,6 +10,7 @@ Welcome to blag's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   api.rst
 
 
 Indices and tables
