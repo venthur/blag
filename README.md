@@ -20,12 +20,14 @@ blag is named after [the blag of the webcomic xkcd][blagxkcd].
 * Generation of Atom feeds for blog content
 * Fenced code blocks and syntax highlighting using [Pygments][]
 * Integrated devserver
+* Available on [PyPI][]
 
 blag runs on Linux, Mac and Windows and requires Python >= 3.8
 
 [markdown]: https://daringfireball.net/projects/markdown/
 [jinja2]: https://palletsprojects.com/p/jinja/
 [pygments]: https://pygments.org/
+[pypi]: https://pypi.org/project/blag/
 
 
 ## Quickstart
