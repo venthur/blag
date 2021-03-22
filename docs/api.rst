@@ -2,7 +2,7 @@ API
 ===
 
 .. autosummary::
-   :toctree: DIRNAME
+   :toctree: api
 
    blag.__init__
    blag.version
