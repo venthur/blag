@@ -36,8 +36,8 @@ def main(args=None):
 def parse_args(args=None):
     """Parse command line arguments.
 
-    Paramters
-    ---------
+    Parameters
+    ----------
     args : List[str]
         optional parameters, used for testing
 
