@@ -1,12 +1,8 @@
 #!/usr/bin/env python3
 
-"""Small static site generator.
+"""blag's core methods.
 
 """
-
-
-__author__ = "Bastian Venthur <venthur@debian.org>"
-
 
 import argparse
 import os
@@ -29,6 +25,17 @@ logging.basicConfig(
 
 
 def main(args=None):
+    """Main entrypoint for the CLI.
+
+    This method parses the CLI arguments and executes the respective
+    commands.
+
+    Parameters
+    ----------
+    args : list[str]
+        optional parameters, used for testing
+
+    """
     args = parse_args(args)
     args.func(args)
 
@@ -36,14 +43,14 @@ def main(args=None):
 def parse_args(args=None):
     """Parse command line arguments.
 
-    Paramters
-    ---------
+    Parameters
+    ----------
     args : List[str]
         optional parameters, used for testing
 
     Returns
     -------
-    args
+    arparse.Namespace
 
     """
     parser = argparse.ArgumentParser()
@@ -113,6 +120,19 @@ def parse_args(args=None):
 
 
 def get_config(configfile):
+    """Load site configuration from configfile.
+
+    Parameters
+    ----------
+    configfile : str
+        path to configuration file
+
+
+    Returns
+    -------
+    dict
+
+    """
     config = configparser.ConfigParser()
     config.read(configfile)
     # check for the mandatory options
@@ -161,6 +181,16 @@ def environment_factory(template_dir=None, globals_=None):
 
 
 def build(args):
+    """Build the site.
+
+    This is blag's main method that builds the site, generates the feed
+    etc.
+
+    Parameters
+    ----------
+    args : argparse.Namespace
+
+    """
     os.makedirs(f'{args.output_dir}', exist_ok=True)
     convertibles = []
     for root, dirnames, filenames in os.walk(args.input_dir):
@@ -322,6 +352,17 @@ def generate_feed(
 
 
 def generate_archive(articles, template, output_dir):
+    """Generate the archive page.
+
+    Parameters
+    ----------
+    articles : list[list[str, dict]]
+        List of articles. Each article has the destination path and a
+        dictionary with the content.
+    template : jinja2.Template instance
+    output_dir : str
+
+    """
     archive = []
     for dst, context in articles:
         entry = context.copy()
@@ -334,6 +375,17 @@ def generate_archive(articles, template, output_dir):
 
 
 def generate_tags(articles, tags_template, tag_template, output_dir):
+    """Generate the tags page.
+
+    Parameters
+    ----------
+    articles : list[list[str, dict]]
+        List of articles. Each article has the destination path and a
+        dictionary with the content.
+    tags_template, tag_template : jinja2.Template instance
+    output_dir : str
+
+    """
     logger.info("Generating Tag-pages.")
     os.makedirs(f'{output_dir}/tags', exist_ok=True)
 
@@ -368,6 +420,16 @@ def generate_tags(articles, tags_template, tag_template, output_dir):
 
 
 def quickstart(args):
+    """Quickstart.
+
+    This method asks the user some questions and generates a
+    configuration file that is needed in order to run blag.
+
+    Parameters
+    ----------
+    args : argparse.Namespace
+
+    """
     base_url = input("Hostname (and path) to the root? "
                      "[https://example.com/]: ")
     title = input("Title of your website? ")

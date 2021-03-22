@@ -1,3 +1,10 @@
+"""Markdown Processing.
+
+This module contains the methods responsible for blag's markdown
+processing.
+
+"""
+
 from datetime import datetime
 import logging
 from urllib.parse import urlsplit, urlunsplit
@@ -33,6 +40,11 @@ def markdown_factory():
 
 def convert_markdown(md, markdown):
     """Convert markdown into html and extract meta data.
+
+    Some meta data is treated special:
+        * `date` is converted into datetime with local timezone
+        * `tags` is interpreted as a comma-separeted list of strings.
+          All strings are stripped and converted to lower case.
 
     Parameters
     ----------
@@ -98,6 +110,9 @@ class MarkdownLinkTreeprocessor(Treeprocessor):
 
 
 class MarkdownLinkExtension(Extension):
+    """markdown.extension that converts relative .md- to .html-links.
+
+    """
     def extendMarkdown(self, md):
         md.treeprocessors.register(
                 MarkdownLinkTreeprocessor(md), 'mdlink', 0,

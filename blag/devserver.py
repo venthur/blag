@@ -1,3 +1,11 @@
+"""Development Server.
+
+This module provides functionality for blag's development server. It
+automatically detects changes in certain directories and rebuilds the
+site if necessary.
+
+"""
+
 import os
 import logging
 import time
@@ -24,7 +32,8 @@ def get_last_modified(dirs):
 
     Returns
     -------
-    int : most recent modification time found in `dirs`
+    int
+        most recent modification time found in `dirs`
 
     """
     last_mtime = 0
@@ -40,6 +49,17 @@ def get_last_modified(dirs):
 
 
 def autoreload(args):
+    """Start the autoreloader.
+
+    This method monitors the given directories for changes (i.e. the
+    last modified time). If the last modified time has changed, a
+    rebuild is triggered.
+
+    Parameters
+    ----------
+    args : argparse.Namespace
+
+    """
     dirs = [args.input_dir, args.template_dir, args.static_dir]
     logger.info(f'Monitoring {dirs} for changes...')
     last_mtime = get_last_modified(dirs)
@@ -53,6 +73,13 @@ def autoreload(args):
 
 
 def serve(args):
+    """Start the webserver and the autoreloader.
+
+    Parameters
+    ----------
+    args : arparse.Namespace
+
+    """
     httpd = HTTPServer(('', 8000), partial(SimpleHTTPRequestHandler,
                        directory=args.output_dir))
     proc = multiprocessing.Process(target=autoreload, args=(args,))

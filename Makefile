@@ -3,6 +3,10 @@ PY = python3
 VENV = venv
 BIN=$(VENV)/bin
 
+DOCS_SRC = docs
+DOCS_OUT = $(DOCS_SRC)/_build
+
+
 ifeq ($(OS), Windows_NT)
 	BIN=$(VENV)/Scripts
 	PY=python
@@ -18,25 +22,30 @@ $(VENV): requirements.txt requirements-dev.txt setup.py
 	$(BIN)/pip install -e .
 	touch $(VENV)
 
+.PHONY: test
 test: $(VENV)
 	$(BIN)/pytest
-.PHONY: test
 
+.PHONY: lint
 lint: $(VENV)
 	$(BIN)/flake8
-.PHONY: lint
 
+.PHONY: release
 release: $(VENV)
 	rm -rf dist
 	$(BIN)/python setup.py sdist bdist_wheel
 	$(BIN)/twine upload dist/*
-.PHONY: release
 
+.PHONY: docs
+docs: $(VENV)
+	$(BIN)/sphinx-build $(DOCS_SRC) $(DOCS_OUT)
+
+.PHONY: clean
 clean:
 	rm -rf build dist *.egg-info
 	rm -rf $(VENV)
+	rm -rf $(DOCS_OUT)
 	find . -type f -name *.pyc -delete
 	find . -type d -name __pycache__ -delete
 	# coverage
 	rm -rf htmlcov .coverage
-.PHONY: clean
