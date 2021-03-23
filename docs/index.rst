@@ -42,7 +42,7 @@ Documentation
    :caption: Contents:
 
 
-   quickstart.rst
+   blag.rst
    api.rst
 
 Indices and tables
