@@ -58,6 +58,49 @@ some text
 Templating
 ----------
 
+Custom templates are **optional** and stored by default in the ``templates``
+directory. blag will search the ``templates`` directory first, and fall back
+to blag's default built-in templates.
+
+============ ====================================== ===================
+Template     Used For                               Variables
+============ ====================================== ===================
+page.html    pages (i.e. non-articles)              site, content, meta
+article.html articles (i.e. blog posts)             site, content, meta
+archive.html archive- and landing page of the blog  site, archive
+tags.html    list of tags                           site, tags
+tag.html     archive of Articles with a certain tag site, archive, tag
+============ ====================================== ===================
+
+If you make use of Jinja2's template inheritance, you can of course have more
+template files in the ``templates`` directory.
+
+``site``
+    This dictionary contains the site configuration, namely: ``base_url``,
+    ``title``, ``description`` and ``author``. Don't confuse the site-title
+    and -description with the title and description of individual pages or
+    articles.
+
+``content``
+    HTML, converted from markdown.
+
+``meta``
+    ``meta`` stands for all metadata elements available in the article or
+    page. Please be aware that those are not wrapped in a dictionary, but
+    **directly** available as variables.
+
+``archive``
+    A list of ``[destination path, context]`` tuples, where the context are
+    the respective variables that would be provided to the individual page or
+    article.
+
+``tags``
+    List of tags.
+
+``tag``
+    A tag.
+
+
 Metadata
 ---------
 
