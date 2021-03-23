@@ -266,3 +266,18 @@ freely in you templates. However, some metadata elements are treated special:
 ``title`` and ``description``
     The title and description are used in the html header and in the atom
     feed.
+
+
+Devserver
+---------
+
+blag provides a devserver which you can use for local web-development. The
+devserver provides a simple web server, serving your site in
+http://localhost:8000 and will automatically rebuild the project when it
+detects modifications in one of the ``content``, ``static`` and ``templates``
+directories.
+
+.. code-block:: sh
+
+    $ blag serve
+
