@@ -1,6 +1,7 @@
 Manual
 ======
 
+
 Quickstart
 ----------
 
@@ -52,7 +53,134 @@ Those directories can be changed via command line arguments. See
 Manual
 ------
 
-some text
+
+Pages and Articles
+^^^^^^^^^^^^^^^^^^
+
+Internally, blag differentiates between **pages** and **articles**.
+Intuitively, pages are simple pages and articles are blog posts. The decision
+whether a document is a page or an article is made depending on the presence
+of the ``date`` metadata element: Any document that contains the ``date``
+metadata element is an article, everything else a page.
+
+This differentiation has consequences:
+
+* blag uses different templates: ``page.html`` and ``article.html``
+* only articles are collected in the Atom feed
+* only articles are aggregated in the tag pages
+
+blag does **not** enforce a certain directory structure for pages and
+articles. You can mix and match them freely or structure them in different
+directories. blag will mirror the structure found in the ``content`` directory
+
+::
+
+    content/
+        article1.md
+        article2.md
+        page1.md
+
+results in:
+
+::
+
+    build/
+        article1.html
+        article2.html
+        page1.html
+
+Arbitrary complex structures are possible too:
+
+::
+
+    content/
+        posts/
+            2020/
+                2020-01-01-foo.md
+                2020-02-01-foo.md
+        pages/
+            foo.md
+            bar.md
+
+results in:
+
+::
+
+    build/
+        posts/
+            2020/
+                2020-01-01-foo.html
+                2020-02-01-foo.html
+        pages/
+            foo.html
+            bar.html
+
+
+Static Files
+^^^^^^^^^^^^
+
+Static files can be put into the ``content`` directory and will be copied over
+to the ``build`` directory as well. If you want better separation between
+content and static files, you can create a ``static`` directory and put the
+files there. All files and directories found in the ``static`` directory will
+be copied over to ``build``.
+
+::
+
+    content/
+        foo.md
+        bar.md
+        kitty.jpg
+
+results in:
+
+::
+
+    build/
+        foo.html
+        bar.html
+        kitty.jpg
+
+Alternatively:
+
+::
+
+    content/
+        foo.md
+        bar.md
+    static/
+        kitty.jpg
+
+results in:
+
+::
+
+    build/
+        foo.html
+        bar.html
+        kitty.jpg
+
+
+Internal Links
+--------------
+
+In contrast to most other static blog generators, blag will automatically
+convert **relative** markdown links. That means you can link you content using
+relative markdown links and blag will convert them to html automatically. The
+advantage is that your content tree in markdown is consistent and
+self-contained even if you don't generate html from it.
+
+
+.. code-block:: markdown
+
+   [...]
+   this is a [link](foo.md) to an internal page foo.
+
+becomes
+
+.. code-block:: html
+
+   <p>this is a <a href="foo.html">link</a> to an internal page foo.</p>
 
 
 Templating
