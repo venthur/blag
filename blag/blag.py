@@ -10,6 +10,7 @@ import configparser
 import logging
 import os
 import shutil
+import sqlite3
 import sys
 from typing import Any
 
@@ -522,8 +523,6 @@ def generate_search(articles, pages, db):
         path to sqlite file
 
     """
-    import sqlite3
-
     conn = sqlite3.connect(db)
     with conn:
         conn.executescript("""
