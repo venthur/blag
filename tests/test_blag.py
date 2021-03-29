@@ -7,19 +7,15 @@ import pytest
 from blag import blag
 
 
-@pytest.fixture
-def outdir():
-    with TemporaryDirectory() as dir:
-        yield dir
-
-
-def test_generate_feed(outdir):
+def test_generate_feed(tempdir):
+    outdir = f'{tempdir}/build'
     articles = []
     blag.generate_feed(articles, outdir, ' ', ' ', ' ', ' ')
     assert os.path.exists(f'{outdir}/atom.xml')
 
 
-def test_feed(outdir):
+def test_feed(tempdir):
+    outdir = f'{tempdir}/build'
     articles = [
         [
             'dest1.html',
@@ -66,7 +62,8 @@ def test_feed(outdir):
     assert '<link href="https://example.com/dest2.html"' in feed
 
 
-def test_generate_feed_with_description(outdir):
+def test_generate_feed_with_description(tempdir):
+    outdir = f'{tempdir}/build'
     # if a description is provided, it will be used as the summary in
     # the feed, otherwise we simply use the title of the article
     articles = [[

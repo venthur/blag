@@ -1,15 +1,6 @@
 import time
 
-import pytest
-
-from tempfile import TemporaryDirectory
 from blag import devserver
-
-
-@pytest.fixture
-def tempdir():
-    with TemporaryDirectory() as dir:
-        yield dir
 
 
 def test_get_last_modified(tempdir):

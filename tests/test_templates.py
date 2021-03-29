@@ -1,46 +1,5 @@
 import datetime
 
-import pytest
-
-from blag import blag
-
-
-@pytest.fixture
-def environment():
-    site = {
-        'base_url': 'site base_url',
-        'title': 'site title',
-        'description': 'site description',
-        'author': 'site author',
-    }
-    env = blag.environment_factory(globals_=dict(site=site))
-    yield env
-
-
-@pytest.fixture
-def page_template(environment):
-    yield environment.get_template('page.html')
-
-
-@pytest.fixture
-def article_template(environment):
-    yield environment.get_template('article.html')
-
-
-@pytest.fixture
-def archive_template(environment):
-    yield environment.get_template('archive.html')
-
-
-@pytest.fixture
-def tags_template(environment):
-    yield environment.get_template('tags.html')
-
-
-@pytest.fixture
-def tag_template(environment):
-    yield environment.get_template('tag.html')
-
 
 def test_page(page_template):
     ctx = {
