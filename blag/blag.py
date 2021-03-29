@@ -289,7 +289,7 @@ def process_markdown(convertibles, input_dir, output_dir,
             articles.append((dst, context))
             result = article_template.render(context)
         else:
-            pages.append((dst, content))
+            pages.append((dst, context))
             result = page_template.render(context)
         with open(f'{output_dir}/{dst}', 'w') as fh_dest:
             fh_dest.write(result)

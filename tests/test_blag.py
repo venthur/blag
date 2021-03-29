@@ -177,3 +177,59 @@ def test_environment_factory():
     env = blag.environment_factory(globals_=globals_)
     assert env.globals['foo'] == 'bar'
     assert env.globals['test'] == 'me'
+
+
+def test_process_markdown(tempdir, page_template, article_template):
+    inputdir = f'{tempdir}/content'
+    outdir = f'{tempdir}/build'
+    page1 = """\
+title: some page
+
+some text
+foo bar
+    """
+
+    article1 = """\
+title: some article1
+date: 2020-01-01
+
+some text
+foo bar
+    """
+
+    article2 = """\
+title: some article2
+date: 2021-01-01
+
+some text
+foo bar
+    """
+
+    convertibles = []
+    for i, txt in enumerate((page1, article1, article2)):
+        i = str(i)
+        with open(f'{inputdir}/{i}', 'w') as fh:
+            fh.write(txt)
+        convertibles.append([i, i])
+
+    articles, pages = blag.process_markdown(
+            convertibles,
+            inputdir,
+            outdir,
+            page_template,
+            article_template
+    )
+
+    assert isinstance(articles, list)
+    assert len(articles) == 2
+    for dst, context in articles:
+        assert isinstance(dst, str)
+        assert isinstance(context, dict)
+        assert 'content' in context
+
+    assert isinstance(pages, list)
+    assert len(pages) == 1
+    for dst, context in pages:
+        assert isinstance(dst, str)
+        assert isinstance(context, dict)
+        assert 'content' in context
