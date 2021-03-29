@@ -284,6 +284,7 @@ def build(args: argparse.Namespace) -> None:
     generate_index(articles, index_template, args.output_dir)
     generate_archive(articles, archive_template, args.output_dir)
     generate_tags(articles, tags_template, tag_template, args.output_dir)
+    generate_search(articles, pages, 'corpus.db')
 
 
 def process_markdown(
@@ -509,6 +510,46 @@ def generate_tags(
         result = tag_template.render(dict(archive=archive, tag=tag))
         with open(f"{output_dir}/tags/{tag}.html", "w") as fh:
             fh.write(result)
+
+
+def generate_search(articles, pages, db):
+    """Generate Search.
+
+    Parameters
+    ----------
+    articles, pages :
+    db : str
+        path to sqlite file
+
+    """
+    import sqlite3
+
+    conn = sqlite3.connect(db)
+    with conn:
+        conn.executescript("""
+            drop table if exists corpus;
+
+            create virtual table corpus using fts5(
+                link,
+                text,
+                tokenize = porter
+            );
+        """)
+
+    with conn:
+        for dst, context in articles:
+            text = context['content']
+            conn.execute("""
+                insert into corpus(link, text)
+                values(:link, :text)
+            """, dict(link=dst, text=text))
+
+        for dst, context in pages:
+            text = context['content']
+            conn.execute("""
+                insert into corpus(link, text)
+                values(:link, :text)
+            """, dict(link=dst, text=text))
 
 
 if __name__ == "__main__":
