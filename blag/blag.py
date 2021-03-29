@@ -392,7 +392,7 @@ def generate_tags(articles, tags_template, tag_template, output_dir):
     # get tags number of occurrences
     all_tags = {}
     for _, context in articles:
-        tags = context.get('tags', None)
+        tags = context.get('tags', [])
         for tag in tags:
             all_tags[tag] = all_tags.get(tag, 0) + 1
     # sort by occurrence
@@ -405,7 +405,7 @@ def generate_tags(articles, tags_template, tag_template, output_dir):
     # get tags and archive per tag
     all_tags = {}
     for dst, context in articles:
-        tags = context.get('tags', None)
+        tags = context.get('tags', [])
         for tag in tags:
             archive = all_tags.get(tag, [])
             entry = context.copy()
