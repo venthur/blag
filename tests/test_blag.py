@@ -7,15 +7,13 @@ import pytest
 from blag import blag
 
 
-def test_generate_feed(tempdir):
-    outdir = f'{tempdir}/build'
+def test_generate_feed(args):
     articles = []
-    blag.generate_feed(articles, outdir, ' ', ' ', ' ', ' ')
-    assert os.path.exists(f'{outdir}/atom.xml')
+    blag.generate_feed(articles, args.output_dir, ' ', ' ', ' ', ' ')
+    assert os.path.exists(f'{args.output_dir}/atom.xml')
 
 
-def test_feed(tempdir):
-    outdir = f'{tempdir}/build'
+def test_feed(args):
     articles = [
         [
             'dest1.html',
@@ -36,9 +34,9 @@ def test_feed(tempdir):
 
     ]
 
-    blag.generate_feed(articles, outdir, 'https://example.com/', 'blog title',
-                       'blog description', 'blog author')
-    with open(f'{outdir}/atom.xml') as fh:
+    blag.generate_feed(articles, args.output_dir, 'https://example.com/',
+                       'blog title', 'blog description', 'blog author')
+    with open(f'{args.output_dir}/atom.xml') as fh:
         feed = fh.read()
 
     assert '<title>blog title</title>' in feed
@@ -62,8 +60,7 @@ def test_feed(tempdir):
     assert '<link href="https://example.com/dest2.html"' in feed
 
 
-def test_generate_feed_with_description(tempdir):
-    outdir = f'{tempdir}/build'
+def test_generate_feed_with_description(args):
     # if a description is provided, it will be used as the summary in
     # the feed, otherwise we simply use the title of the article
     articles = [[
@@ -75,9 +72,9 @@ def test_generate_feed_with_description(tempdir):
             'content': 'content',
         }
     ]]
-    blag.generate_feed(articles, outdir, ' ', ' ', ' ', ' ')
+    blag.generate_feed(articles, args.output_dir, ' ', ' ', ' ', ' ')
 
-    with open(f'{outdir}/atom.xml') as fh:
+    with open(f'{args.output_dir}/atom.xml') as fh:
         feed = fh.read()
 
     assert '<title>title</title>' in feed
@@ -179,9 +176,7 @@ def test_environment_factory():
     assert env.globals['test'] == 'me'
 
 
-def test_process_markdown(tempdir, page_template, article_template):
-    inputdir = f'{tempdir}/content'
-    outdir = f'{tempdir}/build'
+def test_process_markdown(args, page_template, article_template):
     page1 = """\
 title: some page
 
@@ -208,14 +203,14 @@ foo bar
     convertibles = []
     for i, txt in enumerate((page1, article1, article2)):
         i = str(i)
-        with open(f'{inputdir}/{i}', 'w') as fh:
+        with open(f'{args.input_dir}/{i}', 'w') as fh:
             fh.write(txt)
         convertibles.append([i, i])
 
     articles, pages = blag.process_markdown(
             convertibles,
-            inputdir,
-            outdir,
+            args.input_dir,
+            args.output_dir,
             page_template,
             article_template
     )
@@ -280,11 +275,5 @@ foo bar
     blag.build(args)
 
 
-def test_main(args):
-    arglist = ['build']
-    arglist.append(f'--input-dir={args.input_dir}')
-    arglist.append(f'--output-dir={args.output_dir}')
-    arglist.append(f'--static-dir={args.static_dir}')
-    arglist.append(f'--template-dir={args.template_dir}')
-
-    blag.main(arglist)
+def test_main(cleandir):
+    blag.main(['build'])

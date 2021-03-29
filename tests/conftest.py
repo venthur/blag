@@ -1,5 +1,5 @@
 from tempfile import TemporaryDirectory
-from os import mkdir
+import os
 
 import pytest
 
@@ -45,14 +45,32 @@ def tag_template(environment):
 
 @pytest.fixture
 def tempdir():
+    config = """
+[main]
+base_url = https://example.com/
+title = title
+description = description
+author = a. u. thor
+    """
+
     with TemporaryDirectory() as dir:
         for d in 'content', 'build', 'static', 'templates':
-            mkdir(f'{dir}/{d}')
+            os.mkdir(f'{dir}/{d}')
+        with open(f'{dir}/config.ini', 'w') as fh:
+            fh.write(config)
         yield dir
 
 
 @pytest.fixture
-def args(tempdir):
+def cleandir(tempdir):
+    old_cwd = os.getcwd()
+    os.chdir(tempdir)
+    yield
+    os.chdir(old_cwd)
+
+
+@pytest.fixture
+def args(cleandir):
 
     class NameSpace:
         def __init__(self, **kwargs):
@@ -60,9 +78,9 @@ def args(tempdir):
                 setattr(self, name, kwargs[name])
 
     args = NameSpace(
-            input_dir=f'{tempdir}/content',
-            output_dir=f'{tempdir}/build',
-            static_dir=f'{tempdir}/static',
-            template_dir=f'{tempdir}/templates',
+            input_dir='content',
+            output_dir='build',
+            static_dir='static',
+            template_dir='templates',
     )
     yield args
