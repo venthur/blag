@@ -49,3 +49,20 @@ def tempdir():
         for d in 'content', 'build', 'static', 'templates':
             mkdir(f'{dir}/{d}')
         yield dir
+
+
+@pytest.fixture
+def args(tempdir):
+
+    class NameSpace:
+        def __init__(self, **kwargs):
+            for name in kwargs:
+                setattr(self, name, kwargs[name])
+
+    args = NameSpace(
+            input_dir=f'{tempdir}/content',
+            output_dir=f'{tempdir}/build',
+            static_dir=f'{tempdir}/static',
+            template_dir=f'{tempdir}/templates',
+    )
+    yield args

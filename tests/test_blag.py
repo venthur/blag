@@ -233,3 +233,58 @@ foo bar
         assert isinstance(dst, str)
         assert isinstance(context, dict)
         assert 'content' in context
+
+
+def test_build(args):
+    page1 = """\
+title: some page
+
+some text
+foo bar
+    """
+
+    article1 = """\
+title: some article1
+date: 2020-01-01
+tags: foo, bar
+
+some text
+foo bar
+    """
+
+    article2 = """\
+title: some article2
+date: 2021-01-01
+tags: baz
+
+some text
+foo bar
+    """
+
+    # write some convertibles
+    convertibles = []
+    for i, txt in enumerate((page1, article1, article2)):
+        i = str(i)
+        with open(f'{args.input_dir}/{i}.md', 'w') as fh:
+            fh.write(txt)
+        convertibles.append([i, i])
+
+    # some static files
+    with open(f'{args.static_dir}/test', 'w') as fh:
+        fh.write('hello')
+
+    os.mkdir(f'{args.input_dir}/testdir')
+    with open(f'{args.input_dir}/testdir/test', 'w') as fh:
+        fh.write('hello')
+
+    blag.build(args)
+
+
+def test_main(args):
+    arglist = ['build']
+    arglist.append(f'--input-dir={args.input_dir}')
+    arglist.append(f'--output-dir={args.output_dir}')
+    arglist.append(f'--static-dir={args.static_dir}')
+    arglist.append(f'--template-dir={args.template_dir}')
+
+    blag.main(arglist)
