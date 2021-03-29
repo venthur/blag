@@ -44,7 +44,10 @@ def tag_template(environment):
 
 
 @pytest.fixture
-def tempdir():
+def cleandir():
+    """Create a temporary workind directory and cwd.
+
+    """
     config = """
 [main]
 base_url = https://example.com/
@@ -58,15 +61,12 @@ author = a. u. thor
             os.mkdir(f'{dir}/{d}')
         with open(f'{dir}/config.ini', 'w') as fh:
             fh.write(config)
+        # change directory
+        old_cwd = os.getcwd()
+        os.chdir(dir)
         yield dir
-
-
-@pytest.fixture
-def cleandir(tempdir):
-    old_cwd = os.getcwd()
-    os.chdir(tempdir)
-    yield
-    os.chdir(old_cwd)
+        # and change back afterwards
+        os.chdir(old_cwd)
 
 
 @pytest.fixture

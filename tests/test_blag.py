@@ -7,13 +7,13 @@ import pytest
 from blag import blag
 
 
-def test_generate_feed(args):
+def test_generate_feed(cleandir):
     articles = []
-    blag.generate_feed(articles, args.output_dir, ' ', ' ', ' ', ' ')
-    assert os.path.exists(f'{args.output_dir}/atom.xml')
+    blag.generate_feed(articles, 'build', ' ', ' ', ' ', ' ')
+    assert os.path.exists('build/atom.xml')
 
 
-def test_feed(args):
+def test_feed(cleandir):
     articles = [
         [
             'dest1.html',
@@ -34,9 +34,9 @@ def test_feed(args):
 
     ]
 
-    blag.generate_feed(articles, args.output_dir, 'https://example.com/',
+    blag.generate_feed(articles, 'build', 'https://example.com/',
                        'blog title', 'blog description', 'blog author')
-    with open(f'{args.output_dir}/atom.xml') as fh:
+    with open('build/atom.xml') as fh:
         feed = fh.read()
 
     assert '<title>blog title</title>' in feed
@@ -60,7 +60,7 @@ def test_feed(args):
     assert '<link href="https://example.com/dest2.html"' in feed
 
 
-def test_generate_feed_with_description(args):
+def test_generate_feed_with_description(cleandir):
     # if a description is provided, it will be used as the summary in
     # the feed, otherwise we simply use the title of the article
     articles = [[
@@ -72,9 +72,9 @@ def test_generate_feed_with_description(args):
             'content': 'content',
         }
     ]]
-    blag.generate_feed(articles, args.output_dir, ' ', ' ', ' ', ' ')
+    blag.generate_feed(articles, 'build', ' ', ' ', ' ', ' ')
 
-    with open(f'{args.output_dir}/atom.xml') as fh:
+    with open('build/atom.xml') as fh:
         feed = fh.read()
 
     assert '<title>title</title>' in feed
@@ -176,7 +176,7 @@ def test_environment_factory():
     assert env.globals['test'] == 'me'
 
 
-def test_process_markdown(args, page_template, article_template):
+def test_process_markdown(cleandir, page_template, article_template):
     page1 = """\
 title: some page
 
@@ -203,14 +203,14 @@ foo bar
     convertibles = []
     for i, txt in enumerate((page1, article1, article2)):
         i = str(i)
-        with open(f'{args.input_dir}/{i}', 'w') as fh:
+        with open(f'content/{i}', 'w') as fh:
             fh.write(txt)
         convertibles.append([i, i])
 
     articles, pages = blag.process_markdown(
             convertibles,
-            args.input_dir,
-            args.output_dir,
+            'content',
+            'build',
             page_template,
             article_template
     )
