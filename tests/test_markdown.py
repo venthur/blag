@@ -49,3 +49,31 @@ def test_convert_metadata(input_, expected):
 def test_markdown_factory():
     md = markdown_factory()
     assert isinstance(md, markdown.Markdown)
+
+
+def test_smarty():
+    md = markdown_factory()
+
+    md1 = """
+
+this --- is -- a test ...
+
+    """
+    html, meta = convert_markdown(md, md1)
+    assert 'mdash' in html
+    assert 'ndash' in html
+    assert 'hellip' in html
+
+
+def test_smarty_code():
+    md = markdown_factory()
+
+    md1 = """
+```
+this --- is -- a test ...
+```
+    """
+    html, meta = convert_markdown(md, md1)
+    assert 'mdash' not in html
+    assert 'ndash' not in html
+    assert 'hellip' not in html

@@ -30,7 +30,7 @@ def markdown_factory():
     """
     md = Markdown(
         extensions=[
-            'meta', 'fenced_code', 'codehilite',
+            'meta', 'fenced_code', 'codehilite', 'smarty',
             MarkdownLinkExtension()
         ],
         output_format='html5',
