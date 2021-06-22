@@ -20,6 +20,8 @@ setup(
     project_urls={
         'Documentation': 'https://blag.readthedocs.io/',
         'Source': 'https://github.com/venthur/blag',
+        'Changelog':
+            'https://github.com/venthur/blag/blob/master/CHANGELOG.md',
     },
     python_requires='>=3.8',
     package_data={
