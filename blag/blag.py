@@ -286,6 +286,7 @@ def build(args: argparse.Namespace) -> None:
     generate_archive(articles, archive_template, args.output_dir)
     generate_tags(articles, tags_template, tag_template, args.output_dir)
     generate_search(articles, pages, 'corpus.db')
+    logger.info("Done.")
 
 
 def process_markdown(
@@ -523,6 +524,7 @@ def generate_search(articles, pages, db):
         path to sqlite file
 
     """
+    logger.info("Generating full text search.")
     conn = sqlite3.connect(db)
     with conn:
         conn.executescript("""
