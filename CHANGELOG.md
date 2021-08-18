@@ -1,5 +1,9 @@
 # Changelog
 
+## [unreleased]
+
+* added Python 3.10 to list of supported versions to test against
+
 ## [1.0.0] - 2021-08-18
 
 * first 1.0 release!
