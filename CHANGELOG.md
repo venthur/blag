@@ -1,5 +1,9 @@
 # Changelog
 
+## [unreleased]
+
+* added dependabot to github workflows
+
 ## [1.0.0] - 2021-08-18
 
 * first 1.0 release!
