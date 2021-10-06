@@ -1,9 +1,15 @@
 # Changelog
 
-## [unreleased]
+## [1.1.0] - 2021-1006
 
 * added Python 3.10 to list of supported versions to test against
 * added dependabot to github workflows
+* updated various dependencies:
+  * pygments 2.10.0
+  * sphinx 4.2.0
+  * twine 3.4.2
+  * wheel 0.37.0
+  * pytest 6.2.5
 
 ## [1.0.0] - 2021-08-18
 
