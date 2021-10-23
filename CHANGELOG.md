@@ -1,5 +1,13 @@
 # Changelog
 
+## [unreleased]
+
+* updated dependencies:
+  * feedgenerator 2.0.0
+  * jinja2 3.0.1
+  * pytest-cov 3.0.0
+  * flake8 4.0.1
+
 ## [1.1.0] - 2021-10-06
 
 * added Python 3.10 to list of supported versions to test against
