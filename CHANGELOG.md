@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.1.0] - 2021-1006
+## [1.1.0] - 2021-10-06
 
 * added Python 3.10 to list of supported versions to test against
 * added dependabot to github workflows
