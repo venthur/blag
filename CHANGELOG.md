@@ -1,6 +1,6 @@
 # Changelog
 
-## [unreleased]
+## [1.2.0] - 2021-11-06
 
 * `make serve` now rebuilds immediately once after called to avoid serving
   stale files
