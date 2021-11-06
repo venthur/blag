@@ -2,6 +2,8 @@
 
 ## [unreleased]
 
+* `make serve` now rebuilds immediately once after called to avoid serving
+  stale files
 * updated dependencies:
   * feedgenerator 2.0.0
   * jinja2 3.0.1
