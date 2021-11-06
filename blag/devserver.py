@@ -55,6 +55,9 @@ def autoreload(args):
     last modified time). If the last modified time has changed, a
     rebuild is triggered.
 
+    A rebuild is also performed immediately when this method is called
+    to avoid serving stale contents.
+
     Parameters
     ----------
     args : argparse.Namespace
@@ -62,7 +65,9 @@ def autoreload(args):
     """
     dirs = [args.input_dir, args.template_dir, args.static_dir]
     logger.info(f'Monitoring {dirs} for changes...')
-    last_mtime = get_last_modified(dirs)
+    # make sure we trigger the rebuild immediately when we enter the
+    # loop to avoid serving stale contents
+    last_mtime = 0
     while True:
         mtime = get_last_modified(dirs)
         if mtime > last_mtime:
