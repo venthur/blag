@@ -89,4 +89,5 @@ def serve(args):
                        directory=args.output_dir))
     proc = multiprocessing.Process(target=autoreload, args=(args,))
     proc.start()
+    logger.info("\n\n  Devserver Started -- visit http://localhost:8000\n")
     httpd.serve_forever()
