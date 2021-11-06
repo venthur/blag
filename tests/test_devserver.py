@@ -1,6 +1,8 @@
 import time
 import threading
 
+import pytest
+
 from blag import devserver
 
 
@@ -42,6 +44,7 @@ def test_autoreload_builds_immediately(args):
     assert t1 > t0
 
 
+@pytest.mark.filterwarnings("ignore::pytest.PytestUnhandledThreadExceptionWarning")  # noqa
 def test_autoreload(args):
     t = threading.Thread(target=devserver.autoreload,
                          args=(args, ),
@@ -54,11 +57,10 @@ def test_autoreload(args):
     with open('content/test.md', 'w') as fh:
         fh.write('boo')
 
-    # try for 5 seconds...
+    # try for 5 seconds to see if we rebuild once...
     for i in range(5):
         time.sleep(1)
         t1 = devserver.get_last_modified(['build'])
-        print(t1)
         if t1 > t0:
             break
     assert t1 > t0

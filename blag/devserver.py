@@ -72,7 +72,7 @@ def autoreload(args):
         mtime = get_last_modified(dirs)
         if mtime > last_mtime:
             last_mtime = mtime
-            logger.debug('Change detected, rebuilding...')
+            logger.info('Change detected, rebuilding...')
             blag.build(args)
         time.sleep(1)
 
