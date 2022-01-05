@@ -1,5 +1,16 @@
 # Changelog
 
+## [unreleased]
+
+* Small fix in makefile
+* updated dependencies:
+  * sphinx 4.2.0
+  * twine 3.7.1
+  * wheel 0.37.1
+  * markdown 3.3.6
+  * jinja 3.0.3
+  * pygments 2.11.1
+
 ## [1.2.0] - 2021-11-06
 
 * `make serve` now rebuilds immediately once after called to avoid serving
