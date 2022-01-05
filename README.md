@@ -3,7 +3,7 @@
 blag is a blog-aware, static site generator, written in [Python][].
 
 * an example "deployment" can be found [here][venthur.de]
-* online [documentation][] is available on readthedocs
+* online [documentation][] is available on https://readthedocs.org.
 
 blag is named after [the blag of the webcomic xkcd][blagxkcd].
 
