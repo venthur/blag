@@ -13,6 +13,7 @@ ifeq ($(OS), Windows_NT)
 endif
 
 
+.PHONY: all
 all: lint test
 
 $(VENV): requirements.txt requirements-dev.txt setup.py
