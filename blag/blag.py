@@ -433,7 +433,7 @@ def quickstart(args):
     base_url = input("Hostname (and path) to the root? "
                      "[https://example.com/]: ")
     title = input("Title of your website? ")
-    description = input("Description of your website [John Does's Blog]? ")
+    description = input("Description of your website [John Doe's Blog]? ")
     author = input("Author of your website [John Doe]? ")
 
     config = configparser.ConfigParser()
