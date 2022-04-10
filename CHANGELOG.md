@@ -4,12 +4,13 @@
 
 * Small fix in makefile
 * updated dependencies:
-  * sphinx 4.2.0
+  * pytest 7.1.1
+  * sphinx 4.5.0
   * twine 3.7.1
   * wheel 0.37.1
   * markdown 3.3.6
-  * jinja 3.0.3
-  * pygments 2.11.1
+  * jinja 3.1.1
+  * pygments 2.11.2
 
 ## [1.2.0] - 2021-11-06
 
