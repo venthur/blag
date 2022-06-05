@@ -5,7 +5,7 @@
 * Small fix in makefile
 * updated dependencies:
   * pytest 7.1.1
-  * sphinx 4.5.0
+  * sphinx 5.0.0
   * twine 3.7.1
   * wheel 0.37.1
   * markdown 3.3.6
