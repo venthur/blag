@@ -9,7 +9,7 @@
   * twine 3.7.1
   * wheel 0.37.1
   * markdown 3.3.7
-  * jinja 3.1.1
+  * jinja 3.1.2
   * pygments 2.11.2
 
 ## [1.2.0] - 2021-11-06
