@@ -4,7 +4,7 @@
 
 * Small fix in makefile
 * updated dependencies:
-  * pytest 7.1.1
+  * pytest 7.1.2
   * sphinx 5.0.0
   * twine 3.7.1
   * wheel 0.37.1
