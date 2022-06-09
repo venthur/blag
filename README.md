@@ -30,6 +30,21 @@ blag runs on Linux, Mac and Windows and requires Python >= 3.8
 [pypi]: https://pypi.org/project/blag/
 
 
+## Install
+
+blag is available on [PyPI][], you can install it via:
+
+```bash
+$ pip install blag
+```
+
+On Debian or Ubuntu, you can also just install the Debian package:
+
+```bash
+$ sudo aptitude install blag
+```
+
+
 ## Quickstart
 
 ```bash

@@ -2,6 +2,7 @@
 
 ## [unreleased]
 
+* debianized package
 * Small fix in makefile
 * updated dependencies:
   * pytest 7.1.2

@@ -1,5 +1,5 @@
 blag (1.2) unstable; urgency=medium
 
-  * Initial release.
+  * Initial release. Closes: #1012584
 
  -- Bastian Venthur <venthur@debian.org>  Sun, 05 Jun 2022 15:20:48 +0200
