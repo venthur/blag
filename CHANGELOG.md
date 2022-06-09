@@ -1,6 +1,6 @@
 # Changelog
 
-## [unreleased]
+## [1.3.0] - 2022-06-09
 
 * debianized package
 * Small fix in makefile
