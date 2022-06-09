@@ -9,17 +9,17 @@ export PYBUILD_TEST_ARGS=--no-cov
 export PYBUILD_NAME=blag
 
 %:
-	dh $@ --with python3 --buildsystem=pybuild
+	dh $@ --with python3,sphinxdoc --buildsystem=pybuild
 
 
 # If you need to rebuild the Sphinx documentation:
 # Add sphinxdoc to the dh --with line.
 #
 # And uncomment the following lines.
-#execute_after_dh_auto_build-indep: export http_proxy=127.0.0.1:9
-#execute_after_dh_auto_build-indep: export https_proxy=127.0.0.1:9
-#execute_after_dh_auto_build-indep:
-#	PYTHONPATH=. python3 -m sphinx -N -bhtml \
-#	docs/ build/html # HTML generator
+execute_after_dh_auto_build-indep: export http_proxy=127.0.0.1:9
+execute_after_dh_auto_build-indep: export https_proxy=127.0.0.1:9
+execute_after_dh_auto_build-indep:
+	PYTHONPATH=. python3 -m sphinx -N -bhtml \
+	docs/ build/html # HTML generator
 #	PYTHONPATH=. python3 -m sphinx -N -bman \
 #	docs/ build/man # Manpage generator
