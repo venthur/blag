@@ -46,6 +46,7 @@ clean:
 	rm -rf build dist *.egg-info
 	rm -rf $(VENV)
 	rm -rf $(DOCS_OUT)
+	rm -rf $(DOCS_SRC)/api
 	find . -type f -name *.pyc -delete
 	find . -type d -name __pycache__ -delete
 	# coverage
