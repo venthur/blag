@@ -21,5 +21,5 @@ execute_after_dh_auto_build-indep: export https_proxy=127.0.0.1:9
 execute_after_dh_auto_build-indep:
 	PYTHONPATH=. python3 -m sphinx -N -bhtml \
 	docs/ build/html # HTML generator
-#	PYTHONPATH=. python3 -m sphinx -N -bman \
-#	docs/ build/man # Manpage generator
+	PYTHONPATH=. python3 -m sphinx -N -bman \
+	docs/ build/man # Manpage generator
