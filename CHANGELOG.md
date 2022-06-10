@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.3.1] - 2022-06-10
+
+* fixed man page
+
 ## [1.3.0] - 2022-06-09
 
 * debianized package
