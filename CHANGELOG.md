@@ -3,6 +3,7 @@
 ## [unreleased] - XXXX-XX-XX
 
 * Added --version option
+* added --verbose option, that increases the loglevel to 'debug'
 * Improved quickstart:
   * respective default answers will be written to config if user provided no
     answer

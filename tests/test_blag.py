@@ -287,3 +287,11 @@ def test_cli_version(capsys):
     # proper version reported
     out, _ = capsys.readouterr()
     assert blag.__VERSION__ in out
+
+
+def test_cli_verbose(cleandir, caplog):
+    blag.main(['build'])
+    assert 'DEBUG' not in caplog.text
+
+    blag.main(['--verbose', 'build'])
+    assert 'DEBUG' in caplog.text

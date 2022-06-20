@@ -39,6 +39,10 @@ def main(args=None):
 
     """
     args = parse_args(args)
+    # set loglevel
+    if args.verbose:
+        logger.setLevel(logging.DEBUG)
+    logger.debug(f"This is blag {__VERSION__}.")
     args.func(args)
 
 
@@ -60,6 +64,11 @@ def parse_args(args=None):
         '--version',
         action='version',
         version='%(prog)s '+__VERSION__,
+    )
+    parser.add_argument(
+        '-v', '--verbose',
+        action='store_true',
+        help='Verbose output.',
     )
 
     commands = parser.add_subparsers(dest='command')
@@ -219,6 +228,7 @@ def build(args):
             os.makedirs(f'{args.output_dir}/{path}', exist_ok=True)
 
     # copy static files over
+    logger.info('Copying static files.')
     if os.path.exists(args.static_dir):
         shutil.copytree(args.static_dir, args.output_dir, dirs_exist_ok=True)
 
@@ -281,7 +291,8 @@ def process_markdown(convertibles, input_dir, output_dir,
     articles = []
     pages = []
     for src, dst in convertibles:
-        logger.info(f'Processing {src}')
+        logger.debug(f'Processing {src}')
+
         with open(f'{input_dir}/{src}', 'r') as fh:
             body = fh.read()
 
