@@ -16,6 +16,7 @@ import feedgenerator
 
 from blag.markdown import markdown_factory, convert_markdown
 from blag.devserver import serve
+from blag.version import __VERSION__
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
@@ -54,6 +55,11 @@ def parse_args(args=None):
 
     """
     parser = argparse.ArgumentParser()
+    parser.add_argument(
+        '--version',
+        action='version',
+        version='%(prog)s '+__VERSION__,
+    )
 
     commands = parser.add_subparsers(dest='command')
     commands.required = True
