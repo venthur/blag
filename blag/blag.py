@@ -17,6 +17,7 @@ import feedgenerator
 from blag.markdown import markdown_factory, convert_markdown
 from blag.devserver import serve
 from blag.version import __VERSION__
+from blag.quickstart import quickstart
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
@@ -423,34 +424,6 @@ def generate_tags(articles, tags_template, tag_template, output_dir):
         result = tag_template.render(dict(archive=archive, tag=tag))
         with open(f'{output_dir}/tags/{tag}.html', 'w') as fh:
             fh.write(result)
-
-
-def quickstart(args):
-    """Quickstart.
-
-    This method asks the user some questions and generates a
-    configuration file that is needed in order to run blag.
-
-    Parameters
-    ----------
-    args : argparse.Namespace
-
-    """
-    base_url = input("Hostname (and path) to the root? "
-                     "[https://example.com/]: ")
-    title = input("Title of your website? ")
-    description = input("Description of your website [John Doe's Blog]? ")
-    author = input("Author of your website [John Doe]? ")
-
-    config = configparser.ConfigParser()
-    config['main'] = {
-            'base_url': base_url,
-            'title': title,
-            'description': description,
-            'author': author,
-    }
-    with open('config.ini', 'w') as fh:
-        config.write(fh)
 
 
 if __name__ == '__main__':

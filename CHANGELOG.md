@@ -3,6 +3,10 @@
 ## [unreleased] - XXXX-XX-XX
 
 * Added --version option
+* Improved quickstart:
+  * respective default answers will be written to config if user provided no
+    answer
+  * added tests for quickstart
 
 ## [1.3.1] - 2022-06-10
 
