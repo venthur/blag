@@ -1,5 +1,9 @@
 # Changelog
 
+## [unreleased] - XXXX-XX-XX
+
+* Added --version option
+
 ## [1.3.1] - 2022-06-10
 
 * fixed man page

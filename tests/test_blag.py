@@ -277,3 +277,13 @@ foo bar
 
 def test_main(cleandir):
     blag.main(['build'])
+
+
+def test_cli_version(capsys):
+    with pytest.raises(SystemExit) as ex:
+        blag.main(['--version'])
+    # normal system exit
+    assert ex.value.code == 0
+    # proper version reported
+    out, _ = capsys.readouterr()
+    assert blag.__VERSION__ in out
