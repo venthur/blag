@@ -7,6 +7,7 @@
   * respective default answers will be written to config if user provided no
     answer
   * added tests for quickstart
+* Added some test cases for the MarkdownLinktreeProcessor
 
 ## [1.3.1] - 2022-06-10
 

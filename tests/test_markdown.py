@@ -33,6 +33,20 @@ def test_convert_markdown_links(input_, expected):
 
 
 @pytest.mark.parametrize("input_, expected", [
+    # scheme
+    ('[test](https://)', 'https://'),
+    # netloc
+    ('[test](//test.md)', '//test.md'),
+    # no path
+    ('[test]()', ''),
+])
+def test_dont_convert_normal_links(input_, expected):
+    md = markdown_factory()
+    html, _ = convert_markdown(md, input_)
+    assert expected in html
+
+
+@pytest.mark.parametrize("input_, expected", [
     ('foo: bar', {'foo': 'bar'}),
     ('foo: those are several words', {'foo': 'those are several words'}),
     ('tags: this, is, a, test\n', {'tags': ['this', 'is', 'a', 'test']}),
