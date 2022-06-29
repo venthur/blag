@@ -1,6 +1,6 @@
 # Changelog
 
-## [unreleased] - XXXX-XX-XX
+## [1.3.2] - 2022-06-29
 
 * Added --version option
 * Improved quickstart:
