@@ -15,10 +15,12 @@ def test_article(article_template):
     ctx = {
         'content': 'this is the content',
         'title': 'this is the title',
+        'date': datetime.datetime(1980, 5, 9),
     }
     result = article_template.render(ctx)
     assert 'this is the content' in result
     assert 'this is the title' in result
+    assert '1980-05-09' in result
 
 
 def test_archive(archive_template):
