@@ -1,5 +1,9 @@
 # Changelog
 
+## unreleased
+
+* improved default template
+
 ## [1.3.2] - 2022-06-29
 
 * Added --version option
