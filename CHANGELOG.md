@@ -3,6 +3,7 @@
 ## [1.3.2] - 2022-06-29
 
 * Added --version option
+* added --verbose option, that increases the loglevel to 'debug'
 * Improved quickstart:
   * respective default answers will be written to config if user provided no
     answer
