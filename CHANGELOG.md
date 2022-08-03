@@ -3,6 +3,11 @@
 ## unreleased
 
 * improved default template
+* updated dependencies:
+  * markdown 3.4.1
+  * flake 5.0.2
+  * twine 4.0.1
+  * sphinx 5.1.1
 
 ## [1.3.2] - 2022-06-29
 
