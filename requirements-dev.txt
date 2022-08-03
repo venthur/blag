@@ -1,5 +1,5 @@
 sphinx==5.1.1
-twine==4.0.0
+twine==4.0.1
 wheel==0.37.1
 pytest==7.1.2
 pytest-cov==3.0.0
