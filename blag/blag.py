@@ -209,6 +209,7 @@ def build(args):
     """
     os.makedirs(f'{args.output_dir}', exist_ok=True)
     convertibles = []
+    known_targets = []
     for root, dirnames, filenames in os.walk(args.input_dir):
         for filename in filenames:
             rel_src = os.path.relpath(f'{root}/{filename}',
@@ -219,13 +220,20 @@ def build(args):
                 rel_dst = rel_src
                 rel_dst = rel_dst[:-3] + '.html'
                 convertibles.append((rel_src, rel_dst))
+                known_targets.append(
+                    os.path.abspath(f'{args.output_dir}/{rel_dst}')
+                )
             else:
                 shutil.copy(f'{args.input_dir}/{rel_src}',
                             f'{args.output_dir}/{rel_src}')
+                known_targets.append(
+                    os.path.abspath(f'{args.output_dir}/{rel_src}')
+                )
         for dirname in dirnames:
             # all directories are copied into the output directory
             path = os.path.relpath(f'{root}/{dirname}', start=args.input_dir)
             os.makedirs(f'{args.output_dir}/{path}', exist_ok=True)
+            known_targets.append(os.path.abspath(f'{args.output_dir}/{path}'))
 
     # copy static files over
     logger.info('Copying static files.')
@@ -249,6 +257,22 @@ def build(args):
         page_template,
         article_template,
     )
+
+    # clean up files that should not be there
+    for root, dirnames, filenames in os.walk(args.output_dir):
+        for filename in filenames:
+            dst = os.path.abspath(f'{root}/{filename}')
+            if dst not in known_targets:
+                os.remove(dst)
+            else:
+                known_targets.remove(dst)
+        for dirname in dirnames:
+            dst = os.path.abspath(f'{root}/{dirname}')
+            if dst not in known_targets:
+                shutil.rmtree(dst)
+            else:
+                known_targets.remove(dst)
+    logger.debug(known_targets)
 
     generate_feed(
         articles, args.output_dir,
