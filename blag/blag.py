@@ -263,12 +263,14 @@ def build(args):
         for filename in filenames:
             dst = os.path.abspath(f'{root}/{filename}')
             if dst not in known_targets:
+                logger.info(f'deleting {dst}')
                 os.remove(dst)
             else:
                 known_targets.remove(dst)
         for dirname in dirnames:
             dst = os.path.abspath(f'{root}/{dirname}')
             if dst not in known_targets:
+                logger.info(f'deleting {dst}')
                 shutil.rmtree(dst)
             else:
                 known_targets.remove(dst)
