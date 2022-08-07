@@ -274,6 +274,22 @@ foo bar
 
     blag.build(args)
 
+    # test existence of the three converted files
+    for i in range(3):
+        assert os.path.exists(f'{args.output_dir}/{i}.html')
+    # ... static file
+    assert os.path.exists(f'{args.output_dir}/test')
+    # ... directory
+    assert os.path.exists(f'{args.output_dir}/testdir/test')
+    # ... feed
+    assert os.path.exists(f'{args.output_dir}/atom.xml')
+    # ... archive
+    assert os.path.exists(f'{args.output_dir}/index.html')
+    # ... tags
+    assert os.path.exists(f'{args.output_dir}/tags/index.html')
+    assert os.path.exists(f'{args.output_dir}/tags/foo.html')
+    assert os.path.exists(f'{args.output_dir}/tags/bar.html')
+
 
 def test_main(cleandir):
     blag.main(['build'])
