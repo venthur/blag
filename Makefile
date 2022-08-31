@@ -14,7 +14,7 @@ endif
 
 
 .PHONY: all
-all: lint test
+all: lint mypy test
 
 $(VENV): requirements.txt requirements-dev.txt setup.py
 	$(PY) -m venv $(VENV)
