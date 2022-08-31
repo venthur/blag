@@ -1,13 +1,16 @@
+from argparse import Namespace
+from typing import Iterator, Callable
 from tempfile import TemporaryDirectory
 import os
 
 import pytest
+from jinja2 import Environment, Template
 
 from blag import blag
 
 
 @pytest.fixture
-def environment():
+def environment() -> Iterator[Environment]:
     site = {
         'base_url': 'site base_url',
         'title': 'site title',
@@ -19,32 +22,32 @@ def environment():
 
 
 @pytest.fixture
-def page_template(environment):
+def page_template(environment: Environment) -> Iterator[Template]:
     yield environment.get_template('page.html')
 
 
 @pytest.fixture
-def article_template(environment):
+def article_template(environment: Environment) -> Iterator[Template]:
     yield environment.get_template('article.html')
 
 
 @pytest.fixture
-def archive_template(environment):
+def archive_template(environment: Environment) -> Iterator[Template]:
     yield environment.get_template('archive.html')
 
 
 @pytest.fixture
-def tags_template(environment):
+def tags_template(environment: Environment) -> Iterator[Template]:
     yield environment.get_template('tags.html')
 
 
 @pytest.fixture
-def tag_template(environment):
+def tag_template(environment: Environment) -> Iterator[Template]:
     yield environment.get_template('tag.html')
 
 
 @pytest.fixture
-def cleandir():
+def cleandir() -> Iterator[str]:
     """Create a temporary workind directory and cwd.
 
     """
@@ -70,14 +73,9 @@ author = a. u. thor
 
 
 @pytest.fixture
-def args(cleandir):
+def args(cleandir: Callable[[], Iterator[str]]) -> Iterator[Namespace]:
 
-    class NameSpace:
-        def __init__(self, **kwargs):
-            for name in kwargs:
-                setattr(self, name, kwargs[name])
-
-    args = NameSpace(
+    args = Namespace(
             input_dir='content',
             output_dir='build',
             static_dir='static',

@@ -41,7 +41,10 @@ def markdown_factory() -> Markdown:
     return md
 
 
-def convert_markdown(md: Markdown, markdown: str) -> tuple[str, dict]:
+def convert_markdown(
+    md: Markdown,
+    markdown: str,
+) -> tuple[str, dict[str, str]]:
     """Convert markdown into html and extract meta data.
 
     Some meta data is treated special:
@@ -56,13 +59,13 @@ def convert_markdown(md: Markdown, markdown: str) -> tuple[str, dict]:
 
     Returns
     -------
-    str, dict :
+    str, dict[str, str] :
         html and metadata
 
     """
     md.reset()
     content = md.convert(markdown)
-    meta = md.Meta
+    meta = md.Meta  # type: ignore
 
     # markdowns metadata consists as list of strings -- one item per
     # line. let's convert into single strings.
@@ -90,7 +93,7 @@ class MarkdownLinkTreeprocessor(Treeprocessor):
 
     """
 
-    def run(self, root: Element):
+    def run(self, root: Element) -> Element:
         for element in root.iter():
             if element.tag == 'a':
                 url = element.get('href')
@@ -102,7 +105,7 @@ class MarkdownLinkTreeprocessor(Treeprocessor):
                 element.set('href', converted)
         return root
 
-    def convert(self, url: str):
+    def convert(self, url: str) -> str:
         scheme, netloc, path, query, fragment = urlsplit(url)
         logger.debug(
             f'{url}: {scheme=} {netloc=} {path=} {query=} {fragment=}'
@@ -120,7 +123,7 @@ class MarkdownLinkExtension(Extension):
     """markdown.extension that converts relative .md- to .html-links.
 
     """
-    def extendMarkdown(self, md: Markdown):
+    def extendMarkdown(self, md: Markdown) -> None:
         md.treeprocessors.register(
                 MarkdownLinkTreeprocessor(md), 'mdlink', 0,
         )

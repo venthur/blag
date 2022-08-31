@@ -1,7 +1,9 @@
 import datetime
 
+from jinja2 import Template
 
-def test_page(page_template):
+
+def test_page(page_template: Template) -> None:
     ctx = {
         'content': 'this is the content',
         'title': 'this is the title',
@@ -11,7 +13,7 @@ def test_page(page_template):
     assert 'this is the title' in result
 
 
-def test_article(article_template):
+def test_article(article_template: Template) -> None:
     ctx = {
         'content': 'this is the content',
         'title': 'this is the title',
@@ -23,7 +25,7 @@ def test_article(article_template):
     assert '1980-05-09' in result
 
 
-def test_archive(archive_template):
+def test_archive(archive_template: Template) -> None:
     entry = {
         'title': 'this is a title',
         'dst': 'https://example.com/link',
@@ -41,7 +43,7 @@ def test_archive(archive_template):
     assert 'https://example.com/link' in result
 
 
-def test_tags(tags_template):
+def test_tags(tags_template: Template) -> None:
     tags = [('foo', 42)]
     ctx = {
         'tags': tags,
@@ -54,7 +56,7 @@ def test_tags(tags_template):
     assert '42' in result
 
 
-def test_tag(tag_template):
+def test_tag(tag_template: Template) -> None:
     entry = {
         'title': 'this is a title',
         'dst': 'https://example.com/link',

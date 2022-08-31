@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Any
 
 import pytest
 import markdown
@@ -26,7 +27,7 @@ from blag.markdown import convert_markdown, markdown_factory
     ('[test][]\n[test]: /a/test.md', '/a/test.html'),
     ('[test][]\n[test]: /a/test.md "test"', '/a/test.html'),
 ])
-def test_convert_markdown_links(input_, expected):
+def test_convert_markdown_links(input_: str, expected: str) -> None:
     md = markdown_factory()
     html, _ = convert_markdown(md, input_)
     assert expected in html
@@ -40,7 +41,7 @@ def test_convert_markdown_links(input_, expected):
     # no path
     ('[test]()', ''),
 ])
-def test_dont_convert_normal_links(input_, expected):
+def test_dont_convert_normal_links(input_: str, expected: str) -> None:
     md = markdown_factory()
     html, _ = convert_markdown(md, input_)
     assert expected in html
@@ -54,18 +55,18 @@ def test_dont_convert_normal_links(input_, expected):
     ('date: 2020-01-01 12:10', {'date':
                                 datetime(2020, 1, 1, 12, 10).astimezone()}),
 ])
-def test_convert_metadata(input_, expected):
+def test_convert_metadata(input_: str, expected: dict[str, Any]) -> None:
     md = markdown_factory()
     _, meta = convert_markdown(md, input_)
     assert expected == meta
 
 
-def test_markdown_factory():
+def test_markdown_factory() -> None:
     md = markdown_factory()
     assert isinstance(md, markdown.Markdown)
 
 
-def test_smarty():
+def test_smarty() -> None:
     md = markdown_factory()
 
     md1 = """
@@ -79,7 +80,7 @@ this --- is -- a test ...
     assert 'hellip' in html
 
 
-def test_smarty_code():
+def test_smarty_code() -> None:
     md = markdown_factory()
 
     md1 = """

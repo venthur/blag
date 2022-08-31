@@ -32,7 +32,7 @@ def get_input(question: str, default: str) -> str:
     return reply
 
 
-def quickstart(args: argparse.Namespace) -> None:
+def quickstart(args: argparse.Namespace | None) -> None:
     """Quickstart.
 
     This method asks the user some questions and generates a

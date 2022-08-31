@@ -6,6 +6,7 @@
 
 # remove when we don't support py38 anymore
 from __future__ import annotations
+from typing import Any
 import argparse
 import os
 import shutil
@@ -34,7 +35,7 @@ logging.basicConfig(
 )
 
 
-def main(arguments: list[str] = None) -> None:
+def main(arguments: list[str] | None = None) -> None:
     """Main entrypoint for the CLI.
 
     This method parses the CLI arguments and executes the respective
@@ -54,7 +55,7 @@ def main(arguments: list[str] = None) -> None:
     args.func(args)
 
 
-def parse_args(args: list[str] = None) -> argparse.Namespace:
+def parse_args(args: list[str] | None = None) -> argparse.Namespace:
     """Parse command line arguments.
 
     Parameters
@@ -175,8 +176,8 @@ def get_config(configfile: str) -> configparser.SectionProxy:
 
 
 def environment_factory(
-    template_dir: str = None,
-    globals_: dict = None,
+    template_dir: str | None = None,
+    globals_: dict[str, object] | None = None,
 ) -> Environment:
     """Environment factory.
 
@@ -188,7 +189,7 @@ def environment_factory(
     Parameters
     ----------
     template_dir : str
-    globals_ : dict
+    globals_ : dict[str, object]
 
     Returns
     -------
@@ -278,7 +279,7 @@ def process_markdown(
     output_dir: str,
     page_template: Template,
     article_template: Template,
-) -> tuple[list[tuple[str, dict]], list[tuple[str, dict]]]:
+) -> tuple[list[tuple[str, dict[str, Any]]], list[tuple[str, dict[str, Any]]]]:
     """Process markdown files.
 
     This method processes the convertibles, converts them to html and
@@ -298,7 +299,7 @@ def process_markdown(
 
     Returns
     -------
-    articles, pages : list[tuple[str, dict]]
+    articles, pages : list[tuple[str, dict[str, Any]]]
 
     """
     logger.info("Converting Markdown files...")
@@ -334,7 +335,7 @@ def process_markdown(
 
 
 def generate_feed(
-    articles: list[tuple[str, dict]],
+    articles: list[tuple[str, dict[str, Any]]],
     output_dir: str,
     base_url: str,
     blog_title: str,
@@ -345,7 +346,7 @@ def generate_feed(
 
     Parameters
     ----------
-    articles : list[tuple[str, dict]]
+    articles : list[tuple[str, dict[str, Any]]]
         list of relative output path and article dictionary
     output_dir : str
         where the feed is stored
@@ -386,7 +387,7 @@ def generate_feed(
 
 
 def generate_archive(
-    articles: list[tuple[str, dict]],
+    articles: list[tuple[str, dict[str, Any]]],
     template: Template,
     output_dir: str,
 ) -> None:
@@ -394,7 +395,7 @@ def generate_archive(
 
     Parameters
     ----------
-    articles : list[tuple[str, dict]]
+    articles : list[tuple[str, dict[str, Any]]]
         List of articles. Each article has the destination path and a
         dictionary with the content.
     template : jinja2.Template instance
@@ -413,7 +414,7 @@ def generate_archive(
 
 
 def generate_tags(
-    articles: list[tuple[str, dict]],
+    articles: list[tuple[str, dict[str, Any]]],
     tags_template: Template,
     tag_template: Template,
     output_dir: str,
@@ -422,7 +423,7 @@ def generate_tags(
 
     Parameters
     ----------
-    articles : list[tuple[str, dict]]
+    articles : list[tuple[str, dict[str, Any]]]
         List of articles. Each article has the destination path and a
         dictionary with the content.
     tags_template, tag_template : jinja2.Template instance
@@ -431,11 +432,10 @@ def generate_tags(
     """
     logger.info("Generating Tag-pages.")
     os.makedirs(f'{output_dir}/tags', exist_ok=True)
-
     # get tags number of occurrences
-    all_tags: dict = {}
+    all_tags: dict[str, int] = {}
     for _, context in articles:
-        tags = context.get('tags', [])
+        tags: list[str] = context.get('tags', [])
         for tag in tags:
             all_tags[tag] = all_tags.get(tag, 0) + 1
     # sort by occurrence
@@ -448,17 +448,17 @@ def generate_tags(
         fh.write(result)
 
     # get tags and archive per tag
-    all_tags = {}
+    all_tags2: dict[str, list[dict[str, Any]]] = {}
     for dst, context in articles:
         tags = context.get('tags', [])
         for tag in tags:
-            archive = all_tags.get(tag, [])
+            archive: list[dict[str, Any]] = all_tags2.get(tag, [])
             entry = context.copy()
             entry['dst'] = dst
             archive.append(entry)
-            all_tags[tag] = archive
+            all_tags2[tag] = archive
 
-    for tag, archive in all_tags.items():
+    for tag, archive in all_tags2.items():
         result = tag_template.render(dict(archive=archive, tag=tag))
         with open(f'{output_dir}/tags/{tag}.html', 'w') as fh:
             fh.write(result)

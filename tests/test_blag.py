@@ -1,37 +1,41 @@
 from tempfile import TemporaryDirectory
 import os
 from datetime import datetime
+from typing import Any
+from argparse import Namespace
 
 import pytest
+from pytest import CaptureFixture, LogCaptureFixture
+from jinja2 import Template
 
+from blag import __VERSION__
 from blag import blag
 
 
-def test_generate_feed(cleandir):
-    articles = []
+def test_generate_feed(cleandir: str) -> None:
+    articles: list[tuple[str, dict[str, Any]]] = []
     blag.generate_feed(articles, 'build', ' ', ' ', ' ', ' ')
     assert os.path.exists('build/atom.xml')
 
 
-def test_feed(cleandir):
-    articles = [
-        [
+def test_feed(cleandir: str) -> None:
+    articles: list[tuple[str, dict[str, Any]]] = [
+        (
             'dest1.html',
             {
                 'title': 'title1',
                 'date': datetime(2019, 6, 6),
                 'content': 'content1',
             }
-        ],
-        [
+        ),
+        (
             'dest2.html',
             {
                 'title': 'title2',
                 'date': datetime(1980, 5, 9),
                 'content': 'content2',
             }
-        ],
-
+        ),
     ]
 
     blag.generate_feed(articles, 'build', 'https://example.com/',
@@ -60,10 +64,10 @@ def test_feed(cleandir):
     assert '<link href="https://example.com/dest2.html"' in feed
 
 
-def test_generate_feed_with_description(cleandir):
+def test_generate_feed_with_description(cleandir: str) -> None:
     # if a description is provided, it will be used as the summary in
     # the feed, otherwise we simply use the title of the article
-    articles = [[
+    articles: list[tuple[str, dict[str, Any]]] = [(
         'dest.html',
         {
             'title': 'title',
@@ -71,7 +75,7 @@ def test_generate_feed_with_description(cleandir):
             'date': datetime(2019, 6, 6),
             'content': 'content',
         }
-    ]]
+    )]
     blag.generate_feed(articles, 'build', ' ', ' ', ' ', ' ')
 
     with open('build/atom.xml') as fh:
@@ -83,7 +87,7 @@ def test_generate_feed_with_description(cleandir):
     assert '<content type="html">content' in feed
 
 
-def test_parse_args_build():
+def test_parse_args_build() -> None:
     # test default args
     args = blag.parse_args(['build'])
     assert args.input_dir == 'content'
@@ -116,7 +120,7 @@ def test_parse_args_build():
     assert args.static_dir == 'foo'
 
 
-def test_get_config():
+def test_get_config() -> None:
     config = """
 [main]
 base_url = https://example.com/
@@ -166,8 +170,8 @@ author = a. u. thor
         assert config_parsed['base_url'] == 'https://example.com/'
 
 
-def test_environment_factory():
-    globals_ = {
+def test_environment_factory() -> None:
+    globals_: dict[str, object] = {
         'foo': 'bar',
         'test': 'me'
     }
@@ -176,7 +180,11 @@ def test_environment_factory():
     assert env.globals['test'] == 'me'
 
 
-def test_process_markdown(cleandir, page_template, article_template):
+def test_process_markdown(
+    cleandir: str,
+    page_template: Template,
+    article_template: Template,
+) -> None:
     page1 = """\
 title: some page
 
@@ -202,10 +210,9 @@ foo bar
 
     convertibles = []
     for i, txt in enumerate((page1, article1, article2)):
-        i = str(i)
-        with open(f'content/{i}', 'w') as fh:
+        with open(f'content/{str(i)}', 'w') as fh:
             fh.write(txt)
-        convertibles.append([i, i])
+        convertibles.append((str(i), str(i)))
 
     articles, pages = blag.process_markdown(
             convertibles,
@@ -230,7 +237,7 @@ foo bar
         assert 'content' in context
 
 
-def test_build(args):
+def test_build(args: Namespace) -> None:
     page1 = """\
 title: some page
 
@@ -259,10 +266,9 @@ foo bar
     # write some convertibles
     convertibles = []
     for i, txt in enumerate((page1, article1, article2)):
-        i = str(i)
-        with open(f'{args.input_dir}/{i}.md', 'w') as fh:
+        with open(f'{args.input_dir}/{str(i)}.md', 'w') as fh:
             fh.write(txt)
-        convertibles.append([i, i])
+        convertibles.append((str(i), str(i)))
 
     # some static files
     with open(f'{args.static_dir}/test', 'w') as fh:
@@ -291,21 +297,21 @@ foo bar
     assert os.path.exists(f'{args.output_dir}/tags/bar.html')
 
 
-def test_main(cleandir):
+def test_main(cleandir: str) -> None:
     blag.main(['build'])
 
 
-def test_cli_version(capsys):
+def test_cli_version(capsys: CaptureFixture[str]) -> None:
     with pytest.raises(SystemExit) as ex:
         blag.main(['--version'])
     # normal system exit
     assert ex.value.code == 0
     # proper version reported
     out, _ = capsys.readouterr()
-    assert blag.__VERSION__ in out
+    assert __VERSION__ in out
 
 
-def test_cli_verbose(cleandir, caplog):
+def test_cli_verbose(cleandir: str, caplog: LogCaptureFixture) -> None:
     blag.main(['build'])
     assert 'DEBUG' not in caplog.text
 

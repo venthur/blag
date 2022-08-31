@@ -1,12 +1,13 @@
 import time
 import threading
+from argparse import Namespace
 
 import pytest
 
 from blag import devserver
 
 
-def test_get_last_modified(cleandir):
+def test_get_last_modified(cleandir: str) -> None:
     # take initial time
     t1 = devserver.get_last_modified(['content'])
 
@@ -24,7 +25,7 @@ def test_get_last_modified(cleandir):
     assert t2 == t3
 
 
-def test_autoreload_builds_immediately(args):
+def test_autoreload_builds_immediately(args: Namespace) -> None:
     # create a dummy file that can be build
     with open('content/test.md', 'w') as fh:
         fh.write('boo')
@@ -45,7 +46,7 @@ def test_autoreload_builds_immediately(args):
 
 
 @pytest.mark.filterwarnings("ignore::pytest.PytestUnhandledThreadExceptionWarning")  # noqa
-def test_autoreload(args):
+def test_autoreload(args: Namespace) -> None:
     t = threading.Thread(target=devserver.autoreload,
                          args=(args, ),
                          daemon=True,)
