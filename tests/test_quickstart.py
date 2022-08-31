@@ -1,3 +1,6 @@
+# remove when we don't support py38 anymore
+from __future__ import annotations
+
 from pytest import MonkeyPatch
 
 from blag.quickstart import get_input, quickstart

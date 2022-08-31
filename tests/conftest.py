@@ -1,3 +1,5 @@
+# remove when we don't support py38 anymore
+from __future__ import annotations
 from argparse import Namespace
 from typing import Iterator, Callable
 from tempfile import TemporaryDirectory

@@ -1,3 +1,5 @@
+# remove when we don't support py38 anymore
+from __future__ import annotations
 import datetime
 
 from jinja2 import Template
