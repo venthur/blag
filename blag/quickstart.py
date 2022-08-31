@@ -2,6 +2,8 @@
 
 """
 
+# remove when we don't support py38 anymore
+from __future__ import annotations
 import configparser
 import argparse
 

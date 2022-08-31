@@ -6,6 +6,8 @@ site if necessary.
 
 """
 
+# remove when we don't support py38 anymore
+from __future__ import annotations
 import os
 import logging
 import time

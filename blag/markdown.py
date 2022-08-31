@@ -5,6 +5,8 @@ processing.
 
 """
 
+# remove when we don't support py38 anymore
+from __future__ import annotations
 from datetime import datetime
 import logging
 from urllib.parse import urlsplit, urlunsplit
