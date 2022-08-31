@@ -12,6 +12,7 @@ import time
 import multiprocessing
 from http.server import SimpleHTTPRequestHandler, HTTPServer
 from functools import partial
+import argparse
 
 from blag import blag
 
@@ -19,7 +20,7 @@ from blag import blag
 logger = logging.getLogger(__name__)
 
 
-def get_last_modified(dirs):
+def get_last_modified(dirs: list[str]) -> float:
     """Get the last modified time.
 
     This method recursively goes through `dirs` and returns the most
@@ -32,11 +33,11 @@ def get_last_modified(dirs):
 
     Returns
     -------
-    int
+    float
         most recent modification time found in `dirs`
 
     """
-    last_mtime = 0
+    last_mtime = 0.0
 
     for dir in dirs:
         for root, dirs, files in os.walk(dir):
@@ -48,7 +49,7 @@ def get_last_modified(dirs):
     return last_mtime
 
 
-def autoreload(args):
+def autoreload(args: argparse.Namespace) -> None:
     """Start the autoreloader.
 
     This method monitors the given directories for changes (i.e. the
@@ -67,7 +68,7 @@ def autoreload(args):
     logger.info(f'Monitoring {dirs} for changes...')
     # make sure we trigger the rebuild immediately when we enter the
     # loop to avoid serving stale contents
-    last_mtime = 0
+    last_mtime = 0.0
     while True:
         mtime = get_last_modified(dirs)
         if mtime > last_mtime:
@@ -77,7 +78,7 @@ def autoreload(args):
         time.sleep(1)
 
 
-def serve(args):
+def serve(args: argparse.Namespace) -> None:
     """Start the webserver and the autoreloader.
 
     Parameters

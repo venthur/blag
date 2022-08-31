@@ -11,7 +11,13 @@ import logging
 import configparser
 import sys
 
-from jinja2 import Environment, ChoiceLoader, FileSystemLoader, PackageLoader
+from jinja2 import (
+    Environment,
+    ChoiceLoader,
+    FileSystemLoader,
+    PackageLoader,
+    Template,
+)
 import feedgenerator
 
 from blag.markdown import markdown_factory, convert_markdown
@@ -26,7 +32,7 @@ logging.basicConfig(
 )
 
 
-def main(args=None):
+def main(arguments: list[str] = None) -> None:
     """Main entrypoint for the CLI.
 
     This method parses the CLI arguments and executes the respective
@@ -34,11 +40,11 @@ def main(args=None):
 
     Parameters
     ----------
-    args : list[str]
+    arguments : list[str]
         optional parameters, used for testing
 
     """
-    args = parse_args(args)
+    args = parse_args(arguments)
     # set loglevel
     if args.verbose:
         logger.setLevel(logging.DEBUG)
@@ -46,7 +52,7 @@ def main(args=None):
     args.func(args)
 
 
-def parse_args(args=None):
+def parse_args(args: list[str] = None) -> argparse.Namespace:
     """Parse command line arguments.
 
     Parameters
@@ -135,7 +141,7 @@ def parse_args(args=None):
     return parser.parse_args(args)
 
 
-def get_config(configfile):
+def get_config(configfile: str) -> configparser.SectionProxy:
     """Load site configuration from configfile.
 
     Parameters
@@ -146,7 +152,7 @@ def get_config(configfile):
 
     Returns
     -------
-    dict
+    configparser.SectionProxy
 
     """
     config = configparser.ConfigParser()
@@ -166,7 +172,10 @@ def get_config(configfile):
     return config['main']
 
 
-def environment_factory(template_dir=None, globals_=None):
+def environment_factory(
+    template_dir: str = None,
+    globals_: dict = None,
+) -> Environment:
     """Environment factory.
 
     Creates a Jinja2 Environment with the default templates and
@@ -186,7 +195,7 @@ def environment_factory(template_dir=None, globals_=None):
     """
     # first we try the custom templates, and fall back the ones provided
     # by blag
-    loaders = []
+    loaders: list[FileSystemLoader | PackageLoader] = []
     if template_dir:
         loaders.append(FileSystemLoader([template_dir]))
     loaders.append(PackageLoader('blag', 'templates'))
@@ -196,7 +205,7 @@ def environment_factory(template_dir=None, globals_=None):
     return env
 
 
-def build(args):
+def build(args: argparse.Namespace) -> None:
     """Build the site.
 
     This is blag's main method that builds the site, generates the feed
@@ -261,8 +270,13 @@ def build(args):
     generate_tags(articles, tags_template, tag_template, args.output_dir)
 
 
-def process_markdown(convertibles, input_dir, output_dir,
-                     page_template, article_template):
+def process_markdown(
+    convertibles: list[tuple[str, str]],
+    input_dir: str,
+    output_dir: str,
+    page_template: Template,
+    article_template: Template,
+) -> tuple[list[tuple[str, dict]], list[tuple[str, dict]]]:
     """Process markdown files.
 
     This method processes the convertibles, converts them to html and
@@ -273,7 +287,7 @@ def process_markdown(convertibles, input_dir, output_dir,
 
     Parameters
     ----------
-    convertibles : List[Tuple[str, str]]
+    convertibles : list[tuple[str, str]]
         relative paths to markdown- (src) html- (dest) files
     input_dir : str
     output_dir : str
@@ -282,7 +296,7 @@ def process_markdown(convertibles, input_dir, output_dir,
 
     Returns
     -------
-    articles, pages : List[Tuple[str, Dict]]
+    articles, pages : list[tuple[str, dict]]
 
     """
     logger.info("Converting Markdown files...")
@@ -318,18 +332,18 @@ def process_markdown(convertibles, input_dir, output_dir,
 
 
 def generate_feed(
-        articles,
-        output_dir,
-        base_url,
-        blog_title,
-        blog_description,
-        blog_author,
-):
+    articles: list[tuple[str, dict]],
+    output_dir: str,
+    base_url: str,
+    blog_title: str,
+    blog_description: str,
+    blog_author: str,
+) -> None:
     """Generate Atom feed.
 
     Parameters
     ----------
-    articles : list[list[str, dict]]
+    articles : list[tuple[str, dict]]
         list of relative output path and article dictionary
     output_dir : str
         where the feed is stored
@@ -369,12 +383,16 @@ def generate_feed(
         feed.write(fh, encoding='utf8')
 
 
-def generate_archive(articles, template, output_dir):
+def generate_archive(
+    articles: list[tuple[str, dict]],
+    template: Template,
+    output_dir: str,
+) -> None:
     """Generate the archive page.
 
     Parameters
     ----------
-    articles : list[list[str, dict]]
+    articles : list[tuple[str, dict]]
         List of articles. Each article has the destination path and a
         dictionary with the content.
     template : jinja2.Template instance
@@ -392,12 +410,17 @@ def generate_archive(articles, template, output_dir):
         fh.write(result)
 
 
-def generate_tags(articles, tags_template, tag_template, output_dir):
+def generate_tags(
+    articles: list[tuple[str, dict]],
+    tags_template: Template,
+    tag_template: Template,
+    output_dir: str,
+) -> None:
     """Generate the tags page.
 
     Parameters
     ----------
-    articles : list[list[str, dict]]
+    articles : list[tuple[str, dict]]
         List of articles. Each article has the destination path and a
         dictionary with the content.
     tags_template, tag_template : jinja2.Template instance
@@ -408,15 +431,17 @@ def generate_tags(articles, tags_template, tag_template, output_dir):
     os.makedirs(f'{output_dir}/tags', exist_ok=True)
 
     # get tags number of occurrences
-    all_tags = {}
+    all_tags: dict = {}
     for _, context in articles:
         tags = context.get('tags', [])
         for tag in tags:
             all_tags[tag] = all_tags.get(tag, 0) + 1
     # sort by occurrence
-    all_tags = sorted(all_tags.items(), key=lambda x: x[1], reverse=True)
+    taglist: list[tuple[str, int]] = sorted(
+        all_tags.items(), key=lambda x: x[1], reverse=True
+    )
 
-    result = tags_template.render(dict(tags=all_tags))
+    result = tags_template.render(dict(tags=taglist))
     with open(f'{output_dir}/tags/index.html', 'w') as fh:
         fh.write(result)
 

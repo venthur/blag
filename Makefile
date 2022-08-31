@@ -27,6 +27,10 @@ $(VENV): requirements.txt requirements-dev.txt setup.py
 test: $(VENV)
 	$(BIN)/pytest
 
+.PHONY: mypy
+mypy: $(VENV)
+	$(BIN)/mypy
+
 .PHONY: lint
 lint: $(VENV)
 	$(BIN)/flake8

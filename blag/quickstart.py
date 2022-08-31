@@ -3,9 +3,10 @@
 """
 
 import configparser
+import argparse
 
 
-def get_input(question, default):
+def get_input(question: str, default: str) -> str:
     """Prompt for user input.
 
     This is a wrapper around the input-builtin. It will show the default answer
@@ -29,7 +30,7 @@ def get_input(question, default):
     return reply
 
 
-def quickstart(args):
+def quickstart(args: argparse.Namespace) -> None:
     """Quickstart.
 
     This method asks the user some questions and generates a
