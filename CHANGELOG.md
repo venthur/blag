@@ -2,6 +2,7 @@
 
 ## unreleased
 
+* added type hints and mypy --strict to test suite
 * improved default template
 * updated dependencies:
   * markdown 3.4.1

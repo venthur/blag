@@ -2,10 +2,13 @@
 
 """
 
+# remove when we don't support py38 anymore
+from __future__ import annotations
 import configparser
+import argparse
 
 
-def get_input(question, default):
+def get_input(question: str, default: str) -> str:
     """Prompt for user input.
 
     This is a wrapper around the input-builtin. It will show the default answer
@@ -13,14 +16,15 @@ def get_input(question, default):
 
     Parameters
     ----------
-    question : str
+    question
         the question the user is presented
-    default : str
+    default
         the default value that will be used if no answer was given
 
     Returns
     -------
     str
+        the answer
 
     """
     reply = input(f"{question} [{default}]: ")
@@ -29,7 +33,7 @@ def get_input(question, default):
     return reply
 
 
-def quickstart(args):
+def quickstart(args: argparse.Namespace | None) -> None:
     """Quickstart.
 
     This method asks the user some questions and generates a
@@ -37,7 +41,8 @@ def quickstart(args):
 
     Parameters
     ----------
-    args : argparse.Namespace
+    args
+        not used
 
     """
     base_url = get_input(
@@ -59,10 +64,10 @@ def quickstart(args):
 
     config = configparser.ConfigParser()
     config['main'] = {
-            'base_url': base_url,
-            'title': title,
-            'description': description,
-            'author': author,
+        'base_url': base_url,
+        'title': title,
+        'description': description,
+        'author': author,
     }
     with open('config.ini', 'w') as fh:
         config.write(fh)
