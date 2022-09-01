@@ -50,9 +50,7 @@ def tag_template(environment: Environment) -> Iterator[Template]:
 
 @pytest.fixture
 def cleandir() -> Iterator[str]:
-    """Create a temporary workind directory and cwd.
-
-    """
+    """Create a temporary workind directory and cwd."""
     config = """
 [main]
 base_url = https://example.com/
@@ -78,9 +76,9 @@ author = a. u. thor
 def args(cleandir: Callable[[], Iterator[str]]) -> Iterator[Namespace]:
 
     args = Namespace(
-            input_dir='content',
-            output_dir='build',
-            static_dir='static',
-            template_dir='templates',
+        input_dir='content',
+        output_dir='build',
+        static_dir='static',
+        template_dir='templates',
     )
     yield args

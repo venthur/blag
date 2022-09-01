@@ -28,7 +28,7 @@ def test_feed(cleandir: str) -> None:
                 'title': 'title1',
                 'date': datetime(2019, 6, 6),
                 'content': 'content1',
-            }
+            },
         ),
         (
             'dest2.html',
@@ -36,12 +36,18 @@ def test_feed(cleandir: str) -> None:
                 'title': 'title2',
                 'date': datetime(1980, 5, 9),
                 'content': 'content2',
-            }
+            },
         ),
     ]
 
-    blag.generate_feed(articles, 'build', 'https://example.com/',
-                       'blog title', 'blog description', 'blog author')
+    blag.generate_feed(
+        articles,
+        'build',
+        'https://example.com/',
+        'blog title',
+        'blog description',
+        'blog author',
+    )
     with open('build/atom.xml') as fh:
         feed = fh.read()
 
@@ -69,15 +75,17 @@ def test_feed(cleandir: str) -> None:
 def test_generate_feed_with_description(cleandir: str) -> None:
     # if a description is provided, it will be used as the summary in
     # the feed, otherwise we simply use the title of the article
-    articles: list[tuple[str, dict[str, Any]]] = [(
-        'dest.html',
-        {
-            'title': 'title',
-            'description': 'description',
-            'date': datetime(2019, 6, 6),
-            'content': 'content',
-        }
-    )]
+    articles: list[tuple[str, dict[str, Any]]] = [
+        (
+            'dest.html',
+            {
+                'title': 'title',
+                'description': 'description',
+                'date': datetime(2019, 6, 6),
+                'content': 'content',
+            },
+        )
+    ]
     blag.generate_feed(articles, 'build', ' ', ' ', ' ', ' ')
 
     with open('build/atom.xml') as fh:
@@ -144,10 +152,9 @@ author = a. u. thor
 
     # a missing required config causes a sys.exit
     for x in 'base_url', 'title', 'description', 'author':
-        config2 = '\n'.join([line
-                             for line
-                             in config.splitlines()
-                             if not line.startswith(x)])
+        config2 = '\n'.join(
+            [line for line in config.splitlines() if not line.startswith(x)]
+        )
         with TemporaryDirectory() as dir:
             configfile = f'{dir}/config.ini'
             with open(configfile, 'w') as fh:
@@ -173,10 +180,7 @@ author = a. u. thor
 
 
 def test_environment_factory() -> None:
-    globals_: dict[str, object] = {
-        'foo': 'bar',
-        'test': 'me'
-    }
+    globals_: dict[str, object] = {'foo': 'bar', 'test': 'me'}
     env = blag.environment_factory(globals_=globals_)
     assert env.globals['foo'] == 'bar'
     assert env.globals['test'] == 'me'
@@ -217,11 +221,7 @@ foo bar
         convertibles.append((str(i), str(i)))
 
     articles, pages = blag.process_markdown(
-            convertibles,
-            'content',
-            'build',
-            page_template,
-            article_template
+        convertibles, 'content', 'build', page_template, article_template
     )
 
     assert isinstance(articles, list)

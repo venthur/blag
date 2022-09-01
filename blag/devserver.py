@@ -91,8 +91,10 @@ def serve(args: argparse.Namespace) -> None:
         contains the input-, template- and static dir
 
     """
-    httpd = HTTPServer(('', 8000), partial(SimpleHTTPRequestHandler,
-                       directory=args.output_dir))
+    httpd = HTTPServer(
+        ('', 8000),
+        partial(SimpleHTTPRequestHandler, directory=args.output_dir),
+    )
     proc = multiprocessing.Process(target=autoreload, args=(args,))
     proc.start()
     logger.info("\n\n  Devserver Started -- visit http://localhost:8000\n")

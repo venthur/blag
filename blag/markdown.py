@@ -33,8 +33,11 @@ def markdown_factory() -> Markdown:
     """
     md = Markdown(
         extensions=[
-            'meta', 'fenced_code', 'codehilite', 'smarty',
-            MarkdownLinkExtension()
+            'meta',
+            'fenced_code',
+            'codehilite',
+            'smarty',
+            MarkdownLinkExtension(),
         ],
         output_format='html',
     )
@@ -91,9 +94,7 @@ def convert_markdown(
 
 
 class MarkdownLinkTreeprocessor(Treeprocessor):
-    """Converts relative links to .md files to .html
-
-    """
+    """Converts relative links to .md files to .html"""
 
     def run(self, root: Element) -> Element:
         for element in root.iter():
@@ -112,7 +113,7 @@ class MarkdownLinkTreeprocessor(Treeprocessor):
         logger.debug(
             f'{url}: {scheme=} {netloc=} {path=} {query=} {fragment=}'
         )
-        if (scheme or netloc or not path):
+        if scheme or netloc or not path:
             return url
         if path.endswith('.md'):
             path = path[:-3] + '.html'
@@ -122,10 +123,11 @@ class MarkdownLinkTreeprocessor(Treeprocessor):
 
 
 class MarkdownLinkExtension(Extension):
-    """markdown.extension that converts relative .md- to .html-links.
+    """markdown.extension that converts relative .md- to .html-links."""
 
-    """
     def extendMarkdown(self, md: Markdown) -> None:
         md.treeprocessors.register(
-                MarkdownLinkTreeprocessor(md), 'mdlink', 0,
+            MarkdownLinkTreeprocessor(md),
+            'mdlink',
+            0,
         )

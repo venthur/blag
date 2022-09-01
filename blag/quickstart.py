@@ -64,10 +64,10 @@ def quickstart(args: argparse.Namespace | None) -> None:
 
     config = configparser.ConfigParser()
     config['main'] = {
-            'base_url': base_url,
-            'title': title,
-            'description': description,
-            'author': author,
+        'base_url': base_url,
+        'title': title,
+        'description': description,
+        'author': author,
     }
     with open('config.ini', 'w') as fh:
         config.write(fh)

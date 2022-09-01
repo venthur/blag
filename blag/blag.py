@@ -30,8 +30,8 @@ from blag.quickstart import quickstart
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
-        level=logging.INFO,
-        format='%(asctime)s %(levelname)s %(name)s %(message)s',
+    level=logging.INFO,
+    format='%(asctime)s %(levelname)s %(name)s %(message)s',
 )
 
 
@@ -72,10 +72,11 @@ def parse_args(args: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument(
         '--version',
         action='version',
-        version='%(prog)s '+__VERSION__,
+        version='%(prog)s ' + __VERSION__,
     )
     parser.add_argument(
-        '-v', '--verbose',
+        '-v',
+        '--verbose',
         action='store_true',
         help='Verbose output.',
     )
@@ -84,61 +85,69 @@ def parse_args(args: list[str] | None = None) -> argparse.Namespace:
     commands.required = True
 
     build_parser = commands.add_parser(
-            'build',
-            help='Build website.',
+        'build',
+        help='Build website.',
     )
     build_parser.set_defaults(func=build)
     build_parser.add_argument(
-            '-i', '--input-dir',
-            default='content',
-            help='Input directory (default: content)',
+        '-i',
+        '--input-dir',
+        default='content',
+        help='Input directory (default: content)',
     )
     build_parser.add_argument(
-            '-o', '--output-dir',
-            default='build',
-            help='Ouptut directory (default: build)',
+        '-o',
+        '--output-dir',
+        default='build',
+        help='Ouptut directory (default: build)',
     )
     build_parser.add_argument(
-            '-t', '--template-dir',
-            default='templates',
-            help='Template directory (default: templates)',
+        '-t',
+        '--template-dir',
+        default='templates',
+        help='Template directory (default: templates)',
     )
     build_parser.add_argument(
-            '-s', '--static-dir',
-            default='static',
-            help='Static directory (default: static)',
+        '-s',
+        '--static-dir',
+        default='static',
+        help='Static directory (default: static)',
     )
 
     quickstart_parser = commands.add_parser(
-            'quickstart',
-            help="Quickstart blag, creating necessary configuration.",
+        'quickstart',
+        help="Quickstart blag, creating necessary configuration.",
     )
     quickstart_parser.set_defaults(func=quickstart)
 
     serve_parser = commands.add_parser(
-            'serve',
-            help="Start development server.",
+        'serve',
+        help="Start development server.",
     )
     serve_parser.set_defaults(func=serve)
     serve_parser.add_argument(
-            '-i', '--input-dir',
-            default='content',
-            help='Input directory (default: content)',
+        '-i',
+        '--input-dir',
+        default='content',
+        help='Input directory (default: content)',
     )
     serve_parser.add_argument(
-            '-o', '--output-dir',
-            default='build',
-            help='Ouptut directory (default: build)',
+        '-o',
+        '--output-dir',
+        default='build',
+        help='Ouptut directory (default: build)',
     )
     serve_parser.add_argument(
-            '-t', '--template-dir',
-            default='templates',
-            help='Template directory (default: templates)',
+        '-t',
+        '--template-dir',
+        default='templates',
+        help='Template directory (default: templates)',
     )
     serve_parser.add_argument(
-            '-s', '--static-dir',
-            default='static',
-            help='Static directory (default: static)',
+        '-s',
+        '--static-dir',
+        default='static',
+        help='Static directory (default: static)',
     )
 
     return parser.parse_args(args)
@@ -224,8 +233,9 @@ def build(args: argparse.Namespace) -> None:
     convertibles = []
     for root, dirnames, filenames in os.walk(args.input_dir):
         for filename in filenames:
-            rel_src = os.path.relpath(f'{root}/{filename}',
-                                      start=args.input_dir)
+            rel_src = os.path.relpath(
+                f'{root}/{filename}', start=args.input_dir
+            )
             # all non-markdown files are just copied over, the markdown
             # files are converted to html
             if rel_src.endswith('.md'):
@@ -233,8 +243,10 @@ def build(args: argparse.Namespace) -> None:
                 rel_dst = rel_dst[:-3] + '.html'
                 convertibles.append((rel_src, rel_dst))
             else:
-                shutil.copy(f'{args.input_dir}/{rel_src}',
-                            f'{args.output_dir}/{rel_src}')
+                shutil.copy(
+                    f'{args.input_dir}/{rel_src}',
+                    f'{args.output_dir}/{rel_src}',
+                )
         for dirname in dirnames:
             # all directories are copied into the output directory
             path = os.path.relpath(f'{root}/{dirname}', start=args.input_dir)
@@ -264,7 +276,8 @@ def build(args: argparse.Namespace) -> None:
     )
 
     generate_feed(
-        articles, args.output_dir,
+        articles,
+        args.output_dir,
         base_url=config['base_url'],
         blog_title=config['title'],
         blog_description=config['description'],
@@ -364,10 +377,10 @@ def generate_feed(
     """
     logger.info('Generating Atom feed.')
     feed = feedgenerator.Atom1Feed(
-            link=base_url,
-            title=blog_title,
-            description=blog_description,
-            feed_url=base_url + 'atom.xml',
+        link=base_url,
+        title=blog_title,
+        description=blog_description,
+        feed_url=base_url + 'atom.xml',
     )
 
     for dst, context in articles:

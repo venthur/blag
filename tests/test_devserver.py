@@ -32,9 +32,11 @@ def test_autoreload_builds_immediately(args: Namespace) -> None:
     with open('content/test.md', 'w') as fh:
         fh.write('boo')
 
-    t = threading.Thread(target=devserver.autoreload,
-                         args=(args, ),
-                         daemon=True,)
+    t = threading.Thread(
+        target=devserver.autoreload,
+        args=(args,),
+        daemon=True,
+    )
     t0 = devserver.get_last_modified(['build'])
     t.start()
     # try for 5 seconds...
@@ -47,11 +49,15 @@ def test_autoreload_builds_immediately(args: Namespace) -> None:
     assert t1 > t0
 
 
-@pytest.mark.filterwarnings("ignore::pytest.PytestUnhandledThreadExceptionWarning")  # noqa
+@pytest.mark.filterwarnings(
+    "ignore::pytest.PytestUnhandledThreadExceptionWarning"
+)
 def test_autoreload(args: Namespace) -> None:
-    t = threading.Thread(target=devserver.autoreload,
-                         args=(args, ),
-                         daemon=True,)
+    t = threading.Thread(
+        target=devserver.autoreload,
+        args=(args,),
+        daemon=True,
+    )
     t.start()
 
     t0 = devserver.get_last_modified(['build'])
