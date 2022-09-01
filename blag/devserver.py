@@ -30,7 +30,7 @@ def get_last_modified(dirs: list[str]) -> float:
 
     Parameters
     ----------
-    dirs : list[str]
+    dirs
         list of directories to search
 
     Returns
@@ -63,7 +63,8 @@ def autoreload(args: argparse.Namespace) -> None:
 
     Parameters
     ----------
-    args : argparse.Namespace
+    args
+        contains the input-, template- and static dir
 
     """
     dirs = [args.input_dir, args.template_dir, args.static_dir]
@@ -85,7 +86,8 @@ def serve(args: argparse.Namespace) -> None:
 
     Parameters
     ----------
-    args : arparse.Namespace
+    args
+        contains the input-, template- and static dir
 
     """
     httpd = HTTPServer(('', 8000), partial(SimpleHTTPRequestHandler,

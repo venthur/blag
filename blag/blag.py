@@ -43,7 +43,7 @@ def main(arguments: list[str] | None = None) -> None:
 
     Parameters
     ----------
-    arguments : list[str]
+    arguments
         optional parameters, used for testing
 
     """
@@ -60,7 +60,7 @@ def parse_args(args: list[str] | None = None) -> argparse.Namespace:
 
     Parameters
     ----------
-    args : List[str]
+    args
         optional parameters, used for testing
 
     Returns
@@ -149,7 +149,7 @@ def get_config(configfile: str) -> configparser.SectionProxy:
 
     Parameters
     ----------
-    configfile : str
+    configfile
         path to configuration file
 
 
@@ -188,8 +188,9 @@ def environment_factory(
 
     Parameters
     ----------
-    template_dir : str
-    globals_ : dict[str, object]
+    template_dir
+        directory containing the templates
+    globals_
 
     Returns
     -------
@@ -216,7 +217,7 @@ def build(args: argparse.Namespace) -> None:
 
     Parameters
     ----------
-    args : argparse.Namespace
+    args
 
     """
     os.makedirs(f'{args.output_dir}', exist_ok=True)
@@ -290,16 +291,17 @@ def process_markdown(
 
     Parameters
     ----------
-    convertibles : list[tuple[str, str]]
+    convertibles
         relative paths to markdown- (src) html- (dest) files
-    input_dir : str
-    output_dir : str
-    page_template, archive_template : jinja2 template
+    input_dir
+    output_dir
+    page_template, archive_template
         templats for pages and articles
 
     Returns
     -------
-    articles, pages : list[tuple[str, dict[str, Any]]]
+    list[tuple[str, dict[str, Any]]], list[tuple[str, dict[str, Any]]]
+        articles and pages
 
     """
     logger.info("Converting Markdown files...")
@@ -346,17 +348,17 @@ def generate_feed(
 
     Parameters
     ----------
-    articles : list[tuple[str, dict[str, Any]]]
+    articles
         list of relative output path and article dictionary
-    output_dir : str
+    output_dir
         where the feed is stored
-    base_url : str
+    base_url
         base url
-    blog_title : str
+    blog_title
         blog title
-    blog_description : str
+    blog_description
         blog description
-    blog_author : str
+    blog_author
         blog author
 
     """
@@ -395,11 +397,11 @@ def generate_archive(
 
     Parameters
     ----------
-    articles : list[tuple[str, dict[str, Any]]]
+    articles
         List of articles. Each article has the destination path and a
         dictionary with the content.
-    template : jinja2.Template instance
-    output_dir : str
+    template
+    output_dir
 
     """
     archive = []
@@ -423,11 +425,11 @@ def generate_tags(
 
     Parameters
     ----------
-    articles : list[tuple[str, dict[str, Any]]]
+    articles
         List of articles. Each article has the destination path and a
         dictionary with the content.
-    tags_template, tag_template : jinja2.Template instance
-    output_dir : str
+    tags_template, tag_template
+    output_dir
 
     """
     logger.info("Generating Tag-pages.")

@@ -54,12 +54,14 @@ def convert_markdown(
 
     Parameters
     ----------
-    md : markdown.Markdown instance
-    markdown : str
+    md
+        the Markdown instance
+    markdown
+        the markdown text that should be converted
 
     Returns
     -------
-    str, dict[str, str] :
+    str, dict[str, str]
         html and metadata
 
     """

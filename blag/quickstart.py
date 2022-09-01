@@ -16,14 +16,15 @@ def get_input(question: str, default: str) -> str:
 
     Parameters
     ----------
-    question : str
+    question
         the question the user is presented
-    default : str
+    default
         the default value that will be used if no answer was given
 
     Returns
     -------
     str
+        the answer
 
     """
     reply = input(f"{question} [{default}]: ")
@@ -40,7 +41,8 @@ def quickstart(args: argparse.Namespace | None) -> None:
 
     Parameters
     ----------
-    args : argparse.Namespace
+    args
+        not used
 
     """
     base_url = get_input(
