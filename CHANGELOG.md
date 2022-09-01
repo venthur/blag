@@ -5,7 +5,8 @@
 * improved default template
 * updated dependencies:
   * markdown 3.4.1
-  * flake 5.0.2
+  * pygments 2.13.0
+  * flake 5.0.4
   * twine 4.0.1
   * sphinx 5.1.1
 
