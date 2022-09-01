@@ -8,6 +8,7 @@ site if necessary.
 
 # remove when we don't support py38 anymore
 from __future__ import annotations
+from typing import NoReturn
 import os
 import logging
 import time
@@ -51,7 +52,7 @@ def get_last_modified(dirs: list[str]) -> float:
     return last_mtime
 
 
-def autoreload(args: argparse.Namespace) -> None:
+def autoreload(args: argparse.Namespace) -> NoReturn:
     """Start the autoreloader.
 
     This method monitors the given directories for changes (i.e. the
