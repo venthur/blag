@@ -10,5 +10,6 @@ docs/api/
 
 htmlcov/
 .coverage
+.mypy_cache
 
 venv/
