@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.4.1] - 2022-09-29
+
+* applied multi-arch fix by debian-janitor
+
 ## [1.4.0] - 2022-09-01
 
 * added type hints and mypy --strict to test suite
