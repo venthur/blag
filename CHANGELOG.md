@@ -5,6 +5,7 @@
 * applied multi-arch fix by debian-janitor
 * updated dependencies:
   * pytest 7.1.3
+  * sphinx 5.2.1
 
 ## [1.4.0] - 2022-09-01
 
