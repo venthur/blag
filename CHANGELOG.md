@@ -6,6 +6,7 @@
 * updated dependencies:
   * pytest 7.1.3
   * sphinx 5.2.1
+  * types-markdown 3.4.2
 
 ## [1.4.0] - 2022-09-01
 
