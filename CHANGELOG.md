@@ -3,6 +3,8 @@
 ## [1.4.1] - 2022-09-29
 
 * applied multi-arch fix by debian-janitor
+* updated dependencies:
+  * pytest 7.1.3
 
 ## [1.4.0] - 2022-09-01
 
