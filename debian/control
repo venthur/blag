@@ -46,6 +46,7 @@ Architecture: all
 Depends:
  ${sphinxdoc:Depends},
  ${misc:Depends},
+Multi-Arch: foreign
 Description: Blog-aware, static site generator (documentation)
  Blag is a blog-aware, static site generator, written in Python. It supports
  the following features:
