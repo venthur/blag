@@ -4,5 +4,5 @@ wheel==0.37.1
 pytest==7.1.3
 pytest-cov==3.0.0
 flake8==5.0.4
-mypy==0.971
+mypy==0.981
 types-markdown==3.4.2
