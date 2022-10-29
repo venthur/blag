@@ -2,6 +2,7 @@
 
 ## [unreleased]
 
+* added python 3.11 to test suite
 * updated dependencies:
   * mypy 0.982
   * types-markdown 3.4.2.1
