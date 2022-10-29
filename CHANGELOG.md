@@ -1,5 +1,10 @@
 # Changelog
 
+## [unreleased]
+
+* updated dependencies:
+  * mypy 0.982
+
 ## [1.4.1] - 2022-09-29
 
 * applied multi-arch fix by debian-janitor
