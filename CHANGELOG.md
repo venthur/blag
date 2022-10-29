@@ -4,6 +4,7 @@
 
 * updated dependencies:
   * mypy 0.982
+  * types-markdown 3.4.2.1
 
 ## [1.4.1] - 2022-09-29
 
