@@ -3,6 +3,9 @@
 ## [unreleased]
 
 * added python 3.11 to test suite
+* break out lint and mypy from test matrix and only run on linux- and latest
+  stable python to make it a bit more efficient
+* added dependabot check for github actions
 * updated dependencies:
   * mypy 0.982
   * types-markdown 3.4.2.1
