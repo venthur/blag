@@ -75,3 +75,6 @@ jobs:
     - name: Run mypy
       run: |
         make mypy
+
+    - run: |
+        make mypy
