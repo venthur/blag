@@ -2,6 +2,7 @@
 
 ## [unreleased]
 
+* moved to pyproject.toml
 * added python 3.11 to test suite
 * break out lint and mypy from test matrix and only run on linux- and latest
   stable python to make it a bit more efficient

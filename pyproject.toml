@@ -1,0 +1,67 @@
+[build-system]
+requires = ["setuptools>=64.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "blag"
+authors = [
+    { name="Bastian Venthur", email="mail@venthur.de" },
+]
+description = "blog-aware, static site generator"
+keywords = ["markdown", "blag", "blog", "static site generator", "cli"]
+readme = "README.md"
+license = { file="LICENSE" }
+requires-python = ">=3.8"
+dynamic = ["version"]
+dependencies = [
+    "markdown",
+    "feedgenerator",
+    "jinja2",
+    "pygments",
+]
+
+[project.scripts]
+blag = "blag.blag:main"
+
+[project.urls]
+'Documentation' = 'https://blag.readthedocs.io/'
+'Source' = 'https://github.com/venthur/blag'
+'Changelog' = 'https://github.com/venthur/blag/blob/master/CHANGELOG.md'
+
+[project.optional-dependencies]
+dev = [
+    "build",
+    "sphinx",
+    "twine",
+    "wheel",
+    "pytest",
+    "pytest-cov",
+    "flake8",
+    "mypy",
+    "types-markdown",
+]
+
+[tool.setuptools.dynamic]
+version = {attr = "blag.__VERSION__" }
+
+[tool.setuptools]
+packages = ["blag"]
+
+[tool.setuptools.package-data]
+blag = ["templates/*"]
+
+[tool.pytest.ini_options]
+addopts = """
+    --cov=blag
+    --cov=tests
+    --cov-report=html
+    --cov-report=term-missing:skip-covered
+"""
+
+[tool.mypy]
+files = "blag,tests"
+strict = true
+
+[[tool.mypy.overrides]]
+module = "feedgenerator.*"
+ignore_missing_imports = true
