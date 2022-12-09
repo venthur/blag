@@ -8,6 +8,7 @@ Build-Depends:
  dh-sequence-sphinxdoc,
  dh-sequence-python3,
  dh-python,
+ pybuild-plugin-pyproject,
  python3-setuptools,
  python3-all,
  python3-markdown,

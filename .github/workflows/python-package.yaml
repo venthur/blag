@@ -60,3 +60,18 @@ jobs:
         make venv
     - run: |
         make mypy
+
+
+  test-release:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
+      with:
+        python-version: "3.x" 
+
+    - run: |
+        make venv
+    - run: |
+        make test-release
