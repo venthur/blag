@@ -1,6 +1,6 @@
 # Changelog
 
-## [unreleased]
+## [1.5.0] - 2023-04-16
 
 * moved to pyproject.toml
 * added python 3.11 to test suite
