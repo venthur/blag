@@ -45,7 +45,10 @@ dev = [
 version = {attr = "blag.__VERSION__" }
 
 [tool.setuptools]
-packages = ["blag"]
+packages = [
+    "blag",
+    "blag.templates",
+]
 
 [tool.setuptools.package-data]
 blag = ["templates/*"]
