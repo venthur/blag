@@ -21,6 +21,10 @@ jobs:
           - "3.9"
           - "3.10"
           - "3.11"
+        exclude:
+          # 3.8 on windows fails due to some pip issue
+          - os: windows-latest
+            python-version: "3.8"
 
     steps:
     - uses: actions/checkout@v3
@@ -40,7 +44,7 @@ jobs:
     - uses: actions/checkout@v3
     - uses: actions/setup-python@v4
       with:
-        python-version: "3.x" 
+        python-version: "3.x"
 
     - run: |
         make venv
@@ -54,7 +58,7 @@ jobs:
     - uses: actions/checkout@v3
     - uses: actions/setup-python@v4
       with:
-        python-version: "3.x" 
+        python-version: "3.x"
 
     - run: |
         make venv
@@ -69,7 +73,7 @@ jobs:
     - uses: actions/checkout@v3
     - uses: actions/setup-python@v4
       with:
-        python-version: "3.x" 
+        python-version: "3.x"
 
     - run: |
         make venv
