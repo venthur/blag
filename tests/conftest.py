@@ -34,6 +34,11 @@ def article_template(environment: Environment) -> Iterator[Template]:
 
 
 @pytest.fixture
+def index_template(environment: Environment) -> Iterator[Template]:
+    yield environment.get_template('index.html')
+
+
+@pytest.fixture
 def archive_template(environment: Environment) -> Iterator[Template]:
     yield environment.get_template('archive.html')
 
