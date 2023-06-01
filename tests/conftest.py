@@ -8,18 +8,18 @@ import os
 import pytest
 from jinja2 import Environment, Template
 
-from blag import blag
+from blag import blag, quickstart
 
 
 @pytest.fixture
-def environment() -> Iterator[Environment]:
+def environment(cleandir: str) -> Iterator[Environment]:
     site = {
         'base_url': 'site base_url',
         'title': 'site title',
         'description': 'site description',
         'author': 'site author',
     }
-    env = blag.environment_factory(globals_=dict(site=site))
+    env = blag.environment_factory('templates', globals_=dict(site=site))
     yield env
 
 
@@ -50,7 +50,7 @@ def tag_template(environment: Environment) -> Iterator[Template]:
 
 @pytest.fixture
 def cleandir() -> Iterator[str]:
-    """Create a temporary workind directory and cwd."""
+    """Create a temporary working directory and cwd."""
     config = """
 [main]
 base_url = https://example.com/
@@ -60,13 +60,14 @@ author = a. u. thor
     """
 
     with TemporaryDirectory() as dir:
-        for d in 'content', 'build', 'static', 'templates':
+        for d in 'content', 'build', 'static':
             os.mkdir(f'{dir}/{d}')
         with open(f'{dir}/config.ini', 'w') as fh:
             fh.write(config)
         # change directory
         old_cwd = os.getcwd()
         os.chdir(dir)
+        quickstart.copy_templates()
         yield dir
         # and change back afterwards
         os.chdir(old_cwd)

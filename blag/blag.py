@@ -16,13 +16,13 @@ import sys
 
 from jinja2 import (
     Environment,
-    ChoiceLoader,
     FileSystemLoader,
-    PackageLoader,
     Template,
+    TemplateNotFound,
 )
 import feedgenerator
 
+import blag
 from blag.markdown import markdown_factory, convert_markdown
 from blag.devserver import serve
 from blag.version import __VERSION__
@@ -185,15 +185,14 @@ def get_config(configfile: str) -> configparser.SectionProxy:
 
 
 def environment_factory(
-    template_dir: str | None = None,
+    template_dir: str,
     globals_: dict[str, object] | None = None,
 ) -> Environment:
     """Environment factory.
 
-    Creates a Jinja2 Environment with the default templates and
-    additional templates from `template_dir` loaded. If `globals` are
-    provided, they are attached to the environment and thus available to
-    all contexts.
+    Creates a Jinja2 Environment with the templates from `template_dir` loaded.
+    If `globals` are provided, they are attached to the environment and thus
+    available to all contexts.
 
     Parameters
     ----------
@@ -206,13 +205,7 @@ def environment_factory(
     jinja2.Environment
 
     """
-    # first we try the custom templates, and fall back the ones provided
-    # by blag
-    loaders: list[FileSystemLoader | PackageLoader] = []
-    if template_dir:
-        loaders.append(FileSystemLoader([template_dir]))
-    loaders.append(PackageLoader('blag', 'templates'))
-    env = Environment(loader=ChoiceLoader(loaders))
+    env = Environment(loader=FileSystemLoader(template_dir))
     if globals_:
         env.globals = globals_
     return env
@@ -261,11 +254,21 @@ def build(args: argparse.Namespace) -> None:
 
     env = environment_factory(args.template_dir, dict(site=config))
 
-    page_template = env.get_template('page.html')
-    article_template = env.get_template('article.html')
-    archive_template = env.get_template('archive.html')
-    tags_template = env.get_template('tags.html')
-    tag_template = env.get_template('tag.html')
+    try:
+        page_template = env.get_template('page.html')
+        article_template = env.get_template('article.html')
+        archive_template = env.get_template('archive.html')
+        tags_template = env.get_template('tags.html')
+        tag_template = env.get_template('tag.html')
+    except TemplateNotFound as exc:
+        tmpl = os.path.join(blag.__path__[0], 'templates')
+        logger.error(
+            f'Template "{exc.name}" not found in {args.template_dir}! '
+            'Consider running `blag quickstart` or copying the '
+            f'missing template from {tmpl}.'
+        )
+
+        sys.exit(1)
 
     articles, pages = process_markdown(
         convertibles,
@@ -309,7 +312,7 @@ def process_markdown(
     input_dir
     output_dir
     page_template, archive_template
-        templats for pages and articles
+        templates for pages and articles
 
     Returns
     -------

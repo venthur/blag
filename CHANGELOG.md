@@ -1,5 +1,20 @@
 # Changelog
 
+## [unreleased]
+
+### Breaking
+
+* blag does not use default fallback templates anymore and will return an error
+  if it is unable to find required templates, e.g. in `templates/`.
+
+  Users upgrading from older versions can either run `blag quickstart` (don't
+  forget to backup your `config.ini` or copy the templates from blag's
+  resources (the resource path is shown in the error message).
+
+  New users are not affected as `blag quickstart` will generate the needed
+  templates.
+
+
 ## [1.5.0] - 2023-04-16
 
 * moved to pyproject.toml
