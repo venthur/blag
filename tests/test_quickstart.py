@@ -1,5 +1,6 @@
 # remove when we don't support py38 anymore
 from __future__ import annotations
+import os
 
 from pytest import MonkeyPatch
 
@@ -27,3 +28,6 @@ def test_quickstart(cleandir: str, monkeypatch: MonkeyPatch) -> None:
     assert 'title = foo' in data
     assert 'description = foo' in data
     assert 'author = foo' in data
+
+    for directory in 'build', 'content', 'static':
+        assert os.path.exists(directory)

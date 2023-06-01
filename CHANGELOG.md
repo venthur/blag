@@ -1,5 +1,10 @@
 # Changelog
 
+## [unreleased]
+
+* `blag quickstart` will now also create the `build`, `content` and `static`
+  directories.
+
 ## [1.5.0] - 2023-04-16
 
 * moved to pyproject.toml

@@ -6,6 +6,7 @@
 from __future__ import annotations
 import configparser
 import argparse
+import os
 
 
 def get_input(question: str, default: str) -> str:
@@ -33,11 +34,22 @@ def get_input(question: str, default: str) -> str:
     return reply
 
 
+def create_directories() -> None:
+    """Create build, content and static directories.
+
+    """
+    print("Creating directories...")
+    os.makedirs('build', exist_ok=True)
+    os.makedirs('content', exist_ok=True)
+    os.makedirs('static', exist_ok=True)
+
+
 def quickstart(args: argparse.Namespace | None) -> None:
     """Quickstart.
 
-    This method asks the user some questions and generates a
-    configuration file that is needed in order to run blag.
+    This method asks the user some questions and generates a configuration file
+    that is needed in order to run blag. Additionally, it creates the build,
+    content and static directories.
 
     Parameters
     ----------
@@ -71,3 +83,5 @@ def quickstart(args: argparse.Namespace | None) -> None:
     }
     with open('config.ini', 'w') as fh:
         config.write(fh)
+
+    create_directories()
