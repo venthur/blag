@@ -6,6 +6,10 @@
 from __future__ import annotations
 import configparser
 import argparse
+import shutil
+import os
+
+import blag
 
 
 def get_input(question: str, default: str) -> str:
@@ -31,6 +35,22 @@ def get_input(question: str, default: str) -> str:
     if not reply:
         reply = default
     return reply
+
+
+def copy_templates() -> None:
+    """Copy templates into current directory.
+
+    It will not overwrite existing files.
+
+    """
+    print("Copying templates...")
+    try:
+        shutil.copytree(
+            os.path.join(blag.__path__[0], 'templates'),
+            'templates',
+        )
+    except FileExistsError:
+        print("Templates already exist. Skipping.")
 
 
 def quickstart(args: argparse.Namespace | None) -> None:
@@ -71,3 +91,5 @@ def quickstart(args: argparse.Namespace | None) -> None:
     }
     with open('config.ini', 'w') as fh:
         config.write(fh)
+
+    copy_templates()
