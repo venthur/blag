@@ -2,16 +2,29 @@
 
 ## [unreleased]
 
-* **Breaking Change**: Split former archive page which served as index.html
-  into "index" and "archive", each with their own template, respectively. Index
-  is the landing page and shows by default only the latest 10 articles. Archive
-  shows the full list of articles.
+### Breaking
+
+* blag does not use default fallback templates anymore and will return an error
+  if it is unable to find required templates, e.g. in `templates/`.
+
+  Users upgrading from older versions can either run `blag quickstart` (don't
+  forget to backup your `config.ini` or copy the templates from blag's
+  resources (the resource path is shown in the error message).
+
+  New users are not affected as `blag quickstart` will generate the needed
+  templates.
+
+* Split former archive page which served as index.html into "index" and
+  "archive", each with their own template, respectively. Index is the landing
+  page and shows by default only the latest 10 articles. Archive shows the full
+  list of articles.
 
   If you used custom templates,
     * you should create an "index.html"-template (take blag's default one as a
       starting point)
     * you may want to include the new "/archive.html" link somewhere in your
       navigation
+
 
 ## [1.5.0] - 2023-04-16
 

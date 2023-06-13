@@ -179,9 +179,9 @@ author = a. u. thor
         assert config_parsed['base_url'] == 'https://example.com/'
 
 
-def test_environment_factory() -> None:
+def test_environment_factory(cleandir: str) -> None:
     globals_: dict[str, object] = {'foo': 'bar', 'test': 'me'}
-    env = blag.environment_factory(globals_=globals_)
+    env = blag.environment_factory("templates", globals_=globals_)
     assert env.globals['foo'] == 'bar'
     assert env.globals['test'] == 'me'
 
@@ -299,6 +299,23 @@ foo bar
     assert os.path.exists(f'{args.output_dir}/tags/index.html')
     assert os.path.exists(f'{args.output_dir}/tags/foo.html')
     assert os.path.exists(f'{args.output_dir}/tags/bar.html')
+
+
+@pytest.mark.parametrize(
+    'template',
+    [
+        'page.html',
+        'article.html',
+        'index.html',
+        'archive.html',
+        'tags.html',
+        'tag.html',
+    ]
+)
+def test_missing_template_raises(template: str, args: Namespace) -> None:
+    os.remove(f'templates/{template}')
+    with pytest.raises(SystemExit):
+        blag.build(args)
 
 
 def test_main(cleandir: str) -> None:

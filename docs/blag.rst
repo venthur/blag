@@ -13,7 +13,7 @@ Install blag from PyPI_
 
 .. _pypi: https://pypi.org/project/blag/
 
-Run blag's quickstart command to create the configuration needed
+Run blag's quickstart command to create the configuration and templates needed
 
 .. code-block:: sh
 
@@ -40,8 +40,8 @@ If you want more separation between the static files and the markdown content,
 you can put all static files into the ``static`` directory. Blag will copy
 them over to the ``build`` directory.
 
-If you want to customize the looks of the generated site, create a
-``template`` directory and put your jinja2 templates here.
+If you want to customize the look of the generated site, visit the ``template``
+directory. It contains jinja2 templates and can be modified as needed.
 
 Those directories can be changed via command line arguments. See
 
@@ -186,9 +186,7 @@ becomes
 Templating
 ----------
 
-Custom templates are **optional** and stored by default in the ``templates``
-directory. blag will search the ``templates`` directory first, and fall back
-to blag's default built-in templates.
+Templates are stored by default in the ``templates`` directory.
 
 ============ ====================================== ===================
 Template     Used For                               Variables
