@@ -4,12 +4,15 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
     <meta name="author" content="{{ site.author }}">
     {%- if description %}
     <meta name="description" content="{{ description }}">
     {%- else %}
     <meta name="description" content="{{ site.description }}">
     {%- endif %}
+    <link rel="alternate" href="/atom.xml" type="application/atom+xml">
+    <link rel="stylesheet" href="/style.css" type="text/css">
     <title>{% block title %}{% endblock %} | {{ site.description }}</title>
   </head>
 
@@ -19,9 +22,10 @@
       <nav>
         <h2>{{ site.description }}</h2>
         <ul>
-          <li><a href="/">Blog</a></li>
-          <li><a href="/tags/">Tags</a></li>
-          <li><a href="/atom.xml">Atom Feed</a></li>
+          <li><h2><a href="/">Blog</a></h2></li>
+          <li><h2><a href="/tags/">Tags</a></h2></li>
+          <li><h2><a href="/about.html">About Me</a></h2></li>
+          <li><h2><a href="/atom.xml">Feed</a></h2></li>
         </ul>
       </nav>
     </header>
@@ -31,7 +35,15 @@
     {% endblock %}
     </main>
 
+    <footer>
+      <p>This website was built with <a href="https://github.com/venthur/blag">blag</a>.
+      <br>
+      Contact me via
+        <a rel="me" href="TODO">[TODO] Mastodon</a>,
+        <a href="TODO">[TODO] Twitter</a> or
+        <a href="TODO">[TODO] Github</a>.
+      </p>
+    </footer>
   </body>
 
 </html>
-

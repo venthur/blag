@@ -60,14 +60,13 @@ author = a. u. thor
     """
 
     with TemporaryDirectory() as dir:
-        for d in 'content', 'build', 'static':
-            os.mkdir(f'{dir}/{d}')
+        os.mkdir(f'{dir}/build')
         with open(f'{dir}/config.ini', 'w') as fh:
             fh.write(config)
         # change directory
         old_cwd = os.getcwd()
         os.chdir(dir)
-        quickstart.copy_templates()
+        quickstart.copy_default_theme()
         yield dir
         # and change back afterwards
         os.chdir(old_cwd)

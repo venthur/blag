@@ -70,7 +70,7 @@ def test_tag(tag_template: Template) -> None:
         'archive': archive,
     }
     result = tag_template.render(ctx)
-    assert 'Tag foo' in result
+    assert 'foo' in result
 
     assert 'this is a title' in result
     assert '1980-05-09' in result

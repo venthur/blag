@@ -14,6 +14,11 @@
   New users are not affected as `blag quickstart` will generate the needed
   templates.
 
+### Changed
+
+* blag comes now with a simple yet good looking default theme that supports
+  syntax highlighting and a light- and dark theme.
+
 
 ## [1.5.0] - 2023-04-16
 
