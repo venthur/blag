@@ -15,7 +15,12 @@ nav:
     - blag.quickstart: quickstart.md
   - Changelog: CHANGELOG.md
 
-theme: material
+theme:
+  name: material
+  highlightjs: true
+
+markdown_extensions:
+  - pymdownx.superfences
 
 plugins:
   - search:
