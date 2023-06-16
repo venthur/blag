@@ -8,17 +8,17 @@ site if necessary.
 
 # remove when we don't support py38 anymore
 from __future__ import annotations
-from typing import NoReturn
-import os
-import logging
-import time
-import multiprocessing
-from http.server import SimpleHTTPRequestHandler, HTTPServer
-from functools import partial
+
 import argparse
+import logging
+import multiprocessing
+import os
+import time
+from functools import partial
+from http.server import HTTPServer, SimpleHTTPRequestHandler
+from typing import NoReturn
 
 from blag import blag
-
 
 logger = logging.getLogger(__name__)
 
@@ -69,7 +69,7 @@ def autoreload(args: argparse.Namespace) -> NoReturn:
 
     """
     dirs = [args.input_dir, args.template_dir, args.static_dir]
-    logger.info(f'Monitoring {dirs} for changes...')
+    logger.info(f"Monitoring {dirs} for changes...")
     # make sure we trigger the rebuild immediately when we enter the
     # loop to avoid serving stale contents
     last_mtime = 0.0
@@ -77,7 +77,7 @@ def autoreload(args: argparse.Namespace) -> NoReturn:
         mtime = get_last_modified(dirs)
         if mtime > last_mtime:
             last_mtime = mtime
-            logger.info('Change detected, rebuilding...')
+            logger.info("Change detected, rebuilding...")
             blag.build(args)
         time.sleep(1)
 
@@ -92,7 +92,7 @@ def serve(args: argparse.Namespace) -> None:
 
     """
     httpd = HTTPServer(
-        ('', 8000),
+        ("", 8000),
         partial(SimpleHTTPRequestHandler, directory=args.output_dir),
     )
     proc = multiprocessing.Process(target=autoreload, args=(args,))

@@ -4,10 +4,11 @@
 
 # remove when we don't support py38 anymore
 from __future__ import annotations
-import configparser
+
 import argparse
-import shutil
+import configparser
 import os
+import shutil
 
 import blag
 
@@ -47,7 +48,7 @@ def copy_default_theme() -> None:
 
     """
     print("Copying default theme...")
-    for dir_ in 'templates', 'content', 'static':
+    for dir_ in "templates", "content", "static":
         print(f"  Copying {dir_}...")
         try:
             shutil.copytree(
@@ -89,13 +90,13 @@ def quickstart(args: argparse.Namespace | None) -> None:
     )
 
     config = configparser.ConfigParser()
-    config['main'] = {
-        'base_url': base_url,
-        'title': title,
-        'description': description,
-        'author': author,
+    config["main"] = {
+        "base_url": base_url,
+        "title": title,
+        "description": description,
+        "author": author,
     }
-    with open('config.ini', 'w') as fh:
+    with open("config.ini", "w") as fh:
         config.write(fh)
 
     copy_default_theme()

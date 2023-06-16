@@ -7,15 +7,15 @@ processing.
 
 # remove when we don't support py38 anymore
 from __future__ import annotations
-from datetime import datetime
+
 import logging
+from datetime import datetime
 from urllib.parse import urlsplit, urlunsplit
 from xml.etree.ElementTree import Element
 
 from markdown import Markdown
 from markdown.extensions import Extension
 from markdown.treeprocessors import Treeprocessor
-
 
 logger = logging.getLogger(__name__)
 
@@ -33,13 +33,13 @@ def markdown_factory() -> Markdown:
     """
     md = Markdown(
         extensions=[
-            'meta',
-            'fenced_code',
-            'codehilite',
-            'smarty',
+            "meta",
+            "fenced_code",
+            "codehilite",
+            "smarty",
             MarkdownLinkExtension(),
         ],
-        output_format='html',
+        output_format="html",
     )
     return md
 
@@ -75,20 +75,20 @@ def convert_markdown(
     # markdowns metadata consists as list of strings -- one item per
     # line. let's convert into single strings.
     for key, value in meta.items():
-        value = '\n'.join(value)
+        value = "\n".join(value)
         meta[key] = value
 
     # convert known metadata
     # date: datetime
-    if 'date' in meta:
-        meta['date'] = datetime.fromisoformat(meta['date'])
-        meta['date'] = meta['date'].astimezone()
+    if "date" in meta:
+        meta["date"] = datetime.fromisoformat(meta["date"])
+        meta["date"] = meta["date"].astimezone()
     # tags: list[str] and lower case
-    if 'tags' in meta:
-        tags = meta['tags'].split(',')
+    if "tags" in meta:
+        tags = meta["tags"].split(",")
         tags = [t.lower() for t in tags]
         tags = [t.strip() for t in tags]
-        meta['tags'] = tags
+        meta["tags"] = tags
 
     return content, meta
 
@@ -98,25 +98,25 @@ class MarkdownLinkTreeprocessor(Treeprocessor):
 
     def run(self, root: Element) -> Element:
         for element in root.iter():
-            if element.tag == 'a':
-                url = element.get('href')
+            if element.tag == "a":
+                url = element.get("href")
                 # element.get could also return None, we haven't seen this so
                 # far, so lets wait if we raise this
                 assert url is not None
                 url = str(url)
                 converted = self.convert(url)
-                element.set('href', converted)
+                element.set("href", converted)
         return root
 
     def convert(self, url: str) -> str:
         scheme, netloc, path, query, fragment = urlsplit(url)
         logger.debug(
-            f'{url}: {scheme=} {netloc=} {path=} {query=} {fragment=}'
+            f"{url}: {scheme=} {netloc=} {path=} {query=} {fragment=}"
         )
         if scheme or netloc or not path:
             return url
-        if path.endswith('.md'):
-            path = path[:-3] + '.html'
+        if path.endswith(".md"):
+            path = path[:-3] + ".html"
 
         url = urlunsplit((scheme, netloc, path, query, fragment))
         return url
@@ -128,6 +128,6 @@ class MarkdownLinkExtension(Extension):
     def extendMarkdown(self, md: Markdown) -> None:
         md.treeprocessors.register(
             MarkdownLinkTreeprocessor(md),
-            'mdlink',
+            "mdlink",
             0,
         )
