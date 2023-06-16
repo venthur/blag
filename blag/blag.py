@@ -257,6 +257,7 @@ def build(args: argparse.Namespace) -> None:
     try:
         page_template = env.get_template('page.html')
         article_template = env.get_template('article.html')
+        index_template = env.get_template('index.html')
         archive_template = env.get_template('archive.html')
         tags_template = env.get_template('tags.html')
         tag_template = env.get_template('tag.html')
@@ -286,6 +287,7 @@ def build(args: argparse.Namespace) -> None:
         blog_description=config['description'],
         blog_author=config['author'],
     )
+    generate_index(articles, index_template, args.output_dir)
     generate_archive(articles, archive_template, args.output_dir)
     generate_tags(articles, tags_template, tag_template, args.output_dir)
 
@@ -305,6 +307,8 @@ def process_markdown(
     If a markdown file has a `date` metadata field it will be recognized
     as article otherwise as page.
 
+    Articles are sorted by date in descending order.
+
     Parameters
     ----------
     convertibles
@@ -317,7 +321,7 @@ def process_markdown(
     Returns
     -------
     list[tuple[str, dict[str, Any]]], list[tuple[str, dict[str, Any]]]
-        articles and pages
+        articles and pages, articles are sorted by date in descending order.
 
     """
     logger.info("Converting Markdown files...")
@@ -404,12 +408,14 @@ def generate_feed(
         feed.write(fh, encoding='utf8')
 
 
-def generate_archive(
+def generate_index(
     articles: list[tuple[str, dict[str, Any]]],
     template: Template,
     output_dir: str,
 ) -> None:
-    """Generate the archive page.
+    """Generate the index page.
+
+    This is used for the index (i.e. landing) page.
 
     Parameters
     ----------
@@ -428,6 +434,35 @@ def generate_archive(
 
     result = template.render(dict(archive=archive))
     with open(f'{output_dir}/index.html', 'w') as fh:
+        fh.write(result)
+
+
+def generate_archive(
+    articles: list[tuple[str, dict[str, Any]]],
+    template: Template,
+    output_dir: str,
+) -> None:
+    """Generate the archive page.
+
+    This is used for the full archive.
+
+    Parameters
+    ----------
+    articles
+        List of articles. Each article has the destination path and a
+        dictionary with the content.
+    template
+    output_dir
+
+    """
+    archive = []
+    for dst, context in articles:
+        entry = context.copy()
+        entry['dst'] = dst
+        archive.append(entry)
+
+    result = template.render(dict(archive=archive))
+    with open(f'{output_dir}/archive.html', 'w') as fh:
         fh.write(result)
 
 

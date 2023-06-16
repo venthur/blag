@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
-{% block title %}Archive{% endblock %}
+{% block title %}{{ site.title }}{% endblock %}
 
 {% block content %}
-{% for entry in archive %}
+{% for entry in archive[:10] %}
 
   {% if entry.title %}
   <h1><a href="{{entry.dst}}">{{entry.title}}</a></h1>
@@ -17,4 +17,7 @@
   <p>Written on {{ entry.date.date() }}.</p>
 
 {% endfor %}
+
+<p><a href="/archive.html">all articles...</a></p>
+
 {% endblock %}

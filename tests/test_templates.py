@@ -27,6 +27,26 @@ def test_article(article_template: Template) -> None:
     assert '1980-05-09' in result
 
 
+def test_index(index_template: Template) -> None:
+    entry = {
+        'title': 'this is a title',
+        'dst': 'https://example.com/link',
+        'date': datetime.datetime(1980, 5, 9),
+    }
+    archive = [entry]
+    ctx = {
+        'archive': archive,
+    }
+    result = index_template.render(ctx)
+    assert 'site title' in result
+
+    assert 'this is a title' in result
+    assert '1980-05-09' in result
+    assert 'https://example.com/link' in result
+
+    assert '/archive.html' in result
+
+
 def test_archive(archive_template: Template) -> None:
     entry = {
         'title': 'this is a title',
@@ -38,7 +58,7 @@ def test_archive(archive_template: Template) -> None:
         'archive': archive,
     }
     result = archive_template.render(ctx)
-    assert 'site title' in result
+    assert 'Archive' in result
 
     assert 'this is a title' in result
     assert '1980-05-09' in result
