@@ -44,6 +44,8 @@
   * types-markdown 3.4.2.9
   * build 0.10.0
 
+* Switched from sphinx to mkdocs
+
 ### Fixed
 
 * fixed pyproject.toml to include tests/conftest.py

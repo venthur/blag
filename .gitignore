@@ -5,8 +5,7 @@ build/
 dist/
 *.egg-info/
 
-docs/_build/
-docs/api/
+site/
 
 htmlcov/
 .coverage
