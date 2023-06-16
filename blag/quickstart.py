@@ -61,8 +61,9 @@ def copy_default_theme() -> None:
 def quickstart(args: argparse.Namespace | None) -> None:
     """Quickstart.
 
-    This method asks the user some questions and generates a
-    configuration file that is needed in order to run blag.
+    This method asks the user some questions and generates a configuration file
+    that is needed in order to run blag. Additionally, it creates the content
+    and static directories with some initial content, to get the user started.
 
     Parameters
     ----------

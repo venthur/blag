@@ -30,6 +30,10 @@
 * blag comes now with a simple yet good looking default theme that supports
   syntax highlighting and a light- and dark theme.
 
+* apart from the generated configuration, `blag quickstart` will now also
+  create the initial directory structure, with the default template, the static
+  directory with the CSS files and the content directory with some initial
+  content to get the user started
 
 ## [1.5.0] - 2023-04-16
 

@@ -33,8 +33,12 @@ def test_quickstart(cleandir: str, monkeypatch: MonkeyPatch) -> None:
         "archive.html",
         "article.html",
         "base.html",
+        "index.html",
         "page.html",
         "tag.html",
         "tags.html",
     ):
         assert os.path.exists(f'templates/{template}')
+
+    for directory in "build", "content", "static":
+        assert os.path.exists(directory)
