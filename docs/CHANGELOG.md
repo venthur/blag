@@ -1,1 +1,0 @@
-/home/venthur/git/blag/CHANGELOG.md
