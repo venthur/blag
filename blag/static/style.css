@@ -1,0 +1,166 @@
+@import "code-light.css" (prefers-color-scheme: light);
+@import "code-dark.css" (prefers-color-scheme: dark);
+
+@media (prefers-color-scheme: light) {
+    :root {
+        --background: #FFFFFF;
+        --background-dim: #f5f7f9;
+
+        --foreground: #2B303A;
+        --foreground-dim: #576379;
+        --foreground-heavy: #191C22;
+
+        --primary-color: #375287;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background: #2B363B;
+        --background-dim: #2F3C42;
+
+        --foreground: #f0f2f3;
+        --foreground-dim: #d5d5d5;
+        --foreground-heavy: #f2f4f5;
+
+        --primary-color: #A1C5FF;
+    }
+}
+
+
+html {
+  font-size: 18px;
+  font-family: serif;
+}
+
+body {
+  margin: 0 auto;
+  max-width: 50rem;
+  background: var(--background);
+  color: var(--foreground);
+  line-height: 1.5;
+  padding: 0rem 0.5rem;
+}
+
+aside {
+    font-size: smaller;
+    font-style: italic;
+    color: var(--foreground-dim);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+strong {
+    color: var(--foreground-heavy);
+}
+
+a {
+    color: var(--primary-color);
+}
+
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
+    text-decoration: none;
+}
+
+h1 a:hover, h2 a:hover, h3 a:hover, h4 a:hover, h5 a:hover, h6 a:hover {
+    text-decoration: underline;
+}
+
+nav ul {
+  list-style: none;
+}
+
+nav li {
+  display: inline;
+}
+
+nav li + li:before {
+  content: " · ";
+  margin: 0 0.5ex;
+}
+
+article header {
+    display: flex;
+    flex-direction: row;
+    margin: 1rem 0;
+}
+
+article header time {
+    white-space: nowrap;
+    color: var(--foreground-dim);
+    font-style: italic;
+    flex: 0 0 12ex;
+}
+
+article header h2,
+article header p {
+    font-size: 1rem;
+    display: inline;
+}
+
+code,
+pre {
+  background: var(--background-dim);
+  border-radius: 0.3rem;
+  font-family: monospace;
+}
+
+pre {
+  padding: 1rem;
+  border-left: 2px solid var(--primary-color);
+  overflow: auto;
+}
+
+code {
+  padding: 0.1rem 0.2rem;
+}
+
+/* reset the padding for code inside pre */
+pre code {
+  padding: 0;
+}
+
+blockquote {
+  background: var(--background-dim);
+  border-radius: 0 0.3rem 0.3rem 0;
+  font-style: italic;
+  border-left: 2px solid var(--primary-color);
+  margin: 0;
+  padding: 1rem;
+}
+
+/* reset the margin for p inside blockquotes */
+blockquote p {
+  margin: 0;
+}
+
+body > header {
+  padding: 2rem 0;
+}
+
+body footer {
+  margin: 3rem 0;
+  color: var(--foreground-dim);
+  font-size: smaller;
+  text-align: center;
+}
+
+header nav {
+   display: flex;
+   flex-direction: row;
+   justify-content: space-between;
+}
+
+header h1 {
+  margin: 0 auto;
+  color: var(--primary-color);
+}
+
+header h2 {
+  display: inline;
+  font-size: 1.2rem;
+}

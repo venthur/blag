@@ -1,20 +1,25 @@
 {% extends "base.html" %}
 
-{% block title %}Tag {{ tag }}{% endblock %}
+{% block title %}Tag: {{ tag }}{% endblock %}
 
 {% block content %}
+
+<h2>Articles tagged "{{ tag }}"</h2>
+
 {% for entry in archive %}
 
-  {% if entry.title %}
-  <h1><a href="/{{entry.dst}}">{{entry.title}}</a></h1>
-
-  {% if entry.description %}
-  <p>— {{ entry.description }}</p>
-  {% endif %}
-
-  {% endif %}
-
-  <p>Written on {{ entry.date.date() }}.</p>
+  <article>
+    <header>
+      <time datetime="{{ entry.date }}">{{ entry.date.date() }}</time>
+      <div>
+      <h2><a href="../{{ entry.dst }}">{{ entry.title }}</a></h2>
+      {% if entry.description %}
+      <p>— {{ entry.description }}</p>
+      {% endif %}
+      </div>
+    </header>
+  </article>
 
 {% endfor %}
+
 {% endblock %}

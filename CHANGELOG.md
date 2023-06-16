@@ -25,6 +25,11 @@
     * you may want to include the new "/archive.html" link somewhere in your
       navigation
 
+### Changed
+
+* blag comes now with a simple yet good looking default theme that supports
+  syntax highlighting and a light- and dark theme.
+
 
 ## [1.5.0] - 2023-04-16
 
