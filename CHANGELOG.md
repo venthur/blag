@@ -35,6 +35,15 @@
   directory with the CSS files and the content directory with some initial
   content to get the user started
 
+* Added a make target to update the pygments themes
+
+* updated dependencies:
+  * markdown 3.4.3
+  * pygments 2.15.1
+  * pytest 7.3.2
+  * types-markdown 3.4.2.9
+  * build 0.10.0
+
 ## [1.5.0] - 2023-04-16
 
 * moved to pyproject.toml

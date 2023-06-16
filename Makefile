@@ -48,6 +48,11 @@ test-release: $(VENV) build
 release: $(VENV) build
 	$(BIN)/twine upload dist/*
 
+.PHONY: update-pygmentize
+update-pygmentize: $(VENV)
+	$(BIN)/pygmentize -f html -S default > blag/static/code-light.css
+	$(BIN)/pygmentize -f html -S monokai > blag/static/code-dark.css
+
 .PHONY: docs
 docs: $(VENV)
 	$(BIN)/sphinx-build $(DOCS_SRC) $(DOCS_OUT)
