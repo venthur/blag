@@ -291,8 +291,10 @@ foo bar
     assert os.path.exists(f'{args.output_dir}/testdir/test')
     # ... feed
     assert os.path.exists(f'{args.output_dir}/atom.xml')
-    # ... archive
+    # ... index
     assert os.path.exists(f'{args.output_dir}/index.html')
+    # ... archive
+    assert os.path.exists(f'{args.output_dir}/archive.html')
     # ... tags
     assert os.path.exists(f'{args.output_dir}/tags/index.html')
     assert os.path.exists(f'{args.output_dir}/tags/foo.html')
@@ -304,6 +306,7 @@ foo bar
     [
         'page.html',
         'article.html',
+        'index.html',
         'archive.html',
         'tags.html',
         'tag.html',

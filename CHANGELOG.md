@@ -14,6 +14,17 @@
   New users are not affected as `blag quickstart` will generate the needed
   templates.
 
+* Split former archive page which served as index.html into "index" and
+  "archive", each with their own template, respectively. Index is the landing
+  page and shows by default only the latest 10 articles. Archive shows the full
+  list of articles.
+
+  If you used custom templates,
+    * you should create an "index.html"-template (take blag's default one as a
+      starting point)
+    * you may want to include the new "/archive.html" link somewhere in your
+      navigation
+
 ### Changed
 
 * blag comes now with a simple yet good looking default theme that supports

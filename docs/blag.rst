@@ -193,7 +193,8 @@ Template     Used For                               Variables
 ============ ====================================== ===================
 page.html    pages (i.e. non-articles)              site, content, meta
 article.html articles (i.e. blog posts)             site, content, meta
-archive.html archive- and landing page of the blog  site, archive
+index.html   landing page of the blog               site, archive
+archive.html archive page of the blog               site, archive
 tags.html    list of tags                           site, tags
 tag.html     archive of Articles with a certain tag site, archive, tag
 ============ ====================================== ===================
