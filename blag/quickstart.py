@@ -4,10 +4,11 @@
 
 # remove when we don't support py38 anymore
 from __future__ import annotations
-import configparser
+
 import argparse
-import shutil
+import configparser
 import os
+import shutil
 
 import blag
 
@@ -37,27 +38,33 @@ def get_input(question: str, default: str) -> str:
     return reply
 
 
-def copy_templates() -> None:
-    """Copy templates into current directory.
+def copy_default_theme() -> None:
+    """Copy default theme into current directory.
+
+    The default theme contains the 'templates', 'content' and 'static'
+    directories shipped with blag.
 
     It will not overwrite existing files.
 
     """
-    print("Copying templates...")
-    try:
-        shutil.copytree(
-            os.path.join(blag.__path__[0], 'templates'),
-            'templates',
-        )
-    except FileExistsError:
-        print("Templates already exist. Skipping.")
+    print("Copying default theme...")
+    for dir_ in "templates", "content", "static":
+        print(f"  Copying {dir_}...")
+        try:
+            shutil.copytree(
+                os.path.join(blag.__path__[0], dir_),
+                dir_,
+            )
+        except FileExistsError:
+            print(f"  {dir_} already exist. Skipping.")
 
 
 def quickstart(args: argparse.Namespace | None) -> None:
     """Quickstart.
 
-    This method asks the user some questions and generates a
-    configuration file that is needed in order to run blag.
+    This method asks the user some questions and generates a configuration file
+    that is needed in order to run blag. Additionally, it creates the content
+    and static directories with some initial content, to get the user started.
 
     Parameters
     ----------
@@ -83,13 +90,13 @@ def quickstart(args: argparse.Namespace | None) -> None:
     )
 
     config = configparser.ConfigParser()
-    config['main'] = {
-        'base_url': base_url,
-        'title': title,
-        'description': description,
-        'author': author,
+    config["main"] = {
+        "base_url": base_url,
+        "title": title,
+        "description": description,
+        "author": author,
     }
-    with open('config.ini', 'w') as fh:
+    with open("config.ini", "w") as fh:
         config.write(fh)
 
-    copy_templates()
+    copy_default_theme()

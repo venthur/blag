@@ -16,6 +16,7 @@ blag is named after [the blag of the webcomic xkcd][blagxkcd].
 ## Features
 
 * Write content in [Markdown][]
+* Good looking default theme
 * Theming support using [Jinja2][] templates
 * Generation of Atom feeds for blog content
 * Fenced code blocks and syntax highlighting using [Pygments][]

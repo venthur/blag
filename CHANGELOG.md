@@ -14,6 +14,40 @@
   New users are not affected as `blag quickstart` will generate the needed
   templates.
 
+* Split former archive page which served as index.html into "index" and
+  "archive", each with their own template, respectively. Index is the landing
+  page and shows by default only the latest 10 articles. Archive shows the full
+  list of articles.
+
+  If you used custom templates,
+    * you should create an "index.html"-template (take blag's default one as a
+      starting point)
+    * you may want to include the new "/archive.html" link somewhere in your
+      navigation
+
+### Changed
+
+* blag comes now with a simple yet good looking default theme that supports
+  syntax highlighting and a light- and dark theme.
+
+* apart from the generated configuration, `blag quickstart` will now also
+  create the initial directory structure, with the default template, the static
+  directory with the CSS files and the content directory with some initial
+  content to get the user started
+
+* Added a make target to update the pygments themes
+
+* updated dependencies:
+  * markdown 3.4.3
+  * pygments 2.15.1
+  * pytest 7.3.2
+  * types-markdown 3.4.2.9
+  * build 0.10.0
+
+### Fixed
+
+* fixed pyproject.toml to include tests/conftest.py
+
 
 ## [1.5.0] - 2023-04-16
 

@@ -47,11 +47,15 @@ version = {attr = "blag.__VERSION__" }
 [tool.setuptools]
 packages = [
     "blag",
-    "blag.templates",
+    "tests",
 ]
 
 [tool.setuptools.package-data]
-blag = ["templates/*"]
+blag = [
+    "templates/*",
+    "static/*",
+    "content/*",
+]
 
 [tool.pytest.ini_options]
 addopts = """

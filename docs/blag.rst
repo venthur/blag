@@ -13,7 +13,8 @@ Install blag from PyPI_
 
 .. _pypi: https://pypi.org/project/blag/
 
-Run blag's quickstart command to create the configuration and templates needed
+Run blag's quickstart command to create the configuration, templates and some
+initial content.
 
 .. code-block:: sh
 
@@ -23,7 +24,6 @@ Create some content
 
 .. code-block:: sh
 
-    $ mkdir content
     $ edit content/hello-world.md
 
 Generate the website
@@ -121,7 +121,7 @@ Static Files
 
 Static files can be put into the ``content`` directory and will be copied over
 to the ``build`` directory as well. If you want better separation between
-content and static files, you can create a ``static`` directory and put the
+content and static files, you can use the ``static`` directory and put the
 files there. All files and directories found in the ``static`` directory will
 be copied over to ``build``.
 
@@ -193,7 +193,8 @@ Template     Used For                               Variables
 ============ ====================================== ===================
 page.html    pages (i.e. non-articles)              site, content, meta
 article.html articles (i.e. blog posts)             site, content, meta
-archive.html archive- and landing page of the blog  site, archive
+index.html   landing page of the blog               site, archive
+archive.html archive page of the blog               site, archive
 tags.html    list of tags                           site, tags
 tag.html     archive of Articles with a certain tag site, archive, tag
 ============ ====================================== ===================

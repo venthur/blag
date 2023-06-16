@@ -1,10 +1,11 @@
 # remove when we don't support py38 anymore
 from __future__ import annotations
+
 from datetime import datetime
 from typing import Any
 
-import pytest
 import markdown
+import pytest
 
 from blag.markdown import convert_markdown, markdown_factory
 
@@ -13,23 +14,23 @@ from blag.markdown import convert_markdown, markdown_factory
     "input_, expected",
     [
         # inline
-        ('[test](test.md)', 'test.html'),
-        ('[test](test.md "test")', 'test.html'),
-        ('[test](a/test.md)', 'a/test.html'),
-        ('[test](a/test.md "test")', 'a/test.html'),
-        ('[test](/test.md)', '/test.html'),
-        ('[test](/test.md "test")', '/test.html'),
-        ('[test](/a/test.md)', '/a/test.html'),
-        ('[test](/a/test.md "test")', '/a/test.html'),
+        ("[test](test.md)", "test.html"),
+        ('[test](test.md "test")', "test.html"),
+        ("[test](a/test.md)", "a/test.html"),
+        ('[test](a/test.md "test")', "a/test.html"),
+        ("[test](/test.md)", "/test.html"),
+        ('[test](/test.md "test")', "/test.html"),
+        ("[test](/a/test.md)", "/a/test.html"),
+        ('[test](/a/test.md "test")', "/a/test.html"),
         # reference
-        ('[test][]\n[test]: test.md ' '', 'test.html'),
-        ('[test][]\n[test]: test.md "test"', 'test.html'),
-        ('[test][]\n[test]: a/test.md', 'a/test.html'),
-        ('[test][]\n[test]: a/test.md "test"', 'a/test.html'),
-        ('[test][]\n[test]: /test.md', '/test.html'),
-        ('[test][]\n[test]: /test.md "test"', '/test.html'),
-        ('[test][]\n[test]: /a/test.md', '/a/test.html'),
-        ('[test][]\n[test]: /a/test.md "test"', '/a/test.html'),
+        ("[test][]\n[test]: test.md " "", "test.html"),
+        ('[test][]\n[test]: test.md "test"', "test.html"),
+        ("[test][]\n[test]: a/test.md", "a/test.html"),
+        ('[test][]\n[test]: a/test.md "test"', "a/test.html"),
+        ("[test][]\n[test]: /test.md", "/test.html"),
+        ('[test][]\n[test]: /test.md "test"', "/test.html"),
+        ("[test][]\n[test]: /a/test.md", "/a/test.html"),
+        ('[test][]\n[test]: /a/test.md "test"', "/a/test.html"),
     ],
 )
 def test_convert_markdown_links(input_: str, expected: str) -> None:
@@ -42,11 +43,11 @@ def test_convert_markdown_links(input_: str, expected: str) -> None:
     "input_, expected",
     [
         # scheme
-        ('[test](https://)', 'https://'),
+        ("[test](https://)", "https://"),
         # netloc
-        ('[test](//test.md)', '//test.md'),
+        ("[test](//test.md)", "//test.md"),
         # no path
-        ('[test]()', ''),
+        ("[test]()", ""),
     ],
 )
 def test_dont_convert_normal_links(input_: str, expected: str) -> None:
@@ -58,13 +59,13 @@ def test_dont_convert_normal_links(input_: str, expected: str) -> None:
 @pytest.mark.parametrize(
     "input_, expected",
     [
-        ('foo: bar', {'foo': 'bar'}),
-        ('foo: those are several words', {'foo': 'those are several words'}),
-        ('tags: this, is, a, test\n', {'tags': ['this', 'is', 'a', 'test']}),
-        ('tags: this, IS, a, test', {'tags': ['this', 'is', 'a', 'test']}),
+        ("foo: bar", {"foo": "bar"}),
+        ("foo: those are several words", {"foo": "those are several words"}),
+        ("tags: this, is, a, test\n", {"tags": ["this", "is", "a", "test"]}),
+        ("tags: this, IS, a, test", {"tags": ["this", "is", "a", "test"]}),
         (
-            'date: 2020-01-01 12:10',
-            {'date': datetime(2020, 1, 1, 12, 10).astimezone()},
+            "date: 2020-01-01 12:10",
+            {"date": datetime(2020, 1, 1, 12, 10).astimezone()},
         ),
     ],
 )
@@ -88,9 +89,9 @@ this --- is -- a test ...
 
     """
     html, meta = convert_markdown(md, md1)
-    assert 'mdash' in html
-    assert 'ndash' in html
-    assert 'hellip' in html
+    assert "mdash" in html
+    assert "ndash" in html
+    assert "hellip" in html
 
 
 def test_smarty_code() -> None:
@@ -102,6 +103,6 @@ this --- is -- a test ...
 ```
     """
     html, meta = convert_markdown(md, md1)
-    assert 'mdash' not in html
-    assert 'ndash' not in html
-    assert 'hellip' not in html
+    assert "mdash" not in html
+    assert "ndash" not in html
+    assert "hellip" not in html
