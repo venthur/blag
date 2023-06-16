@@ -44,6 +44,11 @@
   * types-markdown 3.4.2.9
   * build 0.10.0
 
+### Fixed
+
+* fixed pyproject.toml to include tests/conftest.py
+
+
 ## [1.5.0] - 2023-04-16
 
 * moved to pyproject.toml
