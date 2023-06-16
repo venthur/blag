@@ -1,3 +1,7 @@
+# API
+
+::: blag
+
 ::: blag.version
 
 ::: blag.blag

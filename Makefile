@@ -4,7 +4,7 @@ VENV = venv
 BIN=$(VENV)/bin
 
 DOCS_SRC = docs
-DOCS_OUT = $(DOCS_SRC)/_build
+DOCS_OUT = site
 
 
 ifeq ($(OS), Windows_NT)
@@ -55,14 +55,13 @@ update-pygmentize: $(VENV)
 
 .PHONY: docs
 docs: $(VENV)
-	$(BIN)/sphinx-build $(DOCS_SRC) $(DOCS_OUT)
+	$(BIN)/mkdocs build
 
 .PHONY: clean
 clean:
 	rm -rf build dist *.egg-info
 	rm -rf $(VENV)
 	rm -rf $(DOCS_OUT)
-	rm -rf $(DOCS_SRC)/api
 	find . -type f -name *.pyc -delete
 	find . -type d -name __pycache__ -delete
 	# coverage
