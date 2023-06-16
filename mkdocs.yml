@@ -1,0 +1,19 @@
+site_name: blag
+site_url: https://blag.readthedocs.io/
+nav:
+  - Home: index.md
+  - Manual: manual.md
+  - API: api.md
+theme: material
+repo_url: https://github.com/venthur/blag
+repo_name: venthur/blag
+plugins:
+  - search:
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_style: numpy
+            allow_inspection: true
+            show_root_heading: true
+            show_if_no_docstring: true
