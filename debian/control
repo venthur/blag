@@ -5,7 +5,6 @@ Maintainer: Bastian Venthur <venthur@debian.org>
 Rules-Requires-Root: no
 Build-Depends:
  debhelper-compat (= 13),
- dh-sequence-sphinxdoc,
  dh-sequence-python3,
  dh-python,
  pybuild-plugin-pyproject,
@@ -17,7 +16,9 @@ Build-Depends:
  python3-pygments,
  python3-pytest,
  python3-pytest-cov,
- python3-sphinx,
+ mkdocs,
+ mkdocs-material,
+ mkdocstrings-python-handlers,
 #Testsuite: autopkgtest-pkg-python
 Standards-Version: 4.6.0.1
 Homepage: https://github.com/venthur/blag
@@ -35,6 +36,7 @@ Description: Blog-aware, static site generator
  Blag is a blog-aware, static site generator, written in Python. It supports
  the following features:
    * Write content in Markdown
+   * Good looking default theme
    * Theming support using Jinja2 templates
    * Generation of Atom feeds for blog content
    * Fenced code blocks and syntax highlighting using Pygments
@@ -45,13 +47,13 @@ Package: blag-doc
 Section: doc
 Architecture: all
 Depends:
- ${sphinxdoc:Depends},
  ${misc:Depends},
 Multi-Arch: foreign
 Description: Blog-aware, static site generator (documentation)
  Blag is a blog-aware, static site generator, written in Python. It supports
  the following features:
    * Write content in Markdown
+   * Good looking default theme
    * Theming support using Jinja2 templates
    * Generation of Atom feeds for blog content
    * Fenced code blocks and syntax highlighting using Pygments
