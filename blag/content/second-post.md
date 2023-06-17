@@ -7,3 +7,5 @@ Tags: blag
 ## Second Post
 
 This page serves no purpose :)
+
+![Blag Screenshot](blag.png)
