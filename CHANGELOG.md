@@ -1,5 +1,10 @@
 # Changelog
 
+## [unreleased]
+
+* default theme: `img` have now `max-width: 100%` by default to avoid very
+  large images overflowing
+
 ## [2.0.0] - 2023-06-16
 
 ### Breaking
