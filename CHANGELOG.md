@@ -5,7 +5,10 @@
 * default theme: `img` have now `max-width: 100%` by default to avoid very
   large images overflowing
 * packaging: explicitly list `templates`, `static` and `content` as packages
-  instead of using package-data for setuptools
+  instead of relying on package-data for setuptools. additionally, created a
+  MANIFEST.in to add the contents of these directories here as well. the
+  automatic finding of namespace packages and packaga-data, currently does not
+  work as advertised in setuptools' docs
 
 
 ## [2.0.0] - 2023-06-16

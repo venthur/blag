@@ -1,0 +1,3 @@
+recursive-include blag/content *
+recursive-include blag/static *
+recursive-include blag/templates *
