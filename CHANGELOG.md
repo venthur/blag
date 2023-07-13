@@ -9,6 +9,7 @@
   MANIFEST.in to add the contents of these directories here as well. the
   automatic finding of namespace packages and packaga-data, currently does not
   work as advertised in setuptools' docs
+* updated dependencies
 
 
 ## [2.0.0] - 2023-06-16
