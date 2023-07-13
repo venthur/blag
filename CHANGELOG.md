@@ -4,7 +4,7 @@
 
 * default theme: `img` have now `max-width: 100%` by default to avoid very
   large images overflowing
-* packaging: explicitly list `templates`, `static` and `content` as packages
+* packaging: treat `templates`, `static` and `content` as namespace packages
   instead of using package-data for setuptools
 
 
