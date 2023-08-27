@@ -1,6 +1,6 @@
 # Changelog
 
-## [unreleased]
+## [2.1.0] -- 2023-08-27
 
 * default theme: `img` have now `max-width: 100%` by default to avoid very
   large images overflowing
@@ -10,7 +10,7 @@
   automatic finding of namespace packages and packaga-data, currently does not
   work as advertised in setuptools' docs
 * updated dependencies
-
+* created debian/watch
 
 ## [2.0.0] - 2023-06-16
 
