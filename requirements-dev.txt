@@ -3,7 +3,7 @@ mkdocs==1.5.2
 mkdocs-material==9.1.21
 mkdocstrings[python]==0.22.0
 twine==4.0.2
-wheel==0.41.1
+wheel==0.41.2
 pytest==7.4.2
 pytest-cov==4.1.0
 flake8==6.1.0
