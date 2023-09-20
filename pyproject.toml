@@ -36,7 +36,7 @@ dev = [
     "wheel",
     "pytest",
     "pytest-cov",
-    "flake8",
+    "ruff",
     "mypy",
     "types-markdown",
 ]
@@ -60,6 +60,22 @@ addopts = """
     --cov-report=html
     --cov-report=term-missing:skip-covered
 """
+
+[tool.ruff]
+select = [
+    "F",        # pyflakes
+    "E", "W",   # pycodestyle
+    "C90",      # mccabe
+    "I",        # isort
+    "D",        # pydocstyle
+    "UP"        # pyupgrade
+]
+line-length = 79
+src = ["blag", "tests"]
+target-version = "py38"
+
+[tool.ruff.pydocstyle]
+convention = "numpy"
 
 [tool.mypy]
 files = "blag,tests"
