@@ -1,3 +1,6 @@
+"""Test blag."""
+
+
 # remove when we don't support py38 anymore
 from __future__ import annotations
 
@@ -15,12 +18,14 @@ from blag import __VERSION__, blag
 
 
 def test_generate_feed(cleandir: str) -> None:
+    """Test generate_feed."""
     articles: list[tuple[str, dict[str, Any]]] = []
     blag.generate_feed(articles, "build", " ", " ", " ", " ")
     assert os.path.exists("build/atom.xml")
 
 
 def test_feed(cleandir: str) -> None:
+    """Test feed."""
     articles: list[tuple[str, dict[str, Any]]] = [
         (
             "dest1.html",
@@ -73,6 +78,7 @@ def test_feed(cleandir: str) -> None:
 
 
 def test_generate_feed_with_description(cleandir: str) -> None:
+    """Test generate_feed with description."""
     # if a description is provided, it will be used as the summary in
     # the feed, otherwise we simply use the title of the article
     articles: list[tuple[str, dict[str, Any]]] = [
@@ -98,6 +104,7 @@ def test_generate_feed_with_description(cleandir: str) -> None:
 
 
 def test_parse_args_build() -> None:
+    """Test parse_args with build."""
     # test default args
     args = blag.parse_args(["build"])
     assert args.input_dir == "content"
@@ -131,6 +138,7 @@ def test_parse_args_build() -> None:
 
 
 def test_get_config() -> None:
+    """Test get_config."""
     config = """
 [main]
 base_url = https://example.com/
@@ -180,6 +188,7 @@ author = a. u. thor
 
 
 def test_environment_factory(cleandir: str) -> None:
+    """Test environment_factory."""
     globals_: dict[str, object] = {"foo": "bar", "test": "me"}
     env = blag.environment_factory("templates", globals_=globals_)
     assert env.globals["foo"] == "bar"
@@ -191,6 +200,7 @@ def test_process_markdown(
     page_template: Template,
     article_template: Template,
 ) -> None:
+    """Test process_markdown."""
     page1 = """\
 title: some page
 
@@ -240,6 +250,7 @@ foo bar
 
 
 def test_build(args: Namespace) -> None:
+    """Test build."""
     page1 = """\
 title: some page
 
@@ -313,16 +324,19 @@ foo bar
     ],
 )
 def test_missing_template_raises(template: str, args: Namespace) -> None:
+    """Test that missing templates raise SystemExit."""
     os.remove(f"templates/{template}")
     with pytest.raises(SystemExit):
         blag.build(args)
 
 
 def test_main(cleandir: str) -> None:
+    """Test main."""
     blag.main(["build"])
 
 
 def test_cli_version(capsys: CaptureFixture[str]) -> None:
+    """Test --version."""
     with pytest.raises(SystemExit) as ex:
         blag.main(["--version"])
     # normal system exit
@@ -333,6 +347,7 @@ def test_cli_version(capsys: CaptureFixture[str]) -> None:
 
 
 def test_cli_verbose(cleandir: str, caplog: LogCaptureFixture) -> None:
+    """Test --verbose."""
     blag.main(["build"])
     assert "DEBUG" not in caplog.text
 

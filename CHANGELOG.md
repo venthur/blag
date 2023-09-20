@@ -1,5 +1,10 @@
 # Changelog
 
+## [unreleased] -- XXXXXXX
+
+* switched from flake8 to ruff
+* added missing docstrings
+
 ## [2.1.0] -- 2023-08-27
 
 * default theme: `img` have now `max-width: 100%` by default to avoid very

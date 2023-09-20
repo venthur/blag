@@ -6,6 +6,6 @@ twine==4.0.2
 wheel==0.41.2
 pytest==7.4.2
 pytest-cov==4.1.0
-flake8==6.1.0
+ruff==0.0.290
 mypy==1.5.1
 types-markdown==3.4.2.10

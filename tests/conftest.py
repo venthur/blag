@@ -1,3 +1,6 @@
+"""Pytest fixtures."""
+
+
 # remove when we don't support py38 anymore
 from __future__ import annotations
 
@@ -14,6 +17,7 @@ from blag import blag, quickstart
 
 @pytest.fixture
 def environment(cleandir: str) -> Iterator[Environment]:
+    """Create a Jinja2 environment."""
     site = {
         "base_url": "site base_url",
         "title": "site title",
@@ -26,31 +30,37 @@ def environment(cleandir: str) -> Iterator[Environment]:
 
 @pytest.fixture
 def page_template(environment: Environment) -> Iterator[Template]:
+    """Create a Jinja2 page-template."""
     yield environment.get_template("page.html")
 
 
 @pytest.fixture
 def article_template(environment: Environment) -> Iterator[Template]:
+    """Create a Jinja2 article-template."""
     yield environment.get_template("article.html")
 
 
 @pytest.fixture
 def index_template(environment: Environment) -> Iterator[Template]:
+    """Create a Jinja2 index-template."""
     yield environment.get_template("index.html")
 
 
 @pytest.fixture
 def archive_template(environment: Environment) -> Iterator[Template]:
+    """Create a Jinja2 archive-template."""
     yield environment.get_template("archive.html")
 
 
 @pytest.fixture
 def tags_template(environment: Environment) -> Iterator[Template]:
+    """Create a Jinja2 tags-template."""
     yield environment.get_template("tags.html")
 
 
 @pytest.fixture
 def tag_template(environment: Environment) -> Iterator[Template]:
+    """Create a Jinja2 tag-template."""
     yield environment.get_template("tag.html")
 
 
@@ -80,6 +90,7 @@ author = a. u. thor
 
 @pytest.fixture
 def args(cleandir: Callable[[], Iterator[str]]) -> Iterator[Namespace]:
+    """Create a Namespace with default arguments."""
     args = Namespace(
         input_dir="content",
         output_dir="build",

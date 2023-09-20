@@ -1,3 +1,6 @@
+"""Tests for the devserver module."""
+
+
 # remove when we don't support py38 anymore
 from __future__ import annotations
 
@@ -11,6 +14,7 @@ from blag import devserver
 
 
 def test_get_last_modified(cleandir: str) -> None:
+    """Test get_last_modified."""
     # take initial time
     t1 = devserver.get_last_modified(["content"])
 
@@ -29,6 +33,7 @@ def test_get_last_modified(cleandir: str) -> None:
 
 
 def test_autoreload_builds_immediately(args: Namespace) -> None:
+    """Test autoreload builds immediately."""
     # create a dummy file that can be build
     with open("content/test.md", "w") as fh:
         fh.write("boo")
@@ -54,6 +59,7 @@ def test_autoreload_builds_immediately(args: Namespace) -> None:
     "ignore::pytest.PytestUnhandledThreadExceptionWarning"
 )
 def test_autoreload(args: Namespace) -> None:
+    """Test autoreload."""
     t = threading.Thread(
         target=devserver.autoreload,
         args=(args,),
