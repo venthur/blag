@@ -33,7 +33,7 @@ mypy: $(VENV)
 
 .PHONY: lint
 lint: $(VENV)
-	$(BIN)/ruff .
+	$(BIN)/ruff check .
 
 .PHONY: build
 build: $(VENV)
