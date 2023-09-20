@@ -71,7 +71,6 @@ select = [
     "UP"        # pyupgrade
 ]
 line-length = 79
-src = ["blag", "tests"]
 target-version = "py38"
 
 [tool.ruff.pydocstyle]
