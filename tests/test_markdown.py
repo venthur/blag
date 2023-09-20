@@ -1,3 +1,6 @@
+"""Test markdown module."""
+
+
 # remove when we don't support py38 anymore
 from __future__ import annotations
 
@@ -34,6 +37,7 @@ from blag.markdown import convert_markdown, markdown_factory
     ],
 )
 def test_convert_markdown_links(input_: str, expected: str) -> None:
+    """Test convert_markdown."""
     md = markdown_factory()
     html, _ = convert_markdown(md, input_)
     assert expected in html
@@ -51,6 +55,7 @@ def test_convert_markdown_links(input_: str, expected: str) -> None:
     ],
 )
 def test_dont_convert_normal_links(input_: str, expected: str) -> None:
+    """Test convert_markdown doesn't convert normal links."""
     md = markdown_factory()
     html, _ = convert_markdown(md, input_)
     assert expected in html
@@ -70,17 +75,20 @@ def test_dont_convert_normal_links(input_: str, expected: str) -> None:
     ],
 )
 def test_convert_metadata(input_: str, expected: dict[str, Any]) -> None:
+    """Test convert_markdown converts metadata correctly."""
     md = markdown_factory()
     _, meta = convert_markdown(md, input_)
     assert expected == meta
 
 
 def test_markdown_factory() -> None:
+    """Test markdown_factory."""
     md = markdown_factory()
     assert isinstance(md, markdown.Markdown)
 
 
 def test_smarty() -> None:
+    """Test smarty."""
     md = markdown_factory()
 
     md1 = """
@@ -95,6 +103,7 @@ this --- is -- a test ...
 
 
 def test_smarty_code() -> None:
+    """Test smarty doesn't touch code."""
     md = markdown_factory()
 
     md1 = """

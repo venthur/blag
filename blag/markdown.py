@@ -94,9 +94,10 @@ def convert_markdown(
 
 
 class MarkdownLinkTreeprocessor(Treeprocessor):
-    """Converts relative links to .md files to .html"""
+    """Converts relative links to .md files to .html."""
 
     def run(self, root: Element) -> Element:
+        """Process the ElementTree."""
         for element in root.iter():
             if element.tag == "a":
                 url = element.get("href")
@@ -109,6 +110,7 @@ class MarkdownLinkTreeprocessor(Treeprocessor):
         return root
 
     def convert(self, url: str) -> str:
+        """Convert relative .md-links to .html-links."""
         scheme, netloc, path, query, fragment = urlsplit(url)
         logger.debug(
             f"{url}: {scheme=} {netloc=} {path=} {query=} {fragment=}"
@@ -126,6 +128,7 @@ class MarkdownLinkExtension(Extension):
     """markdown.extension that converts relative .md- to .html-links."""
 
     def extendMarkdown(self, md: Markdown) -> None:
+        """Register the MarkdownLinkTreeprocessor."""
         md.treeprocessors.register(
             MarkdownLinkTreeprocessor(md),
             "mdlink",

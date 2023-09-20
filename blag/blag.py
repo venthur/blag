@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""blag's core methods.
-
-"""
+"""blag's core methods."""
 
 # remove when we don't support py38 anymore
 from __future__ import annotations
@@ -32,7 +30,7 @@ logging.basicConfig(
 
 
 def main(arguments: list[str] | None = None) -> None:
-    """Main entrypoint for the CLI.
+    """Run the CLI.
 
     This method parses the CLI arguments and executes the respective
     commands.
@@ -328,7 +326,7 @@ def process_markdown(
     for src, dst in convertibles:
         logger.debug(f"Processing {src}")
 
-        with open(f"{input_dir}/{src}", "r") as fh:
+        with open(f"{input_dir}/{src}") as fh:
             body = fh.read()
 
         content, meta = convert_markdown(md, body)
