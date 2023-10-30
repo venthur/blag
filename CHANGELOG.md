@@ -5,6 +5,7 @@
 * switched from flake8 to ruff
 * added missing docstrings
 * fixed dev requirements in pyproject, still pointing to sphinx
+* added Python3.12 to test suite
 
 ## [2.1.0] -- 2023-08-27
 
