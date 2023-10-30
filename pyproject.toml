@@ -31,7 +31,9 @@ blag = "blag.blag:main"
 [project.optional-dependencies]
 dev = [
     "build",
-    "sphinx",
+    "mkdocs",
+    "mkdocs-material",
+    "mkdocstrings[python]",
     "twine",
     "wheel",
     "pytest",
