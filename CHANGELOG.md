@@ -1,11 +1,12 @@
 # Changelog
 
-## [unreleased] -- XXXXXXX
+## [2.2.0] -- 2023-11-05
 
 * switched from flake8 to ruff
 * added missing docstrings
 * fixed dev requirements in pyproject, still pointing to sphinx
 * added Python3.12 to test suite
+* removed debian/watch
 
 ## [2.1.0] -- 2023-08-27
 
