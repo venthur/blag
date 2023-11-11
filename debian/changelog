@@ -1,4 +1,4 @@
-blag (2.2.1) UNRELEASED; urgency=medium
+blag (2.2.1) unstable; urgency=medium
 
   * fixed suggests field to blag-doc (Closes: #1055769)
 
