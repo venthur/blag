@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.2.1] -- 2023-11-11
+
+* fixed `suggests` to blag-doc
+
 ## [2.2.0] -- 2023-11-05
 
 * switched from flake8 to ruff

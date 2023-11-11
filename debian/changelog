@@ -1,3 +1,9 @@
+blag (2.2.1) UNRELEASED; urgency=medium
+
+  * fixed suggests field to blag-doc (Closes: #1055769)
+
+ -- Bastian Venthur <venthur@debian.org>  Sat, 11 Nov 2023 10:57:06 +0100
+
 blag (2.2.0) unstable; urgency=medium
 
   * switched from flake8 to ruff

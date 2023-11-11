@@ -31,7 +31,7 @@ Depends:
  ${python3:Depends},
  ${misc:Depends},
 Suggests:
- python-blag-doc,
+ blag-doc,
 Description: Blog-aware, static site generator
  Blag is a blog-aware, static site generator, written in Python. It supports
  the following features:
