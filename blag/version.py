@@ -1,1 +1,3 @@
-__VERSION__ = '1.3.2'
+"""Version information for the blag package."""
+
+__VERSION__ = "2.2.1"

@@ -1,11 +1,17 @@
-"""Helper methods for blag's quickstart command.
+"""Helper methods for blag's quickstart command."""
 
-"""
+# remove when we don't support py38 anymore
+from __future__ import annotations
 
+import argparse
 import configparser
+import os
+import shutil
+
+import blag
 
 
-def get_input(question, default):
+def get_input(question: str, default: str) -> str:
     """Prompt for user input.
 
     This is a wrapper around the input-builtin. It will show the default answer
@@ -13,14 +19,15 @@ def get_input(question, default):
 
     Parameters
     ----------
-    question : str
+    question
         the question the user is presented
-    default : str
+    default
         the default value that will be used if no answer was given
 
     Returns
     -------
     str
+        the answer
 
     """
     reply = input(f"{question} [{default}]: ")
@@ -29,15 +36,38 @@ def get_input(question, default):
     return reply
 
 
-def quickstart(args):
+def copy_default_theme() -> None:
+    """Copy default theme into current directory.
+
+    The default theme contains the 'templates', 'content' and 'static'
+    directories shipped with blag.
+
+    It will not overwrite existing files.
+
+    """
+    print("Copying default theme...")
+    for dir_ in "templates", "content", "static":
+        print(f"  Copying {dir_}...")
+        try:
+            shutil.copytree(
+                os.path.join(blag.__path__[0], dir_),
+                dir_,
+            )
+        except FileExistsError:
+            print(f"  {dir_} already exist. Skipping.")
+
+
+def quickstart(args: argparse.Namespace | None) -> None:
     """Quickstart.
 
-    This method asks the user some questions and generates a
-    configuration file that is needed in order to run blag.
+    This method asks the user some questions and generates a configuration file
+    that is needed in order to run blag. Additionally, it creates the content
+    and static directories with some initial content, to get the user started.
 
     Parameters
     ----------
-    args : argparse.Namespace
+    args
+        not used
 
     """
     base_url = get_input(
@@ -58,11 +88,13 @@ def quickstart(args):
     )
 
     config = configparser.ConfigParser()
-    config['main'] = {
-            'base_url': base_url,
-            'title': title,
-            'description': description,
-            'author': author,
+    config["main"] = {
+        "base_url": base_url,
+        "title": title,
+        "description": description,
+        "author": author,
     }
-    with open('config.ini', 'w') as fh:
+    with open("config.ini", "w") as fh:
         config.write(fh)
+
+    copy_default_theme()

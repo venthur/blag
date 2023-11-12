@@ -4,7 +4,7 @@ VENV = venv
 BIN=$(VENV)/bin
 
 DOCS_SRC = docs
-DOCS_OUT = $(DOCS_SRC)/_build
+DOCS_OUT = site
 
 
 ifeq ($(OS), Windows_NT)
@@ -14,40 +14,56 @@ endif
 
 
 .PHONY: all
-all: lint test
+all: lint mypy test test-release
 
-$(VENV): requirements.txt requirements-dev.txt setup.py
+$(VENV): requirements.txt requirements-dev.txt pyproject.toml
 	$(PY) -m venv $(VENV)
 	$(BIN)/pip install --upgrade -r requirements.txt
 	$(BIN)/pip install --upgrade -r requirements-dev.txt
-	$(BIN)/pip install -e .
+	$(BIN)/pip install -e .['dev']
 	touch $(VENV)
 
 .PHONY: test
 test: $(VENV)
 	$(BIN)/pytest
 
+.PHONY: mypy
+mypy: $(VENV)
+	$(BIN)/mypy
+
 .PHONY: lint
 lint: $(VENV)
-	$(BIN)/flake8
+	$(BIN)/ruff check .
+
+.PHONY: build
+build: $(VENV)
+	rm -rf dist
+	$(BIN)/python3 -m build
+
+.PHONY: test-release
+test-release: $(VENV) build
+	$(BIN)/twine check dist/*
 
 .PHONY: release
-release: $(VENV)
-	rm -rf dist
-	$(BIN)/python setup.py sdist bdist_wheel
+release: $(VENV) build
 	$(BIN)/twine upload dist/*
+
+.PHONY: update-pygmentize
+update-pygmentize: $(VENV)
+	$(BIN)/pygmentize -f html -S default > blag/static/code-light.css
+	$(BIN)/pygmentize -f html -S monokai > blag/static/code-dark.css
 
 .PHONY: docs
 docs: $(VENV)
-	$(BIN)/sphinx-build $(DOCS_SRC) $(DOCS_OUT)
+	$(BIN)/mkdocs build
 
 .PHONY: clean
 clean:
 	rm -rf build dist *.egg-info
 	rm -rf $(VENV)
 	rm -rf $(DOCS_OUT)
-	rm -rf $(DOCS_SRC)/api
 	find . -type f -name *.pyc -delete
 	find . -type d -name __pycache__ -delete
 	# coverage
 	rm -rf htmlcov .coverage
+	rm -rf .mypy_cache
