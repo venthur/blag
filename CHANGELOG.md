@@ -1,11 +1,113 @@
 # Changelog
 
-## unreleased
+## [2.2.1] -- 2023-11-11
 
+* fixed `suggests` to blag-doc
+
+## [2.2.0] -- 2023-11-05
+
+* switched from flake8 to ruff
+* added missing docstrings
+* fixed dev requirements in pyproject, still pointing to sphinx
+* added Python3.12 to test suite
+* removed debian/watch
+
+## [2.1.0] -- 2023-08-27
+
+* default theme: `img` have now `max-width: 100%` by default to avoid very
+  large images overflowing
+* packaging: explicitly list `templates`, `static` and `content` as packages
+  instead of relying on package-data for setuptools. additionally, created a
+  MANIFEST.in to add the contents of these directories here as well. the
+  automatic finding of namespace packages and packaga-data, currently does not
+  work as advertised in setuptools' docs
+* updated dependencies
+* created debian/watch
+
+## [2.0.0] - 2023-06-16
+
+### Breaking
+
+* blag does not use default fallback templates anymore and will return an error
+  if it is unable to find required templates, e.g. in `templates/`.
+
+  Users upgrading from older versions can either run `blag quickstart` (don't
+  forget to backup your `config.ini` or copy the templates from blag's
+  resources (the resource path is shown in the error message).
+
+  New users are not affected as `blag quickstart` will generate the needed
+  templates.
+
+* Split former archive page which served as index.html into "index" and
+  "archive", each with their own template, respectively. Index is the landing
+  page and shows by default only the latest 10 articles. Archive shows the full
+  list of articles.
+
+  If you used custom templates,
+    * you should create an "index.html"-template (take blag's default one as a
+      starting point)
+    * you may want to include the new "/archive.html" link somewhere in your
+      navigation
+
+### Changed
+
+* blag comes now with a simple yet good looking default theme that supports
+  syntax highlighting and a light- and dark theme.
+
+* apart from the generated configuration, `blag quickstart` will now also
+  create the initial directory structure, with the default template, the static
+  directory with the CSS files and the content directory with some initial
+  content to get the user started
+
+* Added a make target to update the pygments themes
+
+* updated dependencies:
+  * markdown 3.4.3
+  * pygments 2.15.1
+  * pytest 7.3.2
+  * types-markdown 3.4.2.9
+  * build 0.10.0
+
+* Switched from sphinx to mkdocs
+
+### Fixed
+
+* fixed pyproject.toml to include tests/conftest.py
+
+
+## [1.5.0] - 2023-04-16
+
+* moved to pyproject.toml
+* added python 3.11 to test suite
+* break out lint and mypy from test matrix and only run on linux- and latest
+  stable python to make it a bit more efficient
+* added dependabot check for github actions
+* updated dependencies:
+  * mypy 1.2.0
+  * types-markdown 3.4.2.1
+  * pytest-cov 4.0.0
+  * sphinx 5.3.0
+  * pytest 7.3.0
+  * flake8 6.0.0
+  * twine 4.0.2
+  * wheel 0.40.0
+
+## [1.4.1] - 2022-09-29
+
+* applied multi-arch fix by debian-janitor
+* updated dependencies:
+  * pytest 7.1.3
+  * sphinx 5.2.1
+  * types-markdown 3.4.2
+
+## [1.4.0] - 2022-09-01
+
+* added type hints and mypy --strict to test suite
 * improved default template
 * updated dependencies:
   * markdown 3.4.1
-  * flake 5.0.2
+  * pygments 2.13.0
+  * flake 5.0.4
   * twine 4.0.1
   * sphinx 5.1.1
 

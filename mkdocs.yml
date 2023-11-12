@@ -1,0 +1,30 @@
+site_name: blag
+site_url: https://blag.readthedocs.io/
+repo_url: https://github.com/venthur/blag
+repo_name: venthur/blag
+
+nav:
+  - Home: index.md
+  - Manual: manual.md
+  - API:
+    - blag: blag_.md
+    - blag.version: version.md
+    - blag.blag: blag.md
+    - blag.markdown: markdown.md
+    - blag.devserver: devserver.md
+    - blag.quickstart: quickstart.md
+
+theme:
+  name: material
+  highlightjs: true
+
+markdown_extensions:
+  - pymdownx.superfences
+
+plugins:
+  - search:
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_style: numpy

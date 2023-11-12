@@ -1,44 +1,47 @@
 #!/usr/bin/env python3
 
-"""blag's core methods.
+"""blag's core methods."""
 
-"""
+# remove when we don't support py38 anymore
+from __future__ import annotations
 
 import argparse
+import configparser
+import logging
 import os
 import shutil
-import logging
-import configparser
 import sys
+from typing import Any
 
-from jinja2 import Environment, ChoiceLoader, FileSystemLoader, PackageLoader
 import feedgenerator
+from jinja2 import Environment, FileSystemLoader, Template, TemplateNotFound
 
-from blag.markdown import markdown_factory, convert_markdown
+import blag
 from blag.devserver import serve
-from blag.version import __VERSION__
+from blag.markdown import convert_markdown, markdown_factory
 from blag.quickstart import quickstart
+from blag.version import __VERSION__
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
-        level=logging.INFO,
-        format='%(asctime)s %(levelname)s %(name)s %(message)s',
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s %(name)s %(message)s",
 )
 
 
-def main(args=None):
-    """Main entrypoint for the CLI.
+def main(arguments: list[str] | None = None) -> None:
+    """Run the CLI.
 
     This method parses the CLI arguments and executes the respective
     commands.
 
     Parameters
     ----------
-    args : list[str]
+    arguments
         optional parameters, used for testing
 
     """
-    args = parse_args(args)
+    args = parse_args(arguments)
     # set loglevel
     if args.verbose:
         logger.setLevel(logging.DEBUG)
@@ -46,12 +49,12 @@ def main(args=None):
     args.func(args)
 
 
-def parse_args(args=None):
+def parse_args(args: list[str] | None = None) -> argparse.Namespace:
     """Parse command line arguments.
 
     Parameters
     ----------
-    args : List[str]
+    args
         optional parameters, used for testing
 
     Returns
@@ -61,142 +64,148 @@ def parse_args(args=None):
     """
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        '--version',
-        action='version',
-        version='%(prog)s '+__VERSION__,
+        "--version",
+        action="version",
+        version="%(prog)s " + __VERSION__,
     )
     parser.add_argument(
-        '-v', '--verbose',
-        action='store_true',
-        help='Verbose output.',
+        "-v",
+        "--verbose",
+        action="store_true",
+        help="Verbose output.",
     )
 
-    commands = parser.add_subparsers(dest='command')
+    commands = parser.add_subparsers(dest="command")
     commands.required = True
 
     build_parser = commands.add_parser(
-            'build',
-            help='Build website.',
+        "build",
+        help="Build website.",
     )
     build_parser.set_defaults(func=build)
     build_parser.add_argument(
-            '-i', '--input-dir',
-            default='content',
-            help='Input directory (default: content)',
+        "-i",
+        "--input-dir",
+        default="content",
+        help="Input directory (default: content)",
     )
     build_parser.add_argument(
-            '-o', '--output-dir',
-            default='build',
-            help='Ouptut directory (default: build)',
+        "-o",
+        "--output-dir",
+        default="build",
+        help="Ouptut directory (default: build)",
     )
     build_parser.add_argument(
-            '-t', '--template-dir',
-            default='templates',
-            help='Template directory (default: templates)',
+        "-t",
+        "--template-dir",
+        default="templates",
+        help="Template directory (default: templates)",
     )
     build_parser.add_argument(
-            '-s', '--static-dir',
-            default='static',
-            help='Static directory (default: static)',
+        "-s",
+        "--static-dir",
+        default="static",
+        help="Static directory (default: static)",
     )
 
     quickstart_parser = commands.add_parser(
-            'quickstart',
-            help="Quickstart blag, creating necessary configuration.",
+        "quickstart",
+        help="Quickstart blag, creating necessary configuration.",
     )
     quickstart_parser.set_defaults(func=quickstart)
 
     serve_parser = commands.add_parser(
-            'serve',
-            help="Start development server.",
+        "serve",
+        help="Start development server.",
     )
     serve_parser.set_defaults(func=serve)
     serve_parser.add_argument(
-            '-i', '--input-dir',
-            default='content',
-            help='Input directory (default: content)',
+        "-i",
+        "--input-dir",
+        default="content",
+        help="Input directory (default: content)",
     )
     serve_parser.add_argument(
-            '-o', '--output-dir',
-            default='build',
-            help='Ouptut directory (default: build)',
+        "-o",
+        "--output-dir",
+        default="build",
+        help="Ouptut directory (default: build)",
     )
     serve_parser.add_argument(
-            '-t', '--template-dir',
-            default='templates',
-            help='Template directory (default: templates)',
+        "-t",
+        "--template-dir",
+        default="templates",
+        help="Template directory (default: templates)",
     )
     serve_parser.add_argument(
-            '-s', '--static-dir',
-            default='static',
-            help='Static directory (default: static)',
+        "-s",
+        "--static-dir",
+        default="static",
+        help="Static directory (default: static)",
     )
 
     return parser.parse_args(args)
 
 
-def get_config(configfile):
+def get_config(configfile: str) -> configparser.SectionProxy:
     """Load site configuration from configfile.
 
     Parameters
     ----------
-    configfile : str
+    configfile
         path to configuration file
 
 
     Returns
     -------
-    dict
+    configparser.SectionProxy
 
     """
     config = configparser.ConfigParser()
     config.read(configfile)
     # check for the mandatory options
-    for value in 'base_url', 'title', 'description', 'author':
+    for value in "base_url", "title", "description", "author":
         try:
-            config['main'][value]
+            config["main"][value]
         except Exception:
-            print(f'{value} is missing in {configfile}!')
+            print(f"{value} is missing in {configfile}!")
             sys.exit(1)
 
-    if not config['main']['base_url'].endswith('/'):
-        logger.warning('base_url does not end with a slash, adding it.')
-        config['main']['base_url'] += '/'
+    if not config["main"]["base_url"].endswith("/"):
+        logger.warning("base_url does not end with a slash, adding it.")
+        config["main"]["base_url"] += "/"
 
-    return config['main']
+    return config["main"]
 
 
-def environment_factory(template_dir=None, globals_=None):
+def environment_factory(
+    template_dir: str,
+    globals_: dict[str, object] | None = None,
+) -> Environment:
     """Environment factory.
 
-    Creates a Jinja2 Environment with the default templates and
-    additional templates from `template_dir` loaded. If `globals` are
-    provided, they are attached to the environment and thus available to
-    all contexts.
+    Creates a Jinja2 Environment with the templates from `template_dir` loaded.
+    If `globals` are provided, they are attached to the environment and thus
+    available to all contexts.
 
     Parameters
     ----------
-    template_dir : str
-    globals_ : dict
+    template_dir
+        directory containing the templates
+    globals_
 
     Returns
     -------
     jinja2.Environment
 
     """
-    # first we try the custom templates, and fall back the ones provided
-    # by blag
-    loaders = []
-    if template_dir:
-        loaders.append(FileSystemLoader([template_dir]))
-    loaders.append(PackageLoader('blag', 'templates'))
-    env = Environment(loader=ChoiceLoader(loaders))
+    env = Environment(loader=FileSystemLoader(template_dir))
     if globals_:
         env.globals = globals_
     return env
 
 
-def build(args):
+def build(args: argparse.Namespace) -> None:
     """Build the site.
 
     This is blag's main method that builds the site, generates the feed
@@ -204,51 +213,65 @@ def build(args):
 
     Parameters
     ----------
-    args : argparse.Namespace
+    args
 
     """
-    os.makedirs(f'{args.output_dir}', exist_ok=True)
+    os.makedirs(f"{args.output_dir}", exist_ok=True)
     convertibles = []
     known_targets = []
     for root, dirnames, filenames in os.walk(args.input_dir):
         for filename in filenames:
-            rel_src = os.path.relpath(f'{root}/{filename}',
-                                      start=args.input_dir)
+            rel_src = os.path.relpath(
+                f"{root}/{filename}", start=args.input_dir
+            )
             # all non-markdown files are just copied over, the markdown
             # files are converted to html
-            if rel_src.endswith('.md'):
+            if rel_src.endswith(".md"):
                 rel_dst = rel_src
-                rel_dst = rel_dst[:-3] + '.html'
+                rel_dst = rel_dst[:-3] + ".html"
                 convertibles.append((rel_src, rel_dst))
                 known_targets.append(
                     os.path.abspath(f'{args.output_dir}/{rel_dst}')
                 )
             else:
-                shutil.copy(f'{args.input_dir}/{rel_src}',
-                            f'{args.output_dir}/{rel_src}')
+                shutil.copy(
+                    f"{args.input_dir}/{rel_src}",
+                    f"{args.output_dir}/{rel_src}",
+                )
                 known_targets.append(
                     os.path.abspath(f'{args.output_dir}/{rel_src}')
                 )
         for dirname in dirnames:
             # all directories are copied into the output directory
-            path = os.path.relpath(f'{root}/{dirname}', start=args.input_dir)
-            os.makedirs(f'{args.output_dir}/{path}', exist_ok=True)
-            known_targets.append(os.path.abspath(f'{args.output_dir}/{path}'))
+            path = os.path.relpath(f"{root}/{dirname}", start=args.input_dir)
+            os.makedirs(f"{args.output_dir}/{path}", exist_ok=True)
+            known_targets.append(os.path.abspath(f"{args.output_dir}/{path}"))
 
     # copy static files over
-    logger.info('Copying static files.')
+    logger.info("Copying static files.")
     if os.path.exists(args.static_dir):
         shutil.copytree(args.static_dir, args.output_dir, dirs_exist_ok=True)
 
-    config = get_config('config.ini')
+    config = get_config("config.ini")
 
     env = environment_factory(args.template_dir, dict(site=config))
 
-    page_template = env.get_template('page.html')
-    article_template = env.get_template('article.html')
-    archive_template = env.get_template('archive.html')
-    tags_template = env.get_template('tags.html')
-    tag_template = env.get_template('tag.html')
+    try:
+        page_template = env.get_template("page.html")
+        article_template = env.get_template("article.html")
+        index_template = env.get_template("index.html")
+        archive_template = env.get_template("archive.html")
+        tags_template = env.get_template("tags.html")
+        tag_template = env.get_template("tag.html")
+    except TemplateNotFound as exc:
+        tmpl = os.path.join(blag.__path__[0], "templates")
+        logger.error(
+            f'Template "{exc.name}" not found in {args.template_dir}! '
+            "Consider running `blag quickstart` or copying the "
+            f"missing template from {tmpl}."
+        )
+
+        sys.exit(1)
 
     articles, pages = process_markdown(
         convertibles,
@@ -277,18 +300,25 @@ def build(args):
     logger.debug(known_targets)
 
     generate_feed(
-        articles, args.output_dir,
-        base_url=config['base_url'],
-        blog_title=config['title'],
-        blog_description=config['description'],
-        blog_author=config['author'],
+        articles,
+        args.output_dir,
+        base_url=config["base_url"],
+        blog_title=config["title"],
+        blog_description=config["description"],
+        blog_author=config["author"],
     )
+    generate_index(articles, index_template, args.output_dir)
     generate_archive(articles, archive_template, args.output_dir)
     generate_tags(articles, tags_template, tag_template, args.output_dir)
 
 
-def process_markdown(convertibles, input_dir, output_dir,
-                     page_template, article_template):
+def process_markdown(
+    convertibles: list[tuple[str, str]],
+    input_dir: str,
+    output_dir: str,
+    page_template: Template,
+    article_template: Template,
+) -> tuple[list[tuple[str, dict[str, Any]]], list[tuple[str, dict[str, Any]]]]:
     """Process markdown files.
 
     This method processes the convertibles, converts them to html and
@@ -297,18 +327,21 @@ def process_markdown(convertibles, input_dir, output_dir,
     If a markdown file has a `date` metadata field it will be recognized
     as article otherwise as page.
 
+    Articles are sorted by date in descending order.
+
     Parameters
     ----------
-    convertibles : List[Tuple[str, str]]
+    convertibles
         relative paths to markdown- (src) html- (dest) files
-    input_dir : str
-    output_dir : str
-    page_template, archive_template : jinja2 template
-        templats for pages and articles
+    input_dir
+    output_dir
+    page_template, archive_template
+        templates for pages and articles
 
     Returns
     -------
-    articles, pages : List[Tuple[str, Dict]]
+    list[tuple[str, dict[str, Any]]], list[tuple[str, dict[str, Any]]]
+        articles and pages, articles are sorted by date in descending order.
 
     """
     logger.info("Converting Markdown files...")
@@ -317,9 +350,9 @@ def process_markdown(convertibles, input_dir, output_dir,
     articles = []
     pages = []
     for src, dst in convertibles:
-        logger.debug(f'Processing {src}')
+        logger.debug(f"Processing {src}")
 
-        with open(f'{input_dir}/{src}', 'r') as fh:
+        with open(f"{input_dir}/{src}") as fh:
             body = fh.read()
 
         content, meta = convert_markdown(md, body)
@@ -329,139 +362,180 @@ def process_markdown(convertibles, input_dir, output_dir,
 
         # if markdown has date in meta, we treat it as a blog article,
         # everything else are just pages
-        if meta and 'date' in meta:
+        if meta and "date" in meta:
             articles.append((dst, context))
             result = article_template.render(context)
         else:
             pages.append((dst, context))
             result = page_template.render(context)
-        with open(f'{output_dir}/{dst}', 'w') as fh_dest:
+        with open(f"{output_dir}/{dst}", "w") as fh_dest:
             fh_dest.write(result)
 
     # sort articles by date, descending
-    articles = sorted(articles, key=lambda x: x[1]['date'], reverse=True)
+    articles = sorted(articles, key=lambda x: x[1]["date"], reverse=True)
     return articles, pages
 
 
 def generate_feed(
-        articles,
-        output_dir,
-        base_url,
-        blog_title,
-        blog_description,
-        blog_author,
-):
+    articles: list[tuple[str, dict[str, Any]]],
+    output_dir: str,
+    base_url: str,
+    blog_title: str,
+    blog_description: str,
+    blog_author: str,
+) -> None:
     """Generate Atom feed.
 
     Parameters
     ----------
-    articles : list[list[str, dict]]
+    articles
         list of relative output path and article dictionary
-    output_dir : str
+    output_dir
         where the feed is stored
-    base_url : str
+    base_url
         base url
-    blog_title : str
+    blog_title
         blog title
-    blog_description : str
+    blog_description
         blog description
-    blog_author : str
+    blog_author
         blog author
 
     """
-    logger.info('Generating Atom feed.')
+    logger.info("Generating Atom feed.")
     feed = feedgenerator.Atom1Feed(
-            link=base_url,
-            title=blog_title,
-            description=blog_description,
-            feed_url=base_url + 'atom.xml',
+        link=base_url,
+        title=blog_title,
+        description=blog_description,
+        feed_url=base_url + "atom.xml",
     )
 
     for dst, context in articles:
         # if article has a description, use that. otherwise fall back to
         # the title
-        description = context.get('description', context['title'])
+        description = context.get("description", context["title"])
 
         feed.add_item(
-            title=context['title'],
+            title=context["title"],
             author_name=blog_author,
             link=base_url + dst,
             description=description,
-            content=context['content'],
-            pubdate=context['date'],
+            content=context["content"],
+            pubdate=context["date"],
         )
 
-    with open(f'{output_dir}/atom.xml', 'w') as fh:
-        feed.write(fh, encoding='utf8')
+    with open(f"{output_dir}/atom.xml", "w") as fh:
+        feed.write(fh, encoding="utf8")
 
 
-def generate_archive(articles, template, output_dir):
-    """Generate the archive page.
+def generate_index(
+    articles: list[tuple[str, dict[str, Any]]],
+    template: Template,
+    output_dir: str,
+) -> None:
+    """Generate the index page.
+
+    This is used for the index (i.e. landing) page.
 
     Parameters
     ----------
-    articles : list[list[str, dict]]
+    articles
         List of articles. Each article has the destination path and a
         dictionary with the content.
-    template : jinja2.Template instance
-    output_dir : str
+    template
+    output_dir
 
     """
     archive = []
     for dst, context in articles:
         entry = context.copy()
-        entry['dst'] = dst
+        entry["dst"] = dst
         archive.append(entry)
 
     result = template.render(dict(archive=archive))
-    with open(f'{output_dir}/index.html', 'w') as fh:
+    with open(f"{output_dir}/index.html", "w") as fh:
         fh.write(result)
 
 
-def generate_tags(articles, tags_template, tag_template, output_dir):
+def generate_archive(
+    articles: list[tuple[str, dict[str, Any]]],
+    template: Template,
+    output_dir: str,
+) -> None:
+    """Generate the archive page.
+
+    This is used for the full archive.
+
+    Parameters
+    ----------
+    articles
+        List of articles. Each article has the destination path and a
+        dictionary with the content.
+    template
+    output_dir
+
+    """
+    archive = []
+    for dst, context in articles:
+        entry = context.copy()
+        entry["dst"] = dst
+        archive.append(entry)
+
+    result = template.render(dict(archive=archive))
+    with open(f"{output_dir}/archive.html", "w") as fh:
+        fh.write(result)
+
+
+def generate_tags(
+    articles: list[tuple[str, dict[str, Any]]],
+    tags_template: Template,
+    tag_template: Template,
+    output_dir: str,
+) -> None:
     """Generate the tags page.
 
     Parameters
     ----------
-    articles : list[list[str, dict]]
+    articles
         List of articles. Each article has the destination path and a
         dictionary with the content.
-    tags_template, tag_template : jinja2.Template instance
-    output_dir : str
+    tags_template, tag_template
+    output_dir
 
     """
     logger.info("Generating Tag-pages.")
-    os.makedirs(f'{output_dir}/tags', exist_ok=True)
-
+    os.makedirs(f"{output_dir}/tags", exist_ok=True)
     # get tags number of occurrences
-    all_tags = {}
+    all_tags: dict[str, int] = {}
     for _, context in articles:
-        tags = context.get('tags', [])
+        tags: list[str] = context.get("tags", [])
         for tag in tags:
             all_tags[tag] = all_tags.get(tag, 0) + 1
     # sort by occurrence
-    all_tags = sorted(all_tags.items(), key=lambda x: x[1], reverse=True)
+    taglist: list[tuple[str, int]] = sorted(
+        all_tags.items(), key=lambda x: x[1], reverse=True
+    )
 
-    result = tags_template.render(dict(tags=all_tags))
-    with open(f'{output_dir}/tags/index.html', 'w') as fh:
+    result = tags_template.render(dict(tags=taglist))
+    with open(f"{output_dir}/tags/index.html", "w") as fh:
         fh.write(result)
 
     # get tags and archive per tag
-    all_tags = {}
+    all_tags2: dict[str, list[dict[str, Any]]] = {}
     for dst, context in articles:
-        tags = context.get('tags', [])
+        tags = context.get("tags", [])
         for tag in tags:
-            archive = all_tags.get(tag, [])
+            archive: list[dict[str, Any]] = all_tags2.get(tag, [])
             entry = context.copy()
-            entry['dst'] = dst
+            entry["dst"] = dst
             archive.append(entry)
-            all_tags[tag] = archive
+            all_tags2[tag] = archive
 
-    for tag, archive in all_tags.items():
+    for tag, archive in all_tags2.items():
         result = tag_template.render(dict(archive=archive, tag=tag))
-        with open(f'{output_dir}/tags/{tag}.html', 'w') as fh:
+        with open(f"{output_dir}/tags/{tag}.html", "w") as fh:
             fh.write(result)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
