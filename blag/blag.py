@@ -231,7 +231,7 @@ def build(args: argparse.Namespace) -> None:
                 rel_dst = rel_dst[:-3] + ".html"
                 convertibles.append((rel_src, rel_dst))
                 known_targets.append(
-                    os.path.abspath(f'{args.output_dir}/{rel_dst}')
+                    os.path.abspath(f"{args.output_dir}/{rel_dst}")
                 )
             else:
                 shutil.copy(
@@ -239,7 +239,7 @@ def build(args: argparse.Namespace) -> None:
                     f"{args.output_dir}/{rel_src}",
                 )
                 known_targets.append(
-                    os.path.abspath(f'{args.output_dir}/{rel_src}')
+                    os.path.abspath(f"{args.output_dir}/{rel_src}")
                 )
         for dirname in dirnames:
             # all directories are copied into the output directory
@@ -284,16 +284,16 @@ def build(args: argparse.Namespace) -> None:
     # clean up files that should not be there
     for root, dirnames, filenames in os.walk(args.output_dir):
         for filename in filenames:
-            dst = os.path.abspath(f'{root}/{filename}')
+            dst = os.path.abspath(f"{root}/{filename}")
             if dst not in known_targets:
-                logger.info(f'deleting {dst}')
+                logger.info(f"deleting {dst}")
                 os.remove(dst)
             else:
                 known_targets.remove(dst)
         for dirname in dirnames:
-            dst = os.path.abspath(f'{root}/{dirname}')
+            dst = os.path.abspath(f"{root}/{dirname}")
             if dst not in known_targets:
-                logger.info(f'deleting {dst}')
+                logger.info(f"deleting {dst}")
                 shutil.rmtree(dst)
             else:
                 known_targets.remove(dst)
