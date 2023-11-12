@@ -514,13 +514,17 @@ def generate_tags(
             fh.write(result)
 
 
-def generate_search(articles, pages, db):
+def generate_search(
+    articles: list[tuple[str, dict[str, Any]]],
+    pages: list[tuple[str, dict[str, Any]]],
+    db: str,
+) -> None:
     """Generate Search.
 
     Parameters
     ----------
-    articles, pages :
-    db : str
+    articles, pages
+    db
         path to sqlite file
 
     """
