@@ -1,6 +1,6 @@
 build==1.0.3
 mkdocs==1.5.3
-mkdocs-material==9.4.8
+mkdocs-material==9.4.14
 mkdocstrings[python]==0.23.0
 twine==4.0.2
 wheel==0.41.3
