@@ -7,5 +7,5 @@ wheel==0.41.3
 pytest==7.4.3
 pytest-cov==4.1.0
 ruff==0.1.7
-mypy==1.6.1
+mypy==1.8.0
 types-markdown==3.5.0.1
