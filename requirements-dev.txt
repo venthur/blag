@@ -4,7 +4,7 @@ mkdocs-material==9.5.7
 mkdocstrings[python]==0.24.0
 twine==4.0.2
 wheel==0.42.0
-pytest==8.0.0
+pytest==8.0.2
 pytest-cov==4.1.0
 ruff==0.2.00
 mypy==1.8.0
