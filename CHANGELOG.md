@@ -2,7 +2,8 @@
 
 ## [unreleased]
 
-* Fixed devsever so it does not crash when the (re-)build fails anymore
+* Fixed devsever so it does not crash anymore when the (re-)build fails
+* dropped support for Python 3.8 and 3.9
 * updated dependencies
 
 ## [2.2.1] -- 2023-11-11

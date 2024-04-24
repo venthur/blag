@@ -6,9 +6,6 @@ site if necessary.
 
 """
 
-# remove when we don't support py38 anymore
-from __future__ import annotations
-
 import argparse
 import logging
 import multiprocessing

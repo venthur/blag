@@ -11,7 +11,7 @@ description = "blog-aware, static site generator"
 keywords = ["markdown", "blag", "blog", "static site generator", "cli"]
 readme = "README.md"
 license = { file="LICENSE" }
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 dynamic = ["version"]
 dependencies = [
     "markdown",
@@ -65,7 +65,7 @@ addopts = """
 
 [tool.ruff]
 line-length = 79
-target-version = "py38"
+target-version = "py310"
 
 [tool.ruff.lint]
 select = [

@@ -1,13 +1,9 @@
 """Pytest fixtures."""
 
-
-# remove when we don't support py38 anymore
-from __future__ import annotations
-
 import os
 from argparse import Namespace
+from collections.abc import Callable, Iterator
 from tempfile import TemporaryDirectory
-from typing import Callable, Iterator
 
 import pytest
 from jinja2 import Environment, Template
