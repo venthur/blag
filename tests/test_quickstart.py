@@ -1,9 +1,5 @@
 """Tests for the quickstart module."""
 
-
-# remove when we don't support py38 anymore
-from __future__ import annotations
-
 import os
 
 from pytest import MonkeyPatch

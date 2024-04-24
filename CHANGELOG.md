@@ -1,5 +1,10 @@
 # Changelog
 
+## unreleased
+
+* dropped support for Python 3.8 and 3.9
+* added Python 3.13 to CI test suite
+
 ## [2.2.1] -- 2023-11-11
 
 * fixed `suggests` to blag-doc
