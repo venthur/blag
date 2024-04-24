@@ -1,9 +1,10 @@
 # Changelog
 
-## unreleased
+## [unreleased]
 
+* Fixed devsever so it does not crash anymore when the (re-)build fails
 * dropped support for Python 3.8 and 3.9
-* added Python 3.13 to CI test suite
+* updated dependencies
 
 ## [2.2.1] -- 2023-11-11
 
