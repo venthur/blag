@@ -1,5 +1,10 @@
 # Changelog
 
+## [unreleased]
+
+* Fixed devsever so it does not crash when the (re-)build fails anymore
+* updated dependencies
+
 ## [2.2.1] -- 2023-11-11
 
 * fixed `suggests` to blag-doc
