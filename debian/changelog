@@ -1,3 +1,11 @@
+blag (2.3.0) unstable; urgency=medium
+
+  * fixed devsever so it does not crash anymore when the (re-)build fails
+  * dropped support for Python 3.8 and 3.9
+  * updated dependencies
+
+ -- Bastian Venthur <venthur@debian.org>  Wed, 24 Apr 2024 22:25:31 +0200
+
 blag (2.2.1) unstable; urgency=medium
 
   * fixed suggests field to blag-doc (Closes: #1055769)
