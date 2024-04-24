@@ -17,15 +17,10 @@ jobs:
           - macos-latest
           - windows-latest
         python-version:
-          - "3.8"
-          - "3.9"
           - "3.10"
           - "3.11"
           - "3.12"
-        exclude:
-          # 3.8 on windows fails due to some pip issue
-          - os: windows-latest
-            python-version: "3.8"
+          - "3.13"
 
     steps:
     - uses: actions/checkout@v4

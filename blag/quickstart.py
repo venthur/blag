@@ -1,8 +1,5 @@
 """Helper methods for blag's quickstart command."""
 
-# remove when we don't support py38 anymore
-from __future__ import annotations
-
 import argparse
 import configparser
 import os

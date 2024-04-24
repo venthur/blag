@@ -1,9 +1,5 @@
 """Tests for the devserver module."""
 
-
-# remove when we don't support py38 anymore
-from __future__ import annotations
-
 import threading
 import time
 from argparse import Namespace
