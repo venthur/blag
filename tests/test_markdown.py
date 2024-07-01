@@ -1,11 +1,14 @@
 """Test markdown module."""
 
 from datetime import datetime
+import os
 from typing import Any
 
 import markdown
 import pytest
 
+import blag
+from blag.blag import build
 from blag.markdown import convert_markdown, markdown_factory
 
 
@@ -111,3 +114,28 @@ this --- is -- a test ...
     assert "mdash" not in html
     assert "ndash" not in html
     assert "hellip" not in html
+
+
+def test_performance(args) -> None:
+    # create 1000 random markdown files in the content directory
+    with open(os.path.join(blag.__path__[0], "content", "testpage.md")) as fh:
+              markdown = fh.read()
+    for i in range(1000):
+        with open(f"content/{i}.md", "w") as f:
+            f.write(markdown)
+
+    from time import time
+
+    t = time()
+    build(args)
+    print(time() - t)
+
+    import cProfile
+
+    t = time()
+    cProfile.run("build(args)")
+    #build(args)
+    print(time() - t)
+
+
+    1 / 0
