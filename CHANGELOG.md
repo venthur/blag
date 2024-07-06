@@ -8,6 +8,7 @@
 * mkdocs: disabled loading of google fonts, using locally installed system
   fonts instead
 * Debian: simplified html docs directory for blag-doc package
+* Debian: changed section from Python to Web
 * updated dependencies
 
 ## [2.3.0] -- 2024-04-24
