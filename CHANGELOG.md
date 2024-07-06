@@ -1,5 +1,9 @@
 # Changelog
 
+## [unreleased]
+
+* updated dependencies
+
 ## [2.3.0] -- 2024-04-24
 
 * fixed devsever so it does not crash anymore when the (re-)build fails
