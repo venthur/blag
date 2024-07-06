@@ -17,6 +17,8 @@ nav:
 theme:
   name: material
   highlightjs: true
+  # disable google fonts, use system fonts
+  font: false
 
 markdown_extensions:
   - pymdownx.superfences

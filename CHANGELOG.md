@@ -5,6 +5,8 @@
 * added manpage
 * added makefile target for generating blog's manpage
 * added makefile target for serving blags docs locally
+* mkdocs: disabled loading of google fonts, using locally installed system
+  fonts instead
 * updated dependencies
 
 ## [2.3.0] -- 2024-04-24
