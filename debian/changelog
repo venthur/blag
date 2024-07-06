@@ -1,3 +1,16 @@
+blag (2.3.1) unstable; urgency=medium
+
+  * added manpage
+  * added makefile target for generating blog's manpage
+  * added makefile target for serving blags docs locally
+  * mkdocs: disabled loading of google fonts, using locally installed system
+    fonts instead
+  * Debian: simplified html docs directory for blag-doc package
+  * Debian: changed section in debian/control from Python to Web
+  * updated dependencies
+
+ -- Bastian Venthur <venthur@debian.org>  Sat, 06 Jul 2024 15:33:36 +0200
+
 blag (2.3.0) unstable; urgency=medium
 
   * fixed devsever so it does not crash anymore when the (re-)build fails

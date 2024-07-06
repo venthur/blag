@@ -1,6 +1,6 @@
 # Changelog
 
-## [unreleased]
+## [2.3.1] -- 2024-07-06
 
 * added manpage
 * added makefile target for generating blog's manpage
