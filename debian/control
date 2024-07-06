@@ -5,20 +5,20 @@ Maintainer: Bastian Venthur <venthur@debian.org>
 Rules-Requires-Root: no
 Build-Depends:
  debhelper-compat (= 13),
- dh-sequence-python3,
  dh-python,
- pybuild-plugin-pyproject,
- python3-setuptools,
- python3-all,
- python3-markdown,
- python3-feedgenerator,
- python3-jinja2,
- python3-pygments,
- python3-pytest,
- python3-pytest-cov,
+ dh-sequence-python3,
  mkdocs,
  mkdocs-material,
  mkdocstrings-python-handlers,
+ pybuild-plugin-pyproject,
+ python3-all,
+ python3-feedgenerator,
+ python3-jinja2,
+ python3-markdown,
+ python3-pygments,
+ python3-pytest,
+ python3-pytest-cov,
+ python3-setuptools,
 #Testsuite: autopkgtest-pkg-python
 Standards-Version: 4.6.0.1
 Homepage: https://github.com/venthur/blag
@@ -28,8 +28,8 @@ Vcs-Git: https://github.com/venthur/blag.git
 Package: blag
 Architecture: all
 Depends:
- ${python3:Depends},
  ${misc:Depends},
+ ${python3:Depends},
 Suggests:
  blag-doc,
 Description: Blog-aware, static site generator
