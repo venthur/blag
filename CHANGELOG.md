@@ -1,5 +1,9 @@
 # Changelog
 
+## [unreleased] --
+
+* Added changelog to docs
+
 ## [2.3.1] -- 2024-07-06
 
 * added manpage
