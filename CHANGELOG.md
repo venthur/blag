@@ -3,6 +3,8 @@
 ## [unreleased] --
 
 * Added changelog to docs
+* removed ruff's target-version from pyproject.toml, this value defaults to the
+  projects requires-python
 
 ## [2.3.1] -- 2024-07-06
 
