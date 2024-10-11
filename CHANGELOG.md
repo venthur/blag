@@ -2,6 +2,8 @@
 
 ## [unreleased] --
 
+* Ignore FileNotFoundError when trying to get the last modified time of files
+  in directories. This happens for example with temporary emacs files.
 * Added changelog to docs
 * removed ruff's target-version from pyproject.toml, this value defaults to the
   projects requires-python

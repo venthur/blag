@@ -42,7 +42,12 @@ def get_last_modified(dirs: list[str]) -> float:
     for dir in dirs:
         for root, dirs, files in os.walk(dir):
             for f in files:
-                mtime = os.stat(os.path.join(root, f)).st_mtime
+                try:
+                    mtime = os.stat(os.path.join(root, f)).st_mtime
+                except FileNotFoundError:
+                    # ignore files that have been deleted since the os.walk
+                    # call (for example temporary emacs files)
+                    continue
                 if mtime > last_mtime:
                     last_mtime = mtime
 
