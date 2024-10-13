@@ -1,6 +1,6 @@
 # Changelog
 
-## [unreleased] --
+## [2.3.2] -- 2024-10-13
 
 * Ignore FileNotFoundError when trying to get the last modified time of files
   in directories. This happens for example with temporary emacs files.
