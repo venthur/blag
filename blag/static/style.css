@@ -1,32 +1,15 @@
 @import "code-light.css" (prefers-color-scheme: light);
 @import "code-dark.css" (prefers-color-scheme: dark);
 
-@media (prefers-color-scheme: light) {
-    :root {
-        --background: #FFFFFF;
-        --background-dim: #f5f7f9;
-
-        --foreground: #2B303A;
-        --foreground-dim: #576379;
-        --foreground-heavy: #191C22;
-
-        --primary-color: #375287;
-    }
+:root {
+    color-scheme: light dark;
+    --background: light-dark(#FFFFFF, #2B363B);
+    --background-dim: light-dark(#f5f7f9, #2F3C42);
+    --foreground: light-dark(#2B303A, #f0f2f3);
+    --foreground-dim: light-dark(#576379, #d5d5d5);
+    --foreground-heavy: light-dark(#191C22, #f2f4f5);
+    --primary-color: light-dark(#375287, #A1C5FF);
 }
-
-@media (prefers-color-scheme: dark) {
-    :root {
-        --background: #2B363B;
-        --background-dim: #2F3C42;
-
-        --foreground: #f0f2f3;
-        --foreground-dim: #d5d5d5;
-        --foreground-heavy: #f2f4f5;
-
-        --primary-color: #A1C5FF;
-    }
-}
-
 
 html {
   font-size: 18px;
