@@ -67,7 +67,7 @@ manpage: $(VENV)
 
 .PHONY: benchmark
 benchmark: $(VENV)
-	$(BIN)/pytest --no-cov -rP tests/benchmark.py
+	$(BIN)/pytest --no-cov -s -rP tests/benchmark.py
 
 .PHONY: clean
 clean:
