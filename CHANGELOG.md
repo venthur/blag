@@ -1,5 +1,9 @@
 # Changelog
 
+## [unreleased]
+
+* Added Python 3.13 to github actions
+
 ## [2.3.2] -- 2024-10-13
 
 * Ignore FileNotFoundError when trying to get the last modified time of files
