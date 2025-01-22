@@ -65,6 +65,10 @@ serve-docs: $(VENV)
 manpage: $(VENV)
 	help2man $(BIN)/blag --no-info -n "blog-aware, static site generator" -o debian/blag.1
 
+.PHONY: benchmark
+benchmark: $(VENV)
+	$(BIN)/pytest --no-cov -s -rP tests/benchmark.py
+
 .PHONY: clean
 clean:
 	rm -rf build dist *.egg-info
