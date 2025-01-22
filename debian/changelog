@@ -1,3 +1,34 @@
+blag (2.3.2) unstable; urgency=medium
+
+  * Ignore FileNotFoundError when trying to get the last modified time of
+    files in directories. This happens for example with temporary emacs files.
+  * Added changelog to docs
+  * removed ruff's target-version from pyproject.toml, this value defaults to
+    the projects requires-python
+
+ -- Bastian Venthur <venthur@debian.org>  Sun, 13 Oct 2024 20:12:29 +0200
+
+blag (2.3.1) unstable; urgency=medium
+
+  * added manpage
+  * added makefile target for generating blog's manpage
+  * added makefile target for serving blags docs locally
+  * mkdocs: disabled loading of google fonts, using locally installed system
+    fonts instead
+  * Debian: simplified html docs directory for blag-doc package
+  * Debian: changed section in debian/control from Python to Web
+  * updated dependencies
+
+ -- Bastian Venthur <venthur@debian.org>  Sat, 06 Jul 2024 15:33:36 +0200
+
+blag (2.3.0) unstable; urgency=medium
+
+  * fixed devsever so it does not crash anymore when the (re-)build fails
+  * dropped support for Python 3.8 and 3.9
+  * updated dependencies
+
+ -- Bastian Venthur <venthur@debian.org>  Wed, 24 Apr 2024 22:25:31 +0200
+
 blag (2.2.1) unstable; urgency=medium
 
   * fixed suggests field to blag-doc (Closes: #1055769)

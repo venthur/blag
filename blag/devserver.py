@@ -6,9 +6,6 @@ site if necessary.
 
 """
 
-# remove when we don't support py38 anymore
-from __future__ import annotations
-
 import argparse
 import logging
 import multiprocessing
@@ -45,14 +42,19 @@ def get_last_modified(dirs: list[str]) -> float:
     for dir in dirs:
         for root, dirs, files in os.walk(dir):
             for f in files:
-                mtime = os.stat(os.path.join(root, f)).st_mtime
+                try:
+                    mtime = os.stat(os.path.join(root, f)).st_mtime
+                except FileNotFoundError:
+                    # ignore files that have been deleted since the os.walk
+                    # call (for example temporary emacs files)
+                    continue
                 if mtime > last_mtime:
                     last_mtime = mtime
 
     return last_mtime
 
 
-def autoreload(args: argparse.Namespace) -> NoReturn:
+def autoreload(args: argparse.Namespace, wait: int=1) -> NoReturn:
     """Start the autoreloader.
 
     This method monitors the given directories for changes (i.e. the
@@ -66,6 +68,9 @@ def autoreload(args: argparse.Namespace) -> NoReturn:
     ----------
     args
         contains the input-, template- and static dir
+    wait
+        number of seconds the devsever waits before checking for updated
+        content
 
     """
     dirs = [args.input_dir, args.template_dir, args.static_dir]
@@ -74,12 +79,18 @@ def autoreload(args: argparse.Namespace) -> NoReturn:
     # loop to avoid serving stale contents
     last_mtime = 0.0
     while True:
-        mtime = get_last_modified(dirs)
-        if mtime > last_mtime:
-            last_mtime = mtime
-            logger.info("Change detected, rebuilding...")
-            blag.build(args)
-        time.sleep(1)
+        # make sure the devsever does not crash when the build fails with an
+        # exception
+        try:
+            mtime = get_last_modified(dirs)
+            if mtime > last_mtime:
+                last_mtime = mtime
+                logger.info("Change detected, rebuilding...")
+                blag.build(args)
+            time.sleep(wait)
+        except Exception:
+            logger.exception("Error occurred during rebuild:")
+            logger.info("Devserver did not crash, you may continue editing.")
 
 
 def serve(args: argparse.Namespace) -> None:

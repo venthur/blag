@@ -1,5 +1,34 @@
 # Changelog
 
+## [unreleased]
+
+* Added Python 3.13 to github actions
+
+## [2.3.2] -- 2024-10-13
+
+* Ignore FileNotFoundError when trying to get the last modified time of files
+  in directories. This happens for example with temporary emacs files.
+* Added changelog to docs
+* removed ruff's target-version from pyproject.toml, this value defaults to the
+  projects requires-python
+
+## [2.3.1] -- 2024-07-06
+
+* added manpage
+* added makefile target for generating blog's manpage
+* added makefile target for serving blags docs locally
+* mkdocs: disabled loading of google fonts, using locally installed system
+  fonts instead
+* Debian: simplified html docs directory for blag-doc package
+* Debian: changed section from Python to Web
+* updated dependencies
+
+## [2.3.0] -- 2024-04-24
+
+* fixed devsever so it does not crash anymore when the (re-)build fails
+* dropped support for Python 3.8 and 3.9
+* updated dependencies
+
 ## [2.2.1] -- 2023-11-11
 
 * fixed `suggests` to blag-doc

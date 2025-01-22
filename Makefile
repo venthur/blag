@@ -57,6 +57,14 @@ update-pygmentize: $(VENV)
 docs: $(VENV)
 	$(BIN)/mkdocs build
 
+.PHONY: serve-docs
+serve-docs: $(VENV)
+	$(BIN)/mkdocs serve
+
+.PHONY: manpage
+manpage: $(VENV)
+	help2man $(BIN)/blag --no-info -n "blog-aware, static site generator" -o debian/blag.1
+
 .PHONY: clean
 clean:
 	rm -rf build dist *.egg-info

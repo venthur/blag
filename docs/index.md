@@ -16,7 +16,7 @@ blag is named after [the blag of the webcomic xkcd][blagxkcd].
 ## Features
 
 * Write content in [Markdown][]
-* Good looking default theme
+* Good looking default theme:
   ![Blag Screenshot](blag.png)
 * Theming support using [Jinja2][] templates
 * Generation of Atom feeds for blog content
@@ -24,7 +24,7 @@ blag is named after [the blag of the webcomic xkcd][blagxkcd].
 * Integrated devserver
 * Available on [PyPI][]
 
-blag runs on Linux, Mac and Windows and requires Python >= 3.8
+blag runs on Linux, Mac and Windows and requires Python >= 3.10
 
 [markdown]: https://daringfireball.net/projects/markdown/
 [jinja2]: https://palletsprojects.com/p/jinja/

@@ -13,10 +13,13 @@ nav:
     - blag.markdown: markdown.md
     - blag.devserver: devserver.md
     - blag.quickstart: quickstart.md
+  - Changelog: CHANGELOG.md
 
 theme:
   name: material
   highlightjs: true
+  # disable google fonts, use system fonts
+  font: false
 
 markdown_extensions:
   - pymdownx.superfences
