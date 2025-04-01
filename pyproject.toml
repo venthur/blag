@@ -14,9 +14,9 @@ license-files = ["LICENSE"]
 requires-python = ">=3.10"
 dynamic = ["version"]
 dependencies = [
-    "markdown",
     "feedgenerator",
     "jinja2",
+    "markdown",
     "pygments",
 ]
 
@@ -34,13 +34,14 @@ dev = [
     "mkdocs",
     "mkdocs-material",
     "mkdocstrings[python]",
-    "twine",
-    "wheel",
+    "mypy",
+    "pip-tools",
     "pytest",
     "pytest-cov",
     "ruff",
-    "mypy",
+    "twine",
     "types-markdown",
+    "wheel",
 ]
 
 [tool.setuptools.dynamic]
