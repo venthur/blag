@@ -10,7 +10,7 @@ authors = [
 description = "blog-aware, static site generator"
 keywords = ["markdown", "blag", "blog", "static site generator", "cli"]
 readme = "README.md"
-license = { file="LICENSE" }
+license-files = ["LICENSE"]
 requires-python = ">=3.10"
 dynamic = ["version"]
 dependencies = [
