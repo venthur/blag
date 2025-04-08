@@ -55,8 +55,8 @@ update-pygmentize: $(VENV)
 
 .PHONY: update-requirements
 update-requirements: $(VENV)
-	$(BIN)/pip-compile --upgrade --no-annotate --output-file requirements.txt
-	$(BIN)/pip-compile --upgrade --no-annotate --extra dev --output-file requirements-dev.txt
+	$(BIN)/pip-compile --upgrade --no-annotate --strip-extras --output-file requirements.txt
+	$(BIN)/pip-compile --upgrade --no-annotate --strip-extras --extra dev --output-file requirements-dev.txt
 
 .PHONY: docs
 docs: $(VENV)
