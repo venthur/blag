@@ -3,6 +3,9 @@
 ## [unreleased]
 
 * Added Python 3.13 to github actions
+* `requirements*.txt` files are handled by pip-tools. Updates are handled by
+  make update-requirements based on the dependencies described in the
+  pyproject.toml
 
 ## [2.3.2] -- 2024-10-13
 
