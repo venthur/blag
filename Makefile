@@ -53,6 +53,11 @@ update-pygmentize: $(VENV)
 	$(BIN)/pygmentize -f html -S default > blag/static/code-light.css
 	$(BIN)/pygmentize -f html -S monokai > blag/static/code-dark.css
 
+.PHONY: update-requirements
+update-requirements: $(VENV)
+	$(BIN)/pip-compile --upgrade --no-annotate --output-file requirements.txt
+	$(BIN)/pip-compile --upgrade --no-annotate --extra dev --output-file requirements-dev.txt
+
 .PHONY: docs
 docs: $(VENV)
 	$(BIN)/mkdocs build
