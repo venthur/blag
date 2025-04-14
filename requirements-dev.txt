@@ -27,7 +27,7 @@ jaraco-functools==4.1.0
 jeepney==0.9.0
 jinja2==3.1.6
 keyring==25.6.0
-markdown==3.7
+markdown==3.8
 markdown-it-py==3.0.0
 markupsafe==3.0.2
 mdurl==0.1.2
@@ -64,13 +64,13 @@ requests==2.32.3
 requests-toolbelt==1.0.0
 rfc3986==2.0.0
 rich==14.0.0
-ruff==0.11.4
+ruff==0.11.5
 secretstorage==3.3.3
 six==1.17.0
 twine==6.1.0
-types-markdown==3.7.0.20250322
-typing-extensions==4.13.1
-urllib3==2.3.0
+types-markdown==3.8.0.20250413
+typing-extensions==4.13.2
+urllib3==2.4.0
 watchdog==6.0.0
 wheel==0.45.1
 
