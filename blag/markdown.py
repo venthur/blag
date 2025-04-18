@@ -51,6 +51,7 @@ def convert_markdown(
         * `date` is converted into datetime with local timezone
         * `tags` is interpreted as a comma-separeted list of strings.
           All strings are stripped and converted to lower case.
+          All strings have spaces replaced with dashes.
 
     Parameters
     ----------
@@ -85,6 +86,7 @@ def convert_markdown(
         tags = meta["tags"].split(",")
         tags = [t.lower() for t in tags]
         tags = [t.strip() for t in tags]
+        tags = [t.replace(" ","-") for t in tags]
         meta["tags"] = tags
 
     return content, meta
