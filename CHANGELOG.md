@@ -1,6 +1,6 @@
 # Changelog
 
-## [unreleased]
+## [2.3.3] -- 2025-04-27
 
 * Fixed Atom feed encoding to 'utf-8'
 * Added Python 3.13 to github actions
