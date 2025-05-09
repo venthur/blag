@@ -16,10 +16,8 @@ endif
 .PHONY: all
 all: lint mypy test test-release
 
-$(VENV): requirements.txt requirements-dev.txt pyproject.toml
+$(VENV): pyproject.toml
 	$(PY) -m venv $(VENV)
-	$(BIN)/pip install --upgrade -r requirements.txt
-	$(BIN)/pip install --upgrade -r requirements-dev.txt
 	$(BIN)/pip install -e .['dev']
 	touch $(VENV)
 
@@ -52,11 +50,6 @@ release: $(VENV) build
 update-pygmentize: $(VENV)
 	$(BIN)/pygmentize -f html -S default > blag/static/code-light.css
 	$(BIN)/pygmentize -f html -S monokai > blag/static/code-dark.css
-
-.PHONY: update-requirements
-update-requirements: $(VENV)
-	$(BIN)/pip-compile --upgrade --no-annotate --strip-extras --output-file requirements.txt
-	$(BIN)/pip-compile --upgrade --no-annotate --strip-extras --extra dev --output-file requirements-dev.txt
 
 .PHONY: docs
 docs: $(VENV)
