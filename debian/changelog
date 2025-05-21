@@ -1,3 +1,13 @@
+blag (2.3.3) unstable; urgency=medium
+
+  * Fixed Atom feed encoding to 'utf-8'
+  * Added Python 3.13 to github actions
+  * `requirements*.txt` files are handled by pip-tools. Updates are handled by
+    make update-requirements based on the dependencies described in the
+    pyproject.toml
+
+ -- Bastian Venthur <venthur@debian.org>  Sun, 27 Apr 2025 11:42:13 +0200
+
 blag (2.3.2) unstable; urgency=medium
 
   * Ignore FileNotFoundError when trying to get the last modified time of
