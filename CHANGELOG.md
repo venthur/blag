@@ -1,5 +1,9 @@
 # Changelog
 
+## [unreleased] --
+
+* Removed requirements.txt and requirements-dev.txt
+
 ## [2.3.3] -- 2025-04-27
 
 * Fixed Atom feed encoding to 'utf-8'
