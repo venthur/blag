@@ -1,8 +1,16 @@
 # Changelog
 
-## [unreleased]
+## [unreleased] --
 
+* Removed requirements.txt and requirements-dev.txt
+
+## [2.3.3] -- 2025-04-27
+
+* Fixed Atom feed encoding to 'utf-8'
 * Added Python 3.13 to github actions
+* `requirements*.txt` files are handled by pip-tools. Updates are handled by
+  make update-requirements based on the dependencies described in the
+  pyproject.toml
 
 ## [2.3.2] -- 2024-10-13
 

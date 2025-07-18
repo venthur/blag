@@ -396,7 +396,7 @@ def generate_feed(
         )
 
     with open(f"{output_dir}/atom.xml", "w") as fh:
-        feed.write(fh, encoding="utf8")
+        feed.write(fh, encoding='utf-8')
 
 
 def generate_index(

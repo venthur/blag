@@ -99,6 +99,15 @@ def test_generate_feed_with_description(cleandir: str) -> None:
     assert '<content type="html">content' in feed
 
 
+def test_feed_is_unicode(cleandir: str) -> None:
+    """Test generate_feed."""
+    articles: list[tuple[str, dict[str, Any]]] = []
+    blag.generate_feed(articles, "build", " ", " ", " ", " ")
+    with open("build/atom.xml") as fh:
+        feed = fh.read()
+    assert 'encoding="utf-8"' in feed
+
+
 def test_parse_args_build() -> None:
     """Test parse_args with build."""
     # test default args
