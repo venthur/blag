@@ -1,10 +1,19 @@
+"""Benchmark for Blag."""
+
 import os
+from argparse import Namespace
 
 import blag
 from blag.blag import build
 
 
-def test_performance(args) -> None:
+def test_performance(args: Namespace) -> None:
+    """Test performance.
+
+    This test checks how quickly blag can generate `FILES` amount of pages from
+    markdown.
+
+    """
     FILES = 1000
     print(f"Generating {FILES} files")
     # create random markdown files in the content directory
