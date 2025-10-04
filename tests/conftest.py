@@ -92,5 +92,6 @@ def args(cleandir: Callable[[], Iterator[str]]) -> Iterator[Namespace]:
         output_dir="build",
         static_dir="static",
         template_dir="templates",
+        extensions=["footnotes"],
     )
     yield args

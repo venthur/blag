@@ -17,7 +17,13 @@ from markdown.treeprocessors import Treeprocessor
 logger = logging.getLogger(__name__)
 
 
-def markdown_factory() -> Markdown:
+class MarkdownExtensionLoadError(Exception):
+    """An error thrown when extensions cannot be loaded."""
+
+    pass
+
+
+def markdown_factory(extra_extensions: list[str] = []) -> Markdown:
     """Create a Markdown instance.
 
     This method exists only to ensure we use the same Markdown instance
@@ -28,14 +34,20 @@ def markdown_factory() -> Markdown:
     markdown.Markdown
 
     """
+    default_extensions = [
+        "codehilite",
+        "fenced_code",
+        "footnotes",
+        "meta",
+        "smarty",
+    ]
+    # Ensure the extra don't duplicate the default
+    all_extensions = list(set(default_extensions + extra_extensions))
+
     md = Markdown(
         extensions=[
-            "meta",
-            "fenced_code",
-            "codehilite",
-            "smarty",
-            "footnotes",
             MarkdownLinkExtension(),
+            *all_extensions,
         ],
         output_format="html",
     )
@@ -132,3 +144,11 @@ class MarkdownLinkExtension(Extension):
             "mdlink",
             0,
         )
+
+
+def check_extensions(extensions: list[str]) -> None:
+    """Attempt to load the named extensions."""
+    try:
+        Markdown(extensions=extensions)
+    except ModuleNotFoundError:
+        raise MarkdownExtensionLoadError
