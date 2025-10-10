@@ -2,6 +2,7 @@
 
 ## [unreleased] --
 
+* Added Python 3.14 compatibility
 * Removed requirements.txt and requirements-dev.txt
 
 ## [2.3.3] -- 2025-04-27
