@@ -111,3 +111,17 @@ this --- is -- a test ...
     assert "mdash" not in html
     assert "ndash" not in html
     assert "hellip" not in html
+
+def test_l2m4m_extension() -> None:
+    """Test LaTeX math rendering via l2m4m extension."""
+    md = markdown_factory()
+    markdown_input = (
+        "Quick math: $E = mc^2$\n"
+    )
+    expected_output_fragments = [
+        'math display="inline"',
+    ]
+    html, _ = convert_markdown(md, markdown_input)
+
+    for fragment in expected_output_fragments:
+        assert fragment in html
