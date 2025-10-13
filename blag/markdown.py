@@ -13,6 +13,8 @@ from xml.etree.ElementTree import Element
 from markdown import Markdown
 from markdown.extensions import Extension
 from markdown.treeprocessors import Treeprocessor
+from l2m4m import LaTeX2MathMLExtension
+
 
 logger = logging.getLogger(__name__)
 
@@ -35,6 +37,7 @@ def markdown_factory() -> Markdown:
             "codehilite",
             "smarty",
             MarkdownLinkExtension(),
+            LaTeX2MathMLExtension(),
         ],
         output_format="html",
     )
