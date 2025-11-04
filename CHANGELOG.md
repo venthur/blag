@@ -4,6 +4,7 @@
 
 * Added Python 3.14 compatibility
 * Removed requirements.txt and requirements-dev.txt
+* Added footnotes extension for markdown
 
 ## [2.3.3] -- 2025-04-27
 

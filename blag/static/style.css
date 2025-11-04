@@ -151,3 +151,10 @@ header h2 {
   display: inline;
   font-size: 1.2rem;
 }
+
+hr {
+  border: none;
+  border-top: 1px solid var(--foreground-dim);
+  opacity: 0.3;
+  margin: 2rem 0;
+}

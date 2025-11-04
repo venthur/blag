@@ -34,6 +34,7 @@ def markdown_factory() -> Markdown:
             "fenced_code",
             "codehilite",
             "smarty",
+            "footnotes",
             MarkdownLinkExtension(),
         ],
         output_format="html",

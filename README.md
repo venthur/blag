@@ -21,6 +21,7 @@ blag is named after [the blag of the webcomic xkcd][blagxkcd].
 * Theming support using [Jinja2][] templates
 * Generation of Atom feeds for blog content
 * Fenced code blocks and syntax highlighting using [Pygments][]
+* Markdown footnotes
 * Integrated devserver
 * Available on [PyPI][]
 
