@@ -111,3 +111,17 @@ this --- is -- a test ...
     assert "mdash" not in html
     assert "ndash" not in html
     assert "hellip" not in html
+
+
+def test_footnotes() -> None:
+    """Test footnote extension."""
+    md = markdown_factory()
+    md1 = """
+this is a footnote[^1]
+
+[^1]: this is the footnotetext
+"""
+    html, meta = convert_markdown(md, md1)
+    assert "<hr>" in html
+    assert "<ol>" in html
+    assert "footnotetext" in html
