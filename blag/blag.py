@@ -323,6 +323,18 @@ def process_markdown(
     for src, dst in convertibles:
         logger.debug(f"Processing {src}")
 
+        # see first if the dst actually needs re-building. for that we compare
+        # the mtimes and assume mtime_dst > mtime_src means that it needs not
+        # to be rebuilt
+        if os.path.exists(f"{output_dir}/{dst}"):
+            mtime_src = os.stat(f"{input_dir}/{src}").st_mtime
+            mtime_dst = os.stat(f"{output_dir}/{dst}").st_mtime
+            if mtime_dst >= mtime_src:
+                logger.debug(
+                    "Skipping, as target exists and is newer than source."
+                )
+                continue
+
         with open(f"{input_dir}/{src}") as fh:
             body = fh.read()
 
