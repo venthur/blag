@@ -35,6 +35,7 @@ def markdown_factory() -> Markdown:
             "codehilite",
             "smarty",
             "footnotes",
+            "tables",
             MarkdownLinkExtension(),
         ],
         output_format="html",
