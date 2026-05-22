@@ -4,6 +4,17 @@
 
 {% block content %}
 
+  {% if prv or nxt %}
+  <header><nav><ul>
+  {% if prv %}
+  <li><h2><a href="{{ prv }}">zurück</a><h2></li>
+  {% endif %}
+  {% if nxt %}
+  <li><h2><a href="{{ nxt }}">weiter</a><h2></li>
+  {% endif %}
+  </ul></nav></header>
+  {% endif %}
+
   {% if title %}
   <h2>{{ title }}</h2>
   {% endif %}
@@ -23,5 +34,16 @@
   </aside>
 
   {{ content }}
+
+  {% if prv or nxt %}
+  <header><nav><ul>
+  {% if prv %}
+  <li><h2><a href="{{ prv }}">zurück</a><h2></li>
+  {% endif %}
+  {% if nxt %}
+  <li><h2><a href="{{ nxt }}">weiter</a><h2></li>
+  {% endif %}
+  </ul></nav></header>
+  {% endif %}
 
 {% endblock %}
