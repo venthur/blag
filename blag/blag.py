@@ -328,7 +328,11 @@ def process_markdown(
 
         content, meta = convert_markdown(md, body)
 
-        context = dict(content=content)
+        context = dict(
+            content=content,
+            permalink=dst,
+            source=src
+        )
         context.update(meta)
 
         # if markdown has date in meta, we treat it as a blog article,
