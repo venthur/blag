@@ -317,6 +317,22 @@ foo bar
     assert os.path.exists(f"{args.output_dir}/tags/bar.html")
 
 
+def test_remove_extra_files(args):
+    """Test that extra files are removed."""
+    # create a file and directory in output dir that have no corresponding
+    # source
+    file_path = f'{args.output_dir}/a'
+    dir_path = f'{args.output_dir}/b'
+    fh = open(file_path, 'w')
+    fh.close()
+    os.mkdir(dir_path)
+
+    blag.build(args)
+
+    assert not os.path.exists(file_path)
+    assert not os.path.exists(dir_path)
+
+
 @pytest.mark.parametrize(
     "template",
     [
