@@ -251,6 +251,23 @@ freely in you templates. However, some metadata elements are treated special:
   header and in the atom feed.
 
 
+### Markdown Extensions
+
+`blag` loads several Markdown extensions by default, including `meta`,
+`fenced_code`, `codehilite`, and `smarty`.  If you wish to use additional
+extensions, you may add a line to your configuration file as a comma-separated
+list, like this:
+
+```
+extensions = footnotes,tables
+```
+
+You can view the full list of officially supported extensions for the
+Python-Markdown libary here:
+
+<https://python-markdown.github.io/extensions/#officially-supported-extensions>
+
+
 ## Devserver
 
 blag provides a devserver which you can use for local web-development. The

@@ -15,7 +15,12 @@ from jinja2 import Environment, FileSystemLoader, Template, TemplateNotFound
 
 import blag
 from blag.devserver import serve
-from blag.markdown import convert_markdown, markdown_factory
+from blag.markdown import (
+    MarkdownExtensionLoadError,
+    check_extensions,
+    convert_markdown,
+    markdown_factory,
+)
 from blag.quickstart import quickstart
 from blag.version import __VERSION__
 
@@ -242,6 +247,12 @@ def build(args: argparse.Namespace) -> None:
         shutil.copytree(args.static_dir, args.output_dir, dirs_exist_ok=True)
 
     config = get_config("config.ini")
+    extra_extensions = get_extra_extensions(config)
+    try:
+        check_extensions(extra_extensions)
+    except MarkdownExtensionLoadError:
+        logger.error(f"Problem loading extensions: {extra_extensions}")
+        sys.exit(1)
 
     env = environment_factory(args.template_dir, dict(site=config))
 
@@ -268,6 +279,7 @@ def build(args: argparse.Namespace) -> None:
         args.output_dir,
         page_template,
         article_template,
+        extra_extensions,
     )
 
     generate_feed(
@@ -283,12 +295,21 @@ def build(args: argparse.Namespace) -> None:
     generate_tags(articles, tags_template, tag_template, args.output_dir)
 
 
+def get_extra_extensions(config: configparser.SectionProxy) -> list[str]:
+    """Parse named extensions from config and return a list."""
+    if extensions := config.get("extensions"):
+        return list(set(extensions.split(",")))
+    else:
+        return []
+
+
 def process_markdown(
     convertibles: list[tuple[str, str]],
     input_dir: str,
     output_dir: str,
     page_template: Template,
     article_template: Template,
+    extra_extensions: list[str] = [],
 ) -> tuple[list[tuple[str, dict[str, Any]]], list[tuple[str, dict[str, Any]]]]:
     """Process markdown files.
 
@@ -308,6 +329,9 @@ def process_markdown(
     output_dir
     page_template, archive_template
         templates for pages and articles
+    extra_extensions
+        additional supported markdown extensions.
+        see: https://python-markdown.github.io/extensions/
 
     Returns
     -------
@@ -316,7 +340,7 @@ def process_markdown(
 
     """
     logger.info("Converting Markdown files...")
-    md = markdown_factory()
+    md = markdown_factory(extra_extensions)
 
     articles = []
     pages = []
@@ -396,7 +420,7 @@ def generate_feed(
         )
 
     with open(f"{output_dir}/atom.xml", "w") as fh:
-        feed.write(fh, encoding='utf-8')
+        feed.write(fh, encoding="utf-8")
 
 
 def generate_index(

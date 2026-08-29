@@ -54,7 +54,7 @@ def get_last_modified(dirs: list[str]) -> float:
     return last_mtime
 
 
-def autoreload(args: argparse.Namespace, wait: int=1) -> NoReturn:
+def autoreload(args: argparse.Namespace, wait: int = 1) -> NoReturn:
     """Start the autoreloader.
 
     This method monitors the given directories for changes (i.e. the

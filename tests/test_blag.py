@@ -192,6 +192,45 @@ author = a. u. thor
         assert config_parsed["base_url"] == "https://example.com/"
 
 
+def test_get_extra_extensions() -> None:
+    """Test parsing extensions string from config."""
+    # No extensions in config
+    config = """
+[main]
+base_url = https://example.com/
+title = title
+description = description
+author = a. u. thor
+    """
+    with TemporaryDirectory() as dir:
+        configfile = f"{dir}/config.ini"
+        with open(configfile, "w") as fh:
+            fh.write(config)
+
+        config_parsed = blag.get_config(configfile)
+        extra_extensions = blag.get_extra_extensions(config_parsed)
+        assert isinstance(extra_extensions, list)
+        assert len(extra_extensions) == 0
+
+    # Some extensions in the config
+    config = """
+[main]
+base_url = https://example.com/
+title = title
+description = description
+author = a. u. thor
+extensions = footnotes,tables
+    """
+    with TemporaryDirectory() as dir:
+        configfile = f"{dir}/config.ini"
+        with open(configfile, "w") as fh:
+            fh.write(config)
+        config_parsed = blag.get_config(configfile)
+        extra_extensions = blag.get_extra_extensions(config_parsed)
+        assert "footnotes" in extra_extensions
+        assert "tables" in extra_extensions
+
+
 def test_environment_factory(cleandir: str) -> None:
     """Test environment_factory."""
     globals_: dict[str, object] = {"foo": "bar", "test": "me"}

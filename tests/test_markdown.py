@@ -6,7 +6,12 @@ from typing import Any
 import markdown
 import pytest
 
-from blag.markdown import convert_markdown, markdown_factory
+from blag.markdown import (
+    MarkdownExtensionLoadError,
+    check_extensions,
+    convert_markdown,
+    markdown_factory,
+)
 
 
 @pytest.mark.parametrize(
@@ -125,3 +130,12 @@ this is a footnote[^1]
     assert "<hr>" in html
     assert "<ol>" in html
     assert "footnotetext" in html
+
+def test_check_extensions() -> None:
+    """Test that bad extensions throw an error, good extensions don't."""
+    ok_extensions = ["footnotes", "toc"]
+    check_extensions(ok_extensions)
+
+    bad_extensions = ["foobar", "bazbom"]
+    with pytest.raises(MarkdownExtensionLoadError):
+        check_extensions(bad_extensions)
