@@ -335,17 +335,39 @@ def process_markdown(
         # everything else are just pages
         if meta and "date" in meta:
             articles.append((dst, context))
-            result = article_template.render(context)
+            # articles will be rendered after sorting, 
+            # to add next&prev metadata
         else:
             pages.append((dst, context))
+            # we are can already render pages (no sorting needed)
             result = page_template.render(context)
-        with open(f"{output_dir}/{dst}", "w") as fh_dest:
-            fh_dest.write(result)
+            with open(f"{output_dir}/{dst}", "w") as fh_dest:
+                fh_dest.write(result)
 
     # sort articles by date, descending
     articles = sorted(articles, key=lambda x: x[1]["date"], reverse=True)
-    return articles, pages
 
+    # with the sorted list of articles
+    # add metadata for previous and next pages
+    for i in range(0,len(articles)):
+
+        if (i>0):
+            articles[i][1]["prv"]="/" + articles[i-1][0]
+        else:
+            articles[i][1]["prv"]="/"
+
+        if (i<(len(articles)-1)):
+            articles[i][1]["nxt"]="/" + articles[i+1][0]
+        else:
+            articles[i][1]["nxt"]="/"
+
+        # generate articles html files
+        result = article_template.render(articles[i][1])
+        dst=articles[i][0]
+        with open(f"{output_dir}/{dst}", "w") as fh_dest:
+            fh_dest.write(result)
+
+    return articles, pages
 
 def generate_feed(
     articles: list[tuple[str, dict[str, Any]]],
