@@ -504,7 +504,9 @@ def generate_tags(
 
     for tag, archive in all_tags2.items():
         result = tag_template.render(dict(archive=archive, tag=tag))
-        with open(f"{output_dir}/tags/{tag}.html", "w") as fh:
+        # Tags come from article frontmatter; keep the page inside tags/.
+        safe_tag = tag.replace("/", "_").replace("\\", "_")
+        with open(f"{output_dir}/tags/{safe_tag}.html", "w") as fh:
             fh.write(result)
 
 
